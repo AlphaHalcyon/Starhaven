@@ -7,10 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
 		AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */; };
 		AFD4C05229CFA48200A127BB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05129CFA48200A127BB /* ContentView.swift */; };
 		AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05329CFA48400A127BB /* Assets.xcassets */; };
 		AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05629CFA48400A127BB /* Preview Assets.xcassets */; };
+		AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05D29CFA49500A127BB /* BlackHole.swift */; };
+		AFD4C06029CFA8AF00A127BB /* SpaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05F29CFA8AF00A127BB /* SpaceViewModel.swift */; };
+		AFD4C06229CFAA2200A127BB /* SpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06129CFAA2200A127BB /* SpaceView.swift */; };
+		AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06329CFAAFC00A127BB /* Extensions.swift */; };
+		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
+		AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */; };
+		AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD7B1BB29D4A4C400840842 /* Pilot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +27,14 @@
 		AFD4C05129CFA48200A127BB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AFD4C05329CFA48400A127BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFD4C05629CFA48400A127BB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AFD4C05D29CFA49500A127BB /* BlackHole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHole.swift; sourceTree = "<group>"; };
+		AFD4C05F29CFA8AF00A127BB /* SpaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceViewModel.swift; sourceTree = "<group>"; };
+		AFD4C06129CFAA2200A127BB /* SpaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceView.swift; sourceTree = "<group>"; };
+		AFD4C06329CFAAFC00A127BB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		AFD4C06529CFAF5100A127BB /* CustomTorus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTorus.swift; sourceTree = "<group>"; };
+		AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustParticleSystem.swift; sourceTree = "<group>"; };
+		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		AFD7B1BB29D4A4C400840842 /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,8 +52,10 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
+				AFD7B1BB29D4A4C400840842 /* Pilot.swift */,
 				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFD4C04D29CFA48200A127BB /* Products */,
+				AFD4C06929CFFB4E00A127BB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -53,6 +72,12 @@
 			children = (
 				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
 				AFD4C05129CFA48200A127BB /* ContentView.swift */,
+				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
+				AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */,
+				AFD4C06529CFAF5100A127BB /* CustomTorus.swift */,
+				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
+				AFD4C05F29CFA8AF00A127BB /* SpaceViewModel.swift */,
+				AFD4C06129CFAA2200A127BB /* SpaceView.swift */,
 				AFD4C05329CFA48400A127BB /* Assets.xcassets */,
 				AFD4C05529CFA48400A127BB /* Preview Content */,
 			);
@@ -65,6 +90,14 @@
 				AFD4C05629CFA48400A127BB /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		AFD4C06929CFFB4E00A127BB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +171,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFD4C05229CFA48200A127BB /* ContentView.swift in Sources */,
+				AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */,
+				AFD4C06229CFAA2200A127BB /* SpaceView.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
+				AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */,
+				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
+				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
+				AFD4C06029CFA8AF00A127BB /* SpaceViewModel.swift in Sources */,
+				AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,11 +310,14 @@
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = starHaven;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -299,11 +342,14 @@
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = starHaven;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
