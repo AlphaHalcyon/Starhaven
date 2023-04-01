@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
+		AFC43CDA29D7CF200080E891 /* Privacy Policy in Resources */ = {isa = PBXBuildFile; fileRef = AFC43CD929D7CF200080E891 /* Privacy Policy */; };
 		AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */; };
 		AFD4C05229CFA48200A127BB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05129CFA48200A127BB /* ContentView.swift */; };
 		AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05329CFA48400A127BB /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AFC43CD929D7CF200080E891 /* Privacy Policy */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy"; sourceTree = "<group>"; };
 		AFD4C04C29CFA48200A127BB /* Starhaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Starhaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarhavenApp.swift; sourceTree = "<group>"; };
 		AFD4C05129CFA48200A127BB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
 				AFD4C05129CFA48200A127BB /* ContentView.swift */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
+				AFC43CD929D7CF200080E891 /* Privacy Policy */,
 				AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */,
 				AFD4C06529CFAF5100A127BB /* CustomTorus.swift */,
 				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
@@ -160,6 +163,7 @@
 			files = (
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
+				AFC43CDA29D7CF200080E891 /* Privacy Policy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
