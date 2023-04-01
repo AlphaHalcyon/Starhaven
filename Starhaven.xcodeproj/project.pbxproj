@@ -54,7 +54,7 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
-				AFD7B1BB29D4A4C400840842 /* Pilot.swift */,
+				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFD4C04D29CFA48200A127BB /* Products */,
 				AFD4C06929CFFB4E00A127BB /* Frameworks */,
@@ -74,8 +74,8 @@
 			children = (
 				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
 				AFD4C05129CFA48200A127BB /* ContentView.swift */,
+				AFD7B1BB29D4A4C400840842 /* Pilot.swift */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
-				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */,
 				AFD4C06529CFAF5100A127BB /* CustomTorus.swift */,
 				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
