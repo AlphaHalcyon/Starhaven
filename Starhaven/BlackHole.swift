@@ -19,6 +19,7 @@ class BlackHole: ObservableObject {
     @State var ringCount: Int
     @State var bothRings: Bool
     @State var vibe: String
+    @State var discMaterial: SCNMaterial = SCNMaterial()
     init(scene: SCNScene, radius: CGFloat, camera: SCNNode, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String) {
         self.scene = scene
         self.radius = radius
@@ -59,14 +60,15 @@ class BlackHole: ObservableObject {
         for i in 1..<count {
             let mods = self.gravitationalLensingShaderModifiers(currentRing: i, totalRings: count * self.vibeOffset)
             self.addSpinningEdgeRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mod)
-            self.addAccretionRing(cameraNode: cameraNode, i: i, mods: mods)
+            if Float.random(in: 0...1) < 0.99 { self.addAccretionRing(cameraNode: cameraNode, i: i, mods: mods) }
             self.addLensingRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods)
-            //self.addLensedRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods)
+            //if Float.random(in: 0...1) < 0.99 { self.addLensedRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods) }
         }
     }
     func addLensingRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
-        let ringRadius = Float(self.radius + (self.radius/2)) + (Float(i) * 0.098)
-        let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: 0.1, radialSegments: 25, ringSegments: 50)
+        let ringSize: Float = 0.1
+        let ringRadius = Float(self.radius + (self.radius/2)) + (Float(i) * (ringSize-0.02))
+        let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: CGFloat(ringSize), radialSegments: 25, ringSegments: 50)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -121,7 +123,7 @@ class BlackHole: ObservableObject {
     func addAccretionRing(cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let ringRadius = Float(self.radius + (self.radius/2)) + (Float(i) * 0.098)
         let accretionDiskGeometry = SCNTorus(ringRadius: CGFloat(ringRadius), pipeRadius: 0.10 + CGFloat.random(in: -0.001...0.01))
-        let accretionDiskMaterial = SCNMaterial()
+        let accretionDiskMaterial = self.discMaterial
         accretionDiskMaterial.diffuse.contents = UIColor.red
         accretionDiskGeometry.materials = [accretionDiskMaterial]
         let accretionDiskNode = SCNNode(geometry: accretionDiskGeometry)
@@ -272,8 +274,11 @@ struct ShaderVibe {
         else if (t < 5.0/6.0) {
             color = mix(red, blue, (t - 4.0/6.0) * 6.0);
         }
-        else {
+        else if (t < 5.5/6.0) {
             color = mix(blue, purple, (t - 5.0/6.0) * 6.0);
+        }
+        else {
+            color = mix(purple, red, (t - 5.5/6.0) * 6.0);
         }
     """
     var shaderVibe: String

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF1C63CF29D9389000710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63CE29D9389000710916 /* SceneKit Asset Catalog.scnassets */; };
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
 		AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */ = {isa = PBXBuildFile; fileRef = AFC43CD929D7CF200080E891 /* Privacy Policy.txt */; };
 		AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF1C63CE29D9389000710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
 		AFD4C04C29CFA48200A127BB /* Starhaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Starhaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarhavenApp.swift; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
+				AF1C63CE29D9389000710916 /* SceneKit Asset Catalog.scnassets */,
 				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFD4C04D29CFA48200A127BB /* Products */,
@@ -163,6 +166,7 @@
 			files = (
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
+				AF1C63CF29D9389000710916 /* SceneKit Asset Catalog.scnassets in Resources */,
 				AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
