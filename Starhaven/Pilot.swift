@@ -27,14 +27,11 @@ class Pilot: ObservableObject {
         let camera = SCNCamera()
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera
-        self.cameraNode.position = SCNVector3(x: 0, y: 1, z: 500)
+        self.cameraNode.position = SCNVector3(x: 0, y: 100, z: 300)
         self.pilotNode.addChildNode(cameraNode)
         self.cameraNode.camera?.zFar = 10000.0
-        let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-        physicsBody.isAffectedByGravity = true
-        physicsBody.setResting(false)
-        physicsBody.mass = 1
-        pilotNode.physicsBody = physicsBody
+        pilotNode.renderingOrder = 1
+        
     }
     func update(throttleValue: Float, joystickAngle: Float) {
         print(self.throttleValue)
@@ -51,6 +48,7 @@ class Pilot: ObservableObject {
         var vector = SCNVector3(velocity.x, velocity.y, velocity.z)
         let velocityInWorldSpace = pilotNode.presentation.convertVector(vector, to: nil)
         let newPosition = pilotNode.position + velocityInWorldSpace
+        print(cameraNode.eulerAngles)
         let moveAction = SCNAction.move(to: newPosition, duration: 1)
         pilotNode.runAction(moveAction)
     }
