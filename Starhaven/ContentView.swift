@@ -15,15 +15,15 @@ import SwiftUI
     @State private var timer: Timer?
     
     var body: some View {
-        let longPressDragGesture = LongPressGesture(minimumDuration: 0.05)
+        let longPressDragGesture = LongPressGesture(minimumDuration: 0.001)
             .sequenced(before: DragGesture())
             .onChanged { value in
                 switch value {
                 case .first(true):
                     // Long press gesture is recognized
                     timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
-                        self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/100
-                        self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/100
+                        self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/1000
+                        self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/1000
                     }
                 case .second(true, let drag):
                     // Drag gesture is recognized after long press gesture
@@ -38,8 +38,8 @@ import SwiftUI
                     xRotation = yTranslation * .pi / 180.0
                     
                     // Update the camera's orientation
-                    self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/100
-                    self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/100
+                    self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/1000
+                    self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/1000
                 default:
                     break
                 }

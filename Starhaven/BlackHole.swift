@@ -62,13 +62,13 @@ class BlackHole: ObservableObject {
             self.addSpinningEdgeRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mod)
             if Float.random(in: 0...1) < 0.99 { self.addAccretionRing(cameraNode: cameraNode, i: i, mods: mods) }
             self.addLensingRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods)
-            //if Float.random(in: 0...1) < 0.99 { self.addLensedRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods) }
+            if Float.random(in: 0...1) < 0.8 { self.addLensedRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods) }
         }
     }
     func addLensingRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
-        let ringSize: Float = 0.1
+        let ringSize: Float = 0.15
         let ringRadius = Float(self.radius + (self.radius/2)) + (Float(i) * (ringSize-0.02))
-        let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: CGFloat(ringSize), radialSegments: 25, ringSegments: 50)
+        let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: CGFloat(ringSize) + self.radius * 0.1, radialSegments: 25, ringSegments: 50)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -103,7 +103,7 @@ class BlackHole: ObservableObject {
         rotateAroundBlackHoleCenter(edgeRingNode, isWhite: isWhite, count: i)
     }
     func addLensedRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
-        let ringRadius = Float(self.radius) + (Float(i) * Float(self.radius/20))
+        let ringRadius = Float(self.radius) + (Float(i) * Float(0.198))
         let torus = LensedTorus(radius: CGFloat(ringRadius), ringRadius: 0.2, radialSegments: 30, ringSegments: 50)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
@@ -121,8 +121,10 @@ class BlackHole: ObservableObject {
         rotateAroundBlackHoleCenter(edgeRingNode, isWhite: isWhite, count: i)
     }
     func addAccretionRing(cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
-        let ringRadius = Float(self.radius + (self.radius/2)) + (Float(i) * 0.098)
-        let accretionDiskGeometry = SCNTorus(ringRadius: CGFloat(ringRadius), pipeRadius: 0.10 + CGFloat.random(in: -0.001...0.01))
+        let scaleConstant: Float = 0.12
+        let scaleFactor: Float = Float(self.radius) * scaleConstant * Float(i)
+        let ringRadius = Float(self.radius) + Float(self.radius/4) + (Float(i) * Float(0.12))
+        let accretionDiskGeometry = SCNTorus(ringRadius: CGFloat(ringRadius), pipeRadius: 0.12  + CGFloat.random(in: -0.001...0.01))
         let accretionDiskMaterial = self.discMaterial
         accretionDiskMaterial.diffuse.contents = UIColor.red
         accretionDiskGeometry.materials = [accretionDiskMaterial]
@@ -130,8 +132,8 @@ class BlackHole: ObservableObject {
         accretionDiskGeometry.shaderModifiers = mods
         let x = self.blackHoleNode.position.x
         let z = self.blackHoleNode.position.z
-        accretionDiskNode.position = SCNVector3(x, self.blackHoleNode.position.y + Float.random(in: -0.05...0.05), z)
-        accretionDiskNode.opacity = CGFloat.random(in: 0.95...1.0)
+        accretionDiskNode.position = SCNVector3(x, self.blackHoleNode.position.y + Float.random(in: -0.1...0.05), z)
+        accretionDiskNode.opacity = CGFloat.random(in: 0.8...1.0)
         self.addRotationToAccretionDisk(accretionDiskNode)
         self.blackHoleNode.addChildNode(accretionDiskNode)
     }
@@ -278,7 +280,7 @@ struct ShaderVibe {
             color = mix(blue, purple, (t - 5.0/6.0) * 6.0);
         }
         else {
-            color = mix(purple, red, (t - 5.5/6.0) * 6.0);
+            color = red;
         }
     """
     var shaderVibe: String
