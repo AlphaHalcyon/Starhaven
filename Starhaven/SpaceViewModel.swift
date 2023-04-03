@@ -32,8 +32,7 @@ import SceneKit
     
     func addPilot() {
         scene.rootNode.addChildNode(pilot.pilotNode)
-        pilot.pilotNode.position = SCNVector3(x: 0, y:0, z: 150)
-        pilot.pilotNode.physicsBody?.velocity = SCNVector3(x: 0, y: 0, z: -1)
+        pilot.pilotNode.position = SCNVector3(x: 0, y:0, z: 300)
     }
     
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String) -> BlackHole {
@@ -44,8 +43,9 @@ import SceneKit
         lightNode.light = SCNLight()
         lightNode.light?.castsShadow = true
         lightNode.light!.type = .omni
-        lightNode.light!.intensity = 12000
+        lightNode.light!.intensity = 1
         blackHole.blackHoleNode.addChildNode(lightNode)
+        blackHole.blackHoleNode.renderingOrder = 0
         return blackHole
     }
     
