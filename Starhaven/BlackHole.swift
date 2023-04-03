@@ -48,6 +48,7 @@ class BlackHole: ObservableObject {
         let radialGravityField = SCNPhysicsField.radialGravity()
         gravityNode.physicsField = radialGravityField
         radialGravityField.strength = 1000
+        self.blackHoleNode.isHidden = false
         self.blackHoleNode.addChildNode(gravityNode)
     }
 

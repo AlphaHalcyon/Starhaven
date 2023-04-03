@@ -15,17 +15,15 @@ import SwiftUI
     @State private var timer: Timer?
     
     var body: some View {
-        let longPressDragGesture = LongPressGesture(minimumDuration: 0.001)
+        let longPressDragGesture = LongPressGesture(minimumDuration: 0.05)
             .sequenced(before: DragGesture())
             .onChanged { value in
                 switch value {
                 case .first(true):
                     // Long press gesture is recognized
                     timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
-                        self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/1000
-                        self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/1000
-                        self.viewModel.pilot.pilotNode.eulerAngles.x -= xRotation/1000
-                        self.viewModel.pilot.pilotNode.eulerAngles.y += yRotation/1000
+                        self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/100
+                        self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/100
                     }
                 case .second(true, let drag):
                     // Drag gesture is recognized after long press gesture
@@ -40,10 +38,8 @@ import SwiftUI
                     xRotation = yTranslation * .pi / 180.0
                     
                     // Update the camera's orientation
-                    self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/1000
-                    self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/1000
-                    self.viewModel.pilot.pilotNode.eulerAngles.x -= xRotation/1000
-                    self.viewModel.pilot.pilotNode.eulerAngles.y += yRotation/1000
+                    self.viewModel.pilot.cameraNode.eulerAngles.x -= xRotation/100
+                    self.viewModel.pilot.cameraNode.eulerAngles.y += yRotation/100
                 default:
                     break
                 }
@@ -64,23 +60,23 @@ import SwiftUI
             }
 
         let throttleView = ZStack {
-            VStack {
-                Spacer()
-                Rectangle()
-                    .fill(Color.blue)
-                    .frame(height: 225 * CGFloat(throttleValue))
-            }
-            .frame(width: 75, height: 225).opacity(0.1)
-            VStack {
-                Rectangle()
-                    .fill(Color.gray)
-                    .frame(height: 225 * (1 - CGFloat(throttleValue)))
-                Spacer()
-            }
-            .frame(width: 75, height: 225).opacity(0.1)
-        }
-        .frame(width: 75, height: 225)
-        .highPriorityGesture(panGesture)
+                    VStack {
+                        Spacer()
+                        Rectangle()
+                            .fill(Color.blue)
+                            .frame(height: 225 * CGFloat(throttleValue))
+                    }
+                    .frame(width: 75, height: 225).opacity(0.1)
+                    VStack {
+                        Rectangle()
+                            .fill(Color.gray)
+                            .frame(height: 225 * (1 - CGFloat(throttleValue)))
+                        Spacer()
+                    }
+                    .frame(width: 75, height: 225).opacity(0.1)
+                }
+                .frame(width: 75, height: 225)
+                .highPriorityGesture(panGesture)
 
         return ZStack {
             SpaceView(throttleValue: self.$throttleValue).simultaneousGesture(longPressDragGesture).environmentObject(self.viewModel)
