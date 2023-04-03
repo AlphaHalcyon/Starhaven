@@ -39,15 +39,15 @@ class BlackHole: ObservableObject {
         blackHoleMaterial.diffuse.contents = UIColor.black
         sphere.materials = [blackHoleMaterial]
         self.blackHoleNode = SCNNode(geometry: sphere)
-        self.blackHoleNode.physicsBody?.velocity = SCNVector3(x: 0, y: 0, z: 0)
-        let particleSystem = createGravitationalLensingParticleSystem(radius: self.radius)
-        self.blackHoleNode.addParticleSystem(particleSystem)
+        //let particleSystem = createGravitationalLensingParticleSystem(radius: self.radius)
+        //self.blackHoleNode.addParticleSystem(particleSystem)
         let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: 1  * Double.random(in: 1.05...1.15)))
         self.blackHoleNode.runAction(rotationAction)
         let gravityNode = SCNNode()
         let radialGravityField = SCNPhysicsField.radialGravity()
         gravityNode.physicsField = radialGravityField
         radialGravityField.strength = 1000
+        self.blackHoleNode.isHidden = false
         self.blackHoleNode.addChildNode(gravityNode)
     }
 
