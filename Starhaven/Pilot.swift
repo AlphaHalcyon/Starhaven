@@ -75,6 +75,8 @@ class Pilot: ObservableObject {
         let camera = SCNCamera()
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera
+        self.cameraNode.camera?.xFov = 100
+        self.cameraNode.camera?.yFov = 100
         self.cameraNode.position = SCNVector3(x: 0, y: 300, z: 500)
         containerNode.addChildNode(cameraNode)
         self.cameraNode.camera?.zFar = 10000.0
@@ -118,7 +120,7 @@ class Pilot: ObservableObject {
         let offsetX = -sin(cameraAngles.y) * distanceFromCamera * 2
         let offsetY = sin(cameraAngles.x) * distanceFromCamera * 4
         let offsetZ = -cos(cameraAngles.y) * distanceFromCamera * 2
-        let newPositionOfPilotNode = SCNVector3(cameraNode.position.x + offsetX, cameraNode.position.y + offsetY - 20, cameraNode.position.z + offsetZ)
+        let newPositionOfPilotNode = SCNVector3(cameraNode.position.x + offsetX, cameraNode.position.y + offsetY - 150, cameraNode.position.z + offsetZ)
         
         // Animate pilot node's position change
         let movePilotNodeAction = SCNAction.move(to: newPositionOfPilotNode, duration: 1)

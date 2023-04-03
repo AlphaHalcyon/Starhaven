@@ -60,9 +60,9 @@ class BlackHole: ObservableObject {
         for i in 1..<count {
             let mods = self.gravitationalLensingShaderModifiers(currentRing: i, totalRings: count * self.vibeOffset)
             self.addSpinningEdgeRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mod)
-            if Float.random(in: 0...1) < 0.99 { self.addAccretionRing(cameraNode: cameraNode, i: i, mods: mods) }
+            if Float.random(in: 0...1) < 0.95 { self.addAccretionRing(cameraNode: cameraNode, i: i, mods: mods) }
             self.addLensingRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods)
-            if Float.random(in: 0...1) < 0.8 { self.addLensedRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods) }
+            self.addLensedRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mods)
         }
     }
     func addLensingRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
@@ -86,7 +86,7 @@ class BlackHole: ObservableObject {
     }
     func addSpinningEdgeRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let radius = self.radius
-        let torus = CustomTorus(radius: CGFloat(radius), ringRadius: 0.2, radialSegments: 30, ringSegments: 50)
+        let torus = CustomTorus(radius: CGFloat(radius) + 0.5 + CGFloat(Double(i) * 0.05), ringRadius: 0.25, radialSegments: 30, ringSegments: 30)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -104,7 +104,7 @@ class BlackHole: ObservableObject {
     }
     func addLensedRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let ringRadius = Float(self.radius) + (Float(i) * Float(0.198))
-        let torus = LensedTorus(radius: CGFloat(ringRadius), ringRadius: 0.2, radialSegments: 30, ringSegments: 50)
+        let torus = LensedTorus(radius: CGFloat(ringRadius), ringRadius: 0.2, radialSegments: 30, ringSegments: 30)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -278,6 +278,9 @@ struct ShaderVibe {
         }
         else if (t < 5.5/6.0) {
             color = mix(blue, purple, (t - 5.0/6.0) * 6.0);
+        }
+        else if (t < 5.95/6.0) {
+            color = mix(purple, red, (t - 5.5/6.0) * 6.0);
         }
         else {
             color = red;

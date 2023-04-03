@@ -70,20 +70,25 @@ import SwiftUI
                     VStack {
                         Rectangle()
                             .fill(Color.gray)
-                            .frame(height: 225 * (1 - CGFloat(throttleValue)))
+                            .frame(height: 225)
                         Spacer()
                     }
-                    .frame(width: 75, height: 225).opacity(0.1)
+                    .frame(width: 75, height: 225).opacity(0.15)
                 }
                 .frame(width: 75, height: 225)
                 .highPriorityGesture(panGesture)
 
         return ZStack {
             SpaceView(throttleValue: self.$throttleValue).simultaneousGesture(longPressDragGesture).environmentObject(self.viewModel)
-            HStack {
-                throttleView.zIndex(100)
-                Spacer()
-            }
+                HStack {
+                    throttleView.zIndex(100)
+                    Spacer()
+                }
+                
+                // Reticle view
+                Circle()
+                    .fill(Color.cyan.opacity(0.5))
+                    .frame(width: 50, height: 50)
         }
     }
 }

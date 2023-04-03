@@ -26,15 +26,9 @@ import SceneKit
                 
             ]
             scene.background.intensity = 0.5
-            self.blackHoles.append(self.addBlackHole(radius: 4, ringCount: 30, vibeOffset: 1, bothRings: true, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 2, ringCount: 15, vibeOffset: 2, bothRings: true, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 1, ringCount: 15, vibeOffset: 1, bothRings: true, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 25, ringCount: 25, vibeOffset: 1, bothRings: true, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 20, ringCount: 20, vibeOffset: 2, bothRings: true, vibe: ShaderVibe.discOh))
+            self.blackHoles.append(self.addBlackHole(radius: 4, ringCount: 15, vibeOffset: 1, bothRings: true, vibe: ShaderVibe.discOh))
+            self.blackHoles.append(self.addBlackHole(radius: 5, ringCount: 25, vibeOffset: 1, bothRings: false, vibe: ShaderVibe.discOh))
             self.addPilot()
-            self.blackHoles.append(self.addBlackHole(radius: 80, ringCount: 40, vibeOffset: 1, bothRings: true, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 25, ringCount: 25, vibeOffset: 1, bothRings: true, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 5, ringCount: 20, vibeOffset: 2, bothRings: true, vibe: ShaderVibe.discOh))
         }
     }
     
@@ -46,7 +40,7 @@ import SceneKit
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, radius: radius, camera: pilot.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe)
         self.scene.rootNode.addChildNode(blackHole.blackHoleNode)
-        blackHole.blackHoleNode.worldPosition = SCNVector3(x: Float.random(in: -50...50), y:Float.random(in: -500...500), z: Float.random(in: -100...100))
+        blackHole.blackHoleNode.worldPosition = SCNVector3(x: Float.random(in: -500...500), y:Float.random(in: -500...500), z: Float.random(in: -500...500))
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light?.castsShadow = true
