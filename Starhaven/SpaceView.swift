@@ -53,7 +53,7 @@ struct SpaceView: UIViewRepresentable {
         let view = SCNView()
         viewModel.initializeSpace()
         view.scene = viewModel.scene
-        
+        view.prepare(view.scene)
         view.backgroundColor = UIColor.black
         
         // Start updating the node's position

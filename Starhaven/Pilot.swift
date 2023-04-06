@@ -20,7 +20,7 @@ class Pilot: ObservableObject {
     @Published var containerNode = SCNNode()
     
     init() {
-        let modelPath = Bundle.main.path(forResource: "Halcyon", ofType: "obj", inDirectory: "SceneKit Asset Catalog.scnassets")!
+        let modelPath = Bundle.main.path(forResource: "fish", ofType: "obj", inDirectory: "SceneKit Asset Catalog.scnassets")!
         let url = NSURL (fileURLWithPath: modelPath)
         let asset = MDLAsset(url:url as URL)
         let object = asset.object(at: 0)
@@ -39,52 +39,45 @@ class Pilot: ObservableObject {
         node.geometry?.materials = [whiteMaterial]
         let particleSystem = SCNParticleSystem()
         particleSystem.birthRate = 10000
-        particleSystem.particleLifeSpan = 1
-        particleSystem.particleLifeSpanVariation = 0.5
-        particleSystem.particleVelocity = 10000
+        particleSystem.particleLifeSpan = 0.5
+        particleSystem.particleVelocity = 1000
         particleSystem.particleVelocityVariation = 5
         particleSystem.particleSize = 0.1
         particleSystem.particleColor = .cyan
-        particleSystem.emitterShape = SCNBox(width: 1, height: 1, length: 1.0, chamferRadius: 0.5)
+        particleSystem.emitterShape = SCNTorus()
         particleSystem.emittingDirection = SCNVector3(x: 0, y: 0, z: 1)
 
         let particleNode = SCNNode()
         particleNode.addParticleSystem(particleSystem)
-        particleNode.position = SCNVector3(x: 0, y: 0, z: 100)
+        particleNode.position = SCNVector3(x: 0, y: 0, z: -5)
         particleNode.particleSystems?.first?.blendMode = SCNParticleBlendMode(rawValue: 0)!
         let particleNode2 = SCNNode()
         particleNode.addParticleSystem(particleSystem)
-        particleNode.position = SCNVector3(x: 1, y: 0, z: 100)
+        particleNode.position = SCNVector3(x: 1, y: 0, z: -5)
         particleNode.particleSystems?.first?.blendMode = SCNParticleBlendMode(rawValue: 0)!
-        node.addChildNode(particleNode)
-        node.addChildNode(particleNode2)
+        //node.addChildNode(particleNode)
+        //node.addChildNode(particleNode2)
         pilotNode = node
         // Create a container node
-        
         // Add the pilot node to the container node
         containerNode.addChildNode(pilotNode)
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
-        lightNode.light?.castsShadow = true
         lightNode.light!.type = .omni
-        lightNode.light!.intensity = 1000.0
+        lightNode.light!.intensity = 200.0
         lightNode.light?.zFar = 10000.0
-        lightNode.position = SCNVector3(x: 0, y: 300, z: 300)
+        lightNode.position = SCNVector3(x: 0, y: 0, z: 0)
         self.pilotNode.addChildNode(lightNode)
         // Create a camera and attach it to the container node
         let camera = SCNCamera()
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera
-        self.cameraNode.camera?.xFov = 100
-        self.cameraNode.camera?.yFov = 100
-        self.cameraNode.position = SCNVector3(x: 0, y: 300, z: 500)
         containerNode.addChildNode(cameraNode)
         self.cameraNode.camera?.zFar = 10000.0
-
         // Add the container node to the scene
         pilotNode.renderingOrder = 0
         let billboardConstraint = SCNBillboardConstraint()
-        billboardConstraint.freeAxes = SCNBillboardAxis.all
+        billboardConstraint.freeAxes = [.all]
         pilotNode.constraints = [billboardConstraint]
     }
     func update(throttleValue: Float, joystickAngle: Float) {
@@ -95,7 +88,7 @@ class Pilot: ObservableObject {
     }
     
     public func updateCameraVelocity() {
-        let maxSpeed: Float = 25
+        let maxSpeed: Float = 100
         let speed = throttleValue * maxSpeed
         let forwardDirection = cameraNode.simdWorldFront
         let velocity = speed * forwardDirection
@@ -111,19 +104,19 @@ class Pilot: ObservableObject {
         let angle = acos(GLKVector3DotProduct(GLKVector3Normalize(cameraUp), GLKVector3Normalize(yAxis)))
         
         // Adjust distanceFromCamera based on angle
-        let minDistance: Float = 25.0
-        let maxDistance: Float = 200.0
+        let minDistance: Float = 5
+        let maxDistance: Float = 10
         let distanceFromCamera = minDistance + (maxDistance - minDistance) * (1-angle / .pi)
         
         // Update pilot node position based on camera node orientation
         let cameraAngles = cameraNode.eulerAngles
-        let offsetX = -sin(cameraAngles.y) * distanceFromCamera * 2
-        let offsetY = sin(cameraAngles.x) * distanceFromCamera * 4
-        let offsetZ = -cos(cameraAngles.y) * distanceFromCamera * 2
-        let newPositionOfPilotNode = SCNVector3(cameraNode.position.x + offsetX, cameraNode.position.y + offsetY - 150, cameraNode.position.z + offsetZ)
+        let offsetX = -sin(cameraAngles.y) * distanceFromCamera
+        let offsetY = sin(cameraAngles.x) * distanceFromCamera
+        let offsetZ = -cos(cameraAngles.y) * distanceFromCamera
+        let newPositionOfPilotNode = SCNVector3(cameraNode.position.x + offsetX, cameraNode.position.y + offsetY, cameraNode.position.z + offsetZ)
         
         // Animate pilot node's position change
-        let movePilotNodeAction = SCNAction.move(to: newPositionOfPilotNode, duration: 1)
+        let movePilotNodeAction = SCNAction.move(to: newPositionOfPilotNode, duration: 0.1)
         pilotNode.runAction(movePilotNodeAction)
     }
 }
