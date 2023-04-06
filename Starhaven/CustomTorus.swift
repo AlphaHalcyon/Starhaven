@@ -20,7 +20,15 @@ class CustomTorus: SCNNode {
     }
 
     init(radius: CGFloat, ringRadius: CGFloat, radialSegments: Int, ringSegments: Int) {
+        let lowDetailGeometry = CustomTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: 10, ringSegments: 10)
+        let mediumDetailGeometry = CustomTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: 20, ringSegments: 20)
+        let highDetailGeometry = CustomTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: 40, ringSegments: 40)
+
+        let lowDetailLOD = SCNLevelOfDetail(geometry: lowDetailGeometry, screenSpaceRadius: 100)
+        let mediumDetailLOD = SCNLevelOfDetail(geometry: mediumDetailGeometry, screenSpaceRadius: 50)
+        let highDetailLOD = SCNLevelOfDetail(geometry: highDetailGeometry, screenSpaceRadius: 0)
         self.torusGeometry = CustomTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: radialSegments, ringSegments: ringSegments)
+        self.torusGeometry.levelsOfDetail = [lowDetailLOD, mediumDetailLOD, highDetailLOD]
         super.init()
     }
     
@@ -91,6 +99,14 @@ class LensingTorus: SCNNode {
     
     public init(radius: CGFloat, ringRadius: CGFloat, radialSegments: Int, ringSegments: Int) {
         self.torusGeometry = LensingTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: radialSegments, ringSegments: ringSegments)
+        let lowDetailGeometry = LensingTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: 10, ringSegments: 10)
+        let mediumDetailGeometry = LensingTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: 20, ringSegments: 20)
+        let highDetailGeometry = LensingTorus.buildTorusGeometry(radius: radius, ringRadius: ringRadius, radialSegments: 40, ringSegments: 40)
+
+        let lowDetailLOD = SCNLevelOfDetail(geometry: lowDetailGeometry, screenSpaceRadius: 100)
+        let mediumDetailLOD = SCNLevelOfDetail(geometry: mediumDetailGeometry, screenSpaceRadius: 50)
+        let highDetailLOD = SCNLevelOfDetail(geometry: highDetailGeometry, screenSpaceRadius: 0)
+        self.torusGeometry.levelsOfDetail = [lowDetailLOD, mediumDetailLOD, highDetailLOD]
         super.init()
         
     }

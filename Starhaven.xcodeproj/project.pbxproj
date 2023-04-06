@@ -21,6 +21,7 @@
 		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
 		AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */; };
 		AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD7B1BB29D4A4C400840842 /* Pilot.swift */; };
+		AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* Spaceground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustParticleSystem.swift; sourceTree = "<group>"; };
 		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		AFD7B1BB29D4A4C400840842 /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
+		AFDBFDD929DD2775006DEB3E /* Spaceground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 			children = (
 				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
 				AFD4C05129CFA48200A127BB /* ContentView.swift */,
+				AFDBFDD929DD2775006DEB3E /* Spaceground.swift */,
 				AFD7B1BB29D4A4C400840842 /* Pilot.swift */,
 				AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
@@ -183,6 +186,7 @@
 				AFD4C06229CFAA2200A127BB /* SpaceView.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
 				AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */,
+				AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
 				AFD4C06029CFA8AF00A127BB /* SpaceViewModel.swift in Sources */,
