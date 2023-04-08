@@ -53,6 +53,11 @@ struct HUDView: View {
             Reticle()
                 .frame(width: 30, height: 30)
                 .foregroundColor(.blue)
+            HStack {
+                Text("THROTTLE").gesture(LongPressGesture().onChanged { value in
+                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 0.5)
+                })
+            }
         }.padding()
     }
 }

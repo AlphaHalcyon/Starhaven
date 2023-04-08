@@ -47,8 +47,7 @@ struct SpacecraftView: View {
                     .environmentObject(spacecraftViewModel)
             )
             .environmentObject(spacecraftViewModel)
-        Slider(value: $spacecraftViewModel.ship.throttle, in: 0...10, step: 0.1)
-            .padding()
+        //Slider(value: $spacecraftViewModel.ship.throttle, in: 0...10, step: 0.1)
     }
 }
 struct Reticle: Shape {

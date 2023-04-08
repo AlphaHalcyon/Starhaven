@@ -48,7 +48,7 @@ import simd
         let scnView = SCNView()
         scnView.scene = self.scene
         // Load spacecraftNode and add it to the scene
-        let modelPath = Bundle.main.path(forResource: "fish", ofType: "obj", inDirectory: "SceneKit Asset Catalog.scnassets")!
+        let modelPath = Bundle.main.path(forResource: "spacefish", ofType: "obj", inDirectory: "SceneKit Asset Catalog.scnassets")!
         let url = NSURL(fileURLWithPath: modelPath)
         let asset = MDLAsset(url:url as URL)
         let object = asset.object(at: 0)
@@ -68,22 +68,18 @@ import simd
             UIImage(named: "stars7")
         ]
         Task {
+            self.ship.createEmitterNode(); self.ship.createWaterParticles(); self.ship.createFireParticles()
             self.scene.background.intensity = 0.33
-            self.blackHoles.append(self.addBlackHole(radius: 20, ringCount: 10, vibeOffset: 1, bothRings: true, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 1000, ringCount: 8, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 25, ringCount: 12, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 25, ringCount: 6, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 5, ringCount: 5, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 60, ringCount: 7, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 25, ringCount: 8, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 25, ringCount: 8, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 250, ringCount: 9, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 150, ringCount: 5, vibeOffset: 1, bothRings: false, vibe: ShaderVibe.discOh))
+            self.blackHoles.append(self.addBlackHole(radius: 100, ringCount: 7, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
+            self.blackHoles.append(self.addBlackHole(radius: 50, ringCount: 6, vibeOffset: 1, bothRings: false, vibe: ShaderVibe.discOh))
+            self.blackHoles.append(self.addBlackHole(radius: 5, ringCount: 3, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
+            self.blackHoles.append(self.addBlackHole(radius: 120, ringCount: 8, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
+            self.blackHoles.append(self.addBlackHole(radius: 100, ringCount: 4, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
         }
         let blackHole = self.addBlackHole(radius: 60, ringCount: 7, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh)
-        let redStar = Star(radius: 250, color: UIColor.red)
-        redStar.starNode.position = SCNVector3(1500, 0, 0)
-        blackHole.blackHoleNode.addChildNode(redStar.starNode)
+        let redStar = Star(radius: 250, color: UIColor.red, camera: self.cameraNode)
+        redStar.starNode.position = SCNVector3(2500, 0, 0)
+        blackHole.containerNode.addChildNode(redStar.starNode)
         for hole in blackHoles {
             scnView.prepare(hole)
         }
@@ -96,11 +92,12 @@ import simd
     // WORLD SET-UP
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, radius: radius, camera: self.ship.shipNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe)
-        self.scene.rootNode.addChildNode(blackHole.blackHoleNode)
+        self.scene.rootNode.addChildNode(blackHole.containerNode)
         blackHole.blackHoleNode.worldPosition = SCNVector3(x: Float.random(in: -5000...5000), y:Float.random(in: -5000...5000), z: Float.random(in: -5000...5000))
         blackHole.blackHoleNode.renderingOrder = 0
         return blackHole
     }
+
     // PILOT NAV
     func applyRotation() {
         if isRotationActive {
@@ -196,7 +193,11 @@ import simd
     }
     func throttle(value: Float) {
         ship.throttle = value
+        ship.fireParticleSystem.birthRate = CGFloat(5000 * value)
+        ship.waterParticleSystem.birthRate = CGFloat(5000 * value)
+        print(ship.throttle)
     }
+
     func dragChanged(value: DragGesture.Value) {
         let translation = value.translation
         let deltaX = Float(translation.width - previousTranslation.width) * 0.01
@@ -226,7 +227,7 @@ import simd
     }
     func createLookAtConstraint() -> SCNLookAtConstraint {
         let lookAtConstraint = SCNLookAtConstraint(target: ship.shipNode)
-        lookAtConstraint.influenceFactor = 1
+        lookAtConstraint.influenceFactor = 0.5
         return lookAtConstraint
     }
     func setupCamera() {
@@ -240,7 +241,7 @@ import simd
         
         // Position the camera node relative to the spacecraft
         self.cameraNode.position = SCNVector3(x: 0, y: 5, z: 15)
-        
+        self.cameraNode.camera?.fieldOfView = 120
 
         // Add a look-at constraint to the camera node
         cameraNode.constraints = [createLookAtConstraint()]

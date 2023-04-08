@@ -12,6 +12,7 @@ import Metal
 import simd
 
 class BlackHole: ObservableObject {
+    @Published var containerNode: SCNNode = SCNNode()
     @Published var blackHoleNode: SCNNode = SCNNode()
     @Published var scene: SCNScene
     @State var radius: CGFloat
@@ -32,6 +33,7 @@ class BlackHole: ObservableObject {
         self.addSpinningEdgeRings(count: ringCount, cameraNode: camera)
         //self.addMultipleAccretionDisks(count: 10)
         //self.addParticleRingJets(count: 10, cameraNode: camera)
+        self.containerNode.addChildNode(blackHoleNode)
     }
     func addBlackHoleNode(radius: CGFloat) {
         let sphere = SCNSphere(radius: radius)
@@ -41,7 +43,7 @@ class BlackHole: ObservableObject {
         self.blackHoleNode = SCNNode(geometry: sphere)
         //let particleSystem = createGravitationalLensingParticleSystem(radius: self.radius)
         //self.blackHoleNode.addParticleSystem(particleSystem)
-        let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: 2  * Double.random(in: 1.05...1.15)))
+        let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: 2  * Double.random(in: 0.5...1.15)))
         self.blackHoleNode.runAction(rotationAction)
         self.blackHoleNode.isHidden = false
     }
@@ -51,7 +53,7 @@ class BlackHole: ObservableObject {
         
         // Create a single material
         let material = SCNMaterial()
-        
+        material.emission.contents = UIColor.red
         for i in 1..<count {
             let mods = self.gravitationalLensingShaderModifiers(currentRing: i, totalRings: count * self.vibeOffset)
             self.addSpinningEdgeRing(parentNode: parentNode, cameraNode: cameraNode, i: i, mods: mod)
@@ -78,7 +80,7 @@ class BlackHole: ObservableObject {
         let x = self.blackHoleNode.position.x
         let z = self.blackHoleNode.position.z
         accretionDiskNode.position = SCNVector3(x, self.blackHoleNode.position.y, z)
-        accretionDiskNode.opacity = CGFloat.random(in: 0.8...1.0)
+        accretionDiskNode.opacity = CGFloat.random(in: 0.85...1.0)
         self.addRotationToAccretionDisk(accretionDiskNode)
         self.blackHoleNode.addChildNode(accretionDiskNode)
     }
@@ -137,7 +139,7 @@ class BlackHole: ObservableObject {
 
         // Add the edge ring node as a child of the parent node
         edgeRingParentNode.addChildNode(edgeRingNode)
-        edgeRingNode.opacity = CGFloat.random(in: 0.8...1.0)
+        edgeRingNode.opacity = CGFloat.random(in: 0.85...1.0)
         setRotation(for: edgeRingNode, relativeTo: blackHoleNode)
 
         rotateAroundBlackHoleCenter(edgeRingNode, isWhite: isWhite, count: i)

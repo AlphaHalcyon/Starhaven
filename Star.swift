@@ -10,34 +10,47 @@ import SceneKit
 import SwiftUI
 
 class Star {
-    var starNode: SCNNode
-    
-    init(radius: CGFloat, color: UIColor) {
+    @Published var starNode: SCNNode
+    @Published var camera: SCNNode
+    init(radius: CGFloat, color: UIColor, camera: SCNNode) {
         let starGeometry = SCNSphere(radius: radius)
+        let coronaGeo = SCNSphere(radius: radius + 20)
+        self.camera = camera
+        self.starNode = SCNNode(geometry: SCNSphere(radius: radius))
         
-        // Create a material for the star
-        let starMaterial = SCNMaterial()
+        // Create the particle system programmatically
+        let fireParticleSystem = SCNParticleSystem()
+        fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
+        fireParticleSystem.birthRate = 500000
+        fireParticleSystem.particleSize = 0.75
+        fireParticleSystem.particleIntensity = 0.3
+        fireParticleSystem.particleLifeSpan = 0.5
+        fireParticleSystem.spreadingAngle = 180
+        fireParticleSystem.particleAngularVelocity = 50
+        fireParticleSystem.emitterShape = coronaGeo
+        fireParticleSystem.stretchFactor = 0.33
+        // Make the particle system surface-based
+        fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
+        let material = SCNMaterial()
+        material.emission.contents = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg", in: Bundle.main, compatibleWith: nil)
+        material.diffuse.contents = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg", in: Bundle.main, compatibleWith: nil)
+        self.starNode.geometry?.firstMaterial = material
         
-        // Set the base color of the star
-        starMaterial.diffuse.contents = color
+        // Add the particle system to the star node
+        self.starNode.addParticleSystem(fireParticleSystem)
+        // Create a pulsing animation for the star node
+        let pulseInAction = SCNAction.scale(to: 0.95, duration: 1.0)
+        pulseInAction.timingMode = .easeInEaseOut
+        let pulseOutAction = SCNAction.scale(to: 1.05, duration: 1.0)
+        let finalPulse = SCNAction.scale(to: 1.5, duration: 1.0)
+        let implodeAction = SCNAction.scale(to: 0.1, duration: 0.5)
+        let implosionPause = SCNAction.scale(to: 0.1, duration: 0.25)
+        let explosionAction = SCNAction.scale(to: 100, duration: 2.5)
+        let explosionStay = SCNAction.scale(to: 100, duration: 5)
+        pulseOutAction.timingMode = .easeInEaseOut
+        let pulseSequence = SCNAction.sequence([pulseInAction, pulseOutAction])
+        //let novaSequence = SCNAction.sequence([pulseInAction, pulseOutAction, pulseInAction, pulseOutAction, pulseInAction, pulseOutAction, pulseInAction, pulseOutAction, pulseInAction, pulseOutAction, finalPulse, implodeAction, implosionPause, explosionAction])
         
-        // Add an emission property to make the star glow
-        starMaterial.emission.contents = color
-        
-        // Apply the material to the star geometry
-        starGeometry.materials = [starMaterial]
-        
-        // Create the star node and set its geometry
-        starNode = SCNNode(geometry: starGeometry)
-
-        let pulseAnimation = CABasicAnimation(keyPath: "emission.intensity")
-        pulseAnimation.fromValue = 1.0
-        pulseAnimation.toValue = 0.0
-        pulseAnimation.duration = 1.0
-        pulseAnimation.autoreverses = true
-        pulseAnimation.repeatCount = .greatestFiniteMagnitude
-
-        starMaterial.addAnimation(pulseAnimation, forKey: "pulse")
+        self.starNode.runAction(SCNAction.repeatForever(pulseSequence))
     }
 }
-
