@@ -39,8 +39,8 @@ import CoreImage
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
         self.setupCamera()
         // Create a timer to update the ship's position
-        DispatchQueue.main.async {
-            Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+            DispatchQueue.main.async {
                 self.updateShipPosition()
             }
         }
@@ -49,8 +49,9 @@ import CoreImage
         let scnView = SCNView()
         scnView.scene = self.scene
         self.ship.shipNode = self.ship.createShip()
-        scnView.scene?.rootNode.addChildNode(self.cameraNode) // Add this line
-        scnView.scene?.rootNode.addChildNode(self.ship.shipNode)
+        scnView.scene?.rootNode.addChildNode(self.cameraNode)
+        self.ship.containerNode.position = SCNVector3(0, 10_000, -25_000)
+        scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
         scnView.backgroundColor = UIColor.black
@@ -62,36 +63,46 @@ import CoreImage
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        Task {
-            self.ship.createEmitterNode(); self.ship.createWaterParticles(); self.ship.createFireParticles()
-            self.ship.shipNode.geometry!.materials = [SCNMaterial()]
-            self.ship.shipNode.geometry!.firstMaterial?.diffuse.contents = UIColor.gray
-            self.scene.background.intensity = 0.8
-            self.blackHoles.append(self.addBlackHole(radius: 100, ringCount: 25, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 0))
+        
+        // Create scattered black holes
+        for _ in 1...10 {
+            let radius = CGFloat.random(in: 50...200)
+            let ringCount = Int.random(in: 10...30)
+            let blackHole = self.addBlackHole(radius: radius, ringCount: ringCount, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
+            blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -100000...100000), CGFloat.random(in: -100000...100000), CGFloat.random(in: -100000...100000))
+            DispatchQueue.main.async {
+                self.blackHoles.append(blackHole)
+            }
         }
-        let blackHole = self.addBlackHole(radius: 100, ringCount: 50, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
-        let redStar = Star(radius: 1000, color: UIColor.red, camera: self.cameraNode)
-        redStar.starNode.position = SCNVector3(20000, 0, 0)
-        blackHole.blackHoleNode.addChildNode(redStar.starNode)
-        let bh = self.addBlackHole(radius: 400, ringCount: 20, vibeOffset: 1, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
-        let star = Star(radius: 500, color: UIColor.red, camera: self.cameraNode)
-        star.starNode.position = SCNVector3(20_000, 0, 0)
-        bh.blackHoleNode.addChildNode(star.starNode)
-        // Example usage
-        let redStarRadius: Float = 1.0
-        let redStarMass: Float = 1.0
-        let starValues = convertSolarUnitsToSceneKitUnits(radiusInSolarUnits: redStarRadius, massInSolarUnits: redStarMass)
-        let blackHoleRadius: Float = 0
-        let blackHoleMass: Float = 8.0
-        let blackHoleValues = convertSolarUnitsToSceneKitUnits(radiusInSolarUnits: blackHoleRadius, massInSolarUnits: blackHoleMass)
-        print(blackHoleValues.mass, starValues.mass)
-        //self.orbit(node1: redStar.starNode, node2: blackHole.blackHoleNode, mass1: starValues.mass, mass2: blackHoleValues.mass)
-        for hole in blackHoles {
-            scnView.prepare(hole)
+        
+        // Create center black hole
+        let centerBlackHoleRadius = CGFloat(500)
+        let centerBlackHole = self.addBlackHole(radius: centerBlackHoleRadius, ringCount: 50, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
+        
+        // Create dust cloud around center black hole programmatically
+            let dustCloud = SCNParticleSystem()
+            dustCloud.birthRate = 200
+            dustCloud.particleLifeSpan = 5
+            dustCloud.particleLifeSpanVariation = 1
+            dustCloud.particleSize = 0.1
+            dustCloud.particleColor = UIColor.gray
+            dustCloud.emissionDuration = .greatestFiniteMagnitude
+            dustCloud.emitterShape = SCNSphere(radius:centerBlackHoleRadius * 2)
+            dustCloud.particleVelocity = 0.5
+            dustCloud.particleVelocityVariation = 0.5
+            centerBlackHole.blackHoleNode.addParticleSystem(dustCloud)
+        // Create orbiting stars around center black hole
+        for _ in 1...1 {
+            let starRadius = CGFloat.random(in: 500...1500)
+            let star = Star(radius: starRadius, color: UIColor.red, camera: self.cameraNode)
+            star.starNode.position = SCNVector3(CGFloat.random(in:centerBlackHoleRadius + 20000...centerBlackHoleRadius + 30000), 0, 0)
+            centerBlackHole.blackHoleNode.addChildNode(star.starNode)
+            
+            // Add animation to make star orbit around black hole
+            let orbitAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: 30))
+            star.starNode.runAction(orbitAction)
         }
-        scnView.prepare(blackHole.blackHoleNode)
-        scnView.prepare(redStar.starNode)
-        scnView.prepare(self.scene)
+        
         return scnView
     }
     // WORLD DYNAMICS
@@ -255,8 +266,8 @@ import CoreImage
         let eulerAngles = quaternionToEulerAngles(shipQuaternion)
 
         DispatchQueue.main.async {
-            self.ship.yaw = CGFloat(eulerAngles.x * 180 / Float.pi)
-            self.ship.pitch = CGFloat(eulerAngles.y * 180 / Float.pi)
+            self.ship.yaw = CGFloat(eulerAngles.y * 180 / Float.pi)
+            self.ship.pitch = CGFloat(eulerAngles.x * 180 / Float.pi)
             self.ship.roll = CGFloat(eulerAngles.z * 180 / Float.pi)
         }
     }
@@ -268,7 +279,7 @@ import CoreImage
         var closestDistance: Float = .greatestFiniteMagnitude
         closestBlackHole = nil
         for blackHole in self.blackHoles {
-            let distance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, ship.shipNode.simdWorldPosition)
+            let distance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, ship.containerNode.simdWorldPosition)
             if distance < closestDistance {
                 self.closestBlackHole = blackHole
                 closestDistance = distance
@@ -302,8 +313,8 @@ import CoreImage
     }
     func throttle(value: Float) {
         ship.throttle = value
-        ship.fireParticleSystem.birthRate = CGFloat(50 * value)
-        ship.waterParticleSystem.birthRate = CGFloat(50 * value)
+        ship.fireParticleSystem.birthRate = CGFloat(10000 * (value/10))
+        ship.waterParticleSystem.birthRate = CGFloat(10000 * (value/10))
         print(ship.throttle)
     }
 
@@ -343,6 +354,7 @@ import CoreImage
         // Create a camera
         let camera = SCNCamera()
         camera.zFar = 100000
+        camera.zNear = 5
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera
