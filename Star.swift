@@ -14,7 +14,7 @@ class Star {
     @Published var camera: SCNNode
     init(radius: CGFloat, color: UIColor, camera: SCNNode) {
         let starGeometry = SCNSphere(radius: radius)
-        let coronaGeo = SCNSphere(radius: radius + 20)
+        let coronaGeo = SCNSphere(radius: radius + 50)
         self.camera = camera
         self.starNode = SCNNode(geometry: SCNSphere(radius: radius))
         
@@ -28,7 +28,7 @@ class Star {
         fireParticleSystem.spreadingAngle = 180
         fireParticleSystem.particleAngularVelocity = 50
         fireParticleSystem.emitterShape = coronaGeo
-        fireParticleSystem.stretchFactor = 0.33
+        fireParticleSystem.stretchFactor = 0.2
         // Make the particle system surface-based
         fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
         let material = SCNMaterial()

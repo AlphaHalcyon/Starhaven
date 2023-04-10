@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import SceneKit
 import simd
+import CoreImage
 
 @MainActor class SpacecraftViewModel: ObservableObject {
     @Published var previousTranslation: CGSize = CGSize.zero
@@ -34,8 +35,8 @@ import simd
     @Published var points: Int = 0
     @Published var showScoreIncrement: Bool = false
     init() {
-        rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 10)
-        rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 10)
+        rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
+        rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
         self.setupCamera()
         // Create a timer to update the ship's position
         DispatchQueue.main.async {
@@ -47,39 +48,44 @@ import simd
     public func makeSpaceView() -> SCNView {
         let scnView = SCNView()
         scnView.scene = self.scene
-        // Load spacecraftNode and add it to the scene
-        let modelPath = Bundle.main.path(forResource: "spacefish", ofType: "obj", inDirectory: "SceneKit Asset Catalog.scnassets")!
-        let url = NSURL(fileURLWithPath: modelPath)
-        let asset = MDLAsset(url:url as URL)
-        let object = asset.object(at: 0)
-        var node = SCNNode(mdlObject: object)
-        self.ship.shipNode = node
+        self.ship.shipNode = self.ship.createShip()
         scnView.scene?.rootNode.addChildNode(self.cameraNode) // Add this line
         scnView.scene?.rootNode.addChildNode(self.ship.shipNode)
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
         scnView.backgroundColor = UIColor.black
         scnView.scene?.background.contents = [
-            UIImage(named: "stars7"),
-            UIImage(named: "stars7"),
-            UIImage(named: "stars7"),
-            UIImage(named: "stars7"),
-            UIImage(named: "stars7"),
-            UIImage(named: "stars7")
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky")
         ]
         Task {
             self.ship.createEmitterNode(); self.ship.createWaterParticles(); self.ship.createFireParticles()
-            self.scene.background.intensity = 0.33
-            self.blackHoles.append(self.addBlackHole(radius: 100, ringCount: 7, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 50, ringCount: 6, vibeOffset: 1, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 5, ringCount: 3, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 120, ringCount: 8, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
-            self.blackHoles.append(self.addBlackHole(radius: 100, ringCount: 4, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh))
+            self.ship.shipNode.geometry!.materials = [SCNMaterial()]
+            self.ship.shipNode.geometry!.firstMaterial?.diffuse.contents = UIColor.gray
+            self.scene.background.intensity = 0.8
+            self.blackHoles.append(self.addBlackHole(radius: 100, ringCount: 25, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 0))
         }
-        let blackHole = self.addBlackHole(radius: 60, ringCount: 7, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh)
-        let redStar = Star(radius: 250, color: UIColor.red, camera: self.cameraNode)
-        redStar.starNode.position = SCNVector3(2500, 0, 0)
-        blackHole.containerNode.addChildNode(redStar.starNode)
+        let blackHole = self.addBlackHole(radius: 100, ringCount: 50, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
+        let redStar = Star(radius: 1000, color: UIColor.red, camera: self.cameraNode)
+        redStar.starNode.position = SCNVector3(20000, 0, 0)
+        blackHole.blackHoleNode.addChildNode(redStar.starNode)
+        let bh = self.addBlackHole(radius: 400, ringCount: 20, vibeOffset: 1, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
+        let star = Star(radius: 500, color: UIColor.red, camera: self.cameraNode)
+        star.starNode.position = SCNVector3(20_000, 0, 0)
+        bh.blackHoleNode.addChildNode(star.starNode)
+        // Example usage
+        let redStarRadius: Float = 1.0
+        let redStarMass: Float = 1.0
+        let starValues = convertSolarUnitsToSceneKitUnits(radiusInSolarUnits: redStarRadius, massInSolarUnits: redStarMass)
+        let blackHoleRadius: Float = 0
+        let blackHoleMass: Float = 8.0
+        let blackHoleValues = convertSolarUnitsToSceneKitUnits(radiusInSolarUnits: blackHoleRadius, massInSolarUnits: blackHoleMass)
+        print(blackHoleValues.mass, starValues.mass)
+        //self.orbit(node1: redStar.starNode, node2: blackHole.blackHoleNode, mass1: starValues.mass, mass2: blackHoleValues.mass)
         for hole in blackHoles {
             scnView.prepare(hole)
         }
@@ -88,10 +94,113 @@ import simd
         scnView.prepare(self.scene)
         return scnView
     }
-    
+    // WORLD DYNAMICS
+    func orbit(node1: SCNNode, node2: SCNNode, mass1: Float, mass2: Float) {
+        // Calculate the center of mass
+        let totalMass = mass1 + mass2
+        let centerOfMass = SCNVector3(
+            x: (node1.position.x * mass1 + node2.position.x * mass2) / totalMass,
+            y: (node1.position.y * mass1 + node2.position.y * mass2) / totalMass,
+            z: (node1.position.z * mass1 + node2.position.z * mass2) / totalMass
+        )
+        print(centerOfMass)
+        // Calculate the distance between the nodes and the center of mass
+        let distance1 = sqrt(pow(node1.position.x - centerOfMass.x, 2) + pow(node1.position.y - centerOfMass.y, 2) + pow(node1.position.z - centerOfMass.z, 2))
+        let distance2 = sqrt(pow(node2.position.x - centerOfMass.x, 2) + pow(node2.position.y - centerOfMass.y, 2) + pow(node2.position.z - centerOfMass.z, 2))
+
+        // Calculate the gravitational force between the nodes
+        let gravitationalConstant: Float = 6.674e-11
+        let force = gravitationalConstant * mass1 * mass2 / pow(distance1 + distance2, 2)
+
+        // Calculate the acceleration of each node
+        let acceleration1 = force / mass1
+        let acceleration2 = force / mass2
+
+        // Calculate the velocity of each node
+        let velocity1 = sqrt(acceleration1 * distance1)
+        let velocity2 = sqrt(acceleration2 * distance2)
+        // Calculate the direction vector between the nodes
+        let direction = node2.position - node1.position
+        
+        // Calculate the rotation axis using the cross product
+        let arbitraryVector = SCNVector3(1, 0, 0)
+        let rotationAxis = direction.crossProduct(arbitraryVector).normalized()
+
+        let orbitAction1 = SCNAction.customAction(duration: 100000000) { node, elapsedTime in
+            print(velocity1)
+            let angle = CGFloat(velocity1) * elapsedTime/1000000
+            let diff = node1.position - centerOfMass
+            let rotation = SCNMatrix4MakeRotation(Float(angle), rotationAxis.x, rotationAxis.y, rotationAxis.z)
+            let newPosition = self.applyAffineTransform(vector: diff, transform: rotation) + centerOfMass
+            node1.position = newPosition
+        }
+        let orbitAction2 = SCNAction.customAction(duration: 100000000) { node, elapsedTime in
+            let angle = CGFloat(velocity2) * elapsedTime/1000000
+            let diff = node2.position - centerOfMass
+            let rotation = SCNMatrix4MakeRotation(Float(angle), rotationAxis.x, rotationAxis.y, rotationAxis.z)
+            let newPosition = self.applyAffineTransform(vector: diff, transform: rotation) + centerOfMass
+            node2.position = newPosition
+        }
+        print(velocity1, velocity2)
+        // Run the actions on the nodes
+        node1.runAction(orbitAction1)
+        node2.runAction(orbitAction2)
+    }
+    // WORLD SCALE
+    func applyAffineTransform(vector: SCNVector3, transform: SCNMatrix4) -> SCNVector3 {
+        let x = transform.m11 * vector.x + transform.m21 * vector.y + transform.m31 * vector.z + transform.m41
+        let y = transform.m12 * vector.x + transform.m22 * vector.y + transform.m32 * vector.z + transform.m42
+        let z = transform.m13 * vector.x + transform.m23 * vector.y + transform.m33 * vector.z + transform.m43
+        return SCNVector3(x: x, y: y, z: z)
+    }
+    func convertSolarUnitsToSceneKitUnits(radiusInSolarUnits: Float, massInSolarUnits: Float) -> (radius: Float, mass: Float) {
+        let solarValuesInSceneKitUnits = getSolarValuesInSceneKitUnits()
+        let solarRadiusInSceneKitUnits = solarValuesInSceneKitUnits.radius
+        let solarMassInSceneKitUnits = solarValuesInSceneKitUnits.mass
+
+        let radiusInSceneKitUnits = radiusInSolarUnits * solarRadiusInSceneKitUnits
+        let massInSceneKitUnits = massInSolarUnits * solarMassInSceneKitUnits
+
+        return (radiusInSceneKitUnits, massInSceneKitUnits)
+    }
+    func getSolarValuesInSceneKitUnits() -> (radius: Float, mass: Float) {
+        let solarRadiusInMeters: Float = 6.957e8
+        let solarMassInKg: Float = 1.988e30
+
+        let distanceConversionFactor: Float = 10_000
+        let massConversionFactor: Float = 10000000000
+
+        let solarRadiusInSceneKitUnits = solarRadiusInMeters / distanceConversionFactor
+        let solarMassInSceneKitUnits = solarMassInKg / massConversionFactor
+
+        return (solarRadiusInSceneKitUnits, solarMassInSceneKitUnits)
+    }
+    func convertToRealLifeUnits(sceneKitValue: Float, unitType: String) -> Float {
+        let conversionFactor: Float
+        if unitType == "distance" {
+            conversionFactor = 10_000
+        } else if unitType == "mass" {
+            conversionFactor = 10_000
+        } else {
+            return sceneKitValue
+        }
+        return sceneKitValue * conversionFactor
+    }
+
+    func convertToSceneKitUnits(realLifeValue: Float, unitType: String) -> Float {
+        let conversionFactor: Float
+        if unitType == "distance" {
+            conversionFactor = 10_000
+        } else if unitType == "mass" {
+            conversionFactor = 10_000
+        } else {
+            return realLifeValue
+        }
+        return realLifeValue / conversionFactor
+    }
     // WORLD SET-UP
-    func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String) -> BlackHole {
-        let blackHole: BlackHole = BlackHole(scene: self.scene, radius: radius, camera: self.ship.shipNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe)
+    func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
+        let blackHole: BlackHole = BlackHole(scene: self.scene, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
         blackHole.blackHoleNode.worldPosition = SCNVector3(x: Float.random(in: -5000...5000), y:Float.random(in: -5000...5000), z: Float.random(in: -5000...5000))
         blackHole.blackHoleNode.renderingOrder = 0
@@ -193,8 +302,8 @@ import simd
     }
     func throttle(value: Float) {
         ship.throttle = value
-        ship.fireParticleSystem.birthRate = CGFloat(5000 * value)
-        ship.waterParticleSystem.birthRate = CGFloat(5000 * value)
+        ship.fireParticleSystem.birthRate = CGFloat(50 * value)
+        ship.waterParticleSystem.birthRate = CGFloat(50 * value)
         print(ship.throttle)
     }
 
@@ -221,8 +330,8 @@ import simd
     func dragEnded() {
         previousTranslation = CGSize.zero
         isRotationActive = false
-        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 5)
-        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 5)
+        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 3)
+        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 3)
         startContinuousRotation()
     }
     func createLookAtConstraint() -> SCNLookAtConstraint {
@@ -234,7 +343,6 @@ import simd
         // Create a camera
         let camera = SCNCamera()
         camera.zFar = 100000
-        
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera

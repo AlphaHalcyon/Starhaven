@@ -25,21 +25,23 @@ struct SpacecraftView: View {
             .gesture(
                 LongPressGesture(minimumDuration: 0.01)
                     .onEnded { _ in
-                        spacecraftViewModel.isPressed.toggle()
-                        if spacecraftViewModel.isPressed {
-                            spacecraftViewModel.startContinuousRotation()
-                        } else {
-                            spacecraftViewModel.stopContinuousRotation()
+                        if !self.spacecraftViewModel.view.allowsCameraControl {
+                            spacecraftViewModel.isPressed.toggle()
+                            if spacecraftViewModel.isPressed {
+                                spacecraftViewModel.startContinuousRotation()
+                            } else {
+                                spacecraftViewModel.stopContinuousRotation()
+                            }
                         }
                     }
             )
             .simultaneousGesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
-                        spacecraftViewModel.dragChanged(value: value)
+                        if !self.spacecraftViewModel.view.allowsCameraControl { spacecraftViewModel.dragChanged(value: value) }
                     }
                     .onEnded { _ in
-                        spacecraftViewModel.dragEnded()
+                        if !self.spacecraftViewModel.view.allowsCameraControl { spacecraftViewModel.dragEnded() }
                     }
             )
             .overlay(

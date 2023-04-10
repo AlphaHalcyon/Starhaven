@@ -23,11 +23,10 @@ struct HUDView: View {
             }
             .foregroundColor(.blue)
             HStack {
-                Spacer()
-                Text("POINTS: \(spacecraftViewModel.points)")
-            }.foregroundColor(.red)
-            Spacer()
-            if spacecraftViewModel.isInverted {
+                Text("FREE CAM").onTapGesture {
+                    self.spacecraftViewModel.view.allowsCameraControl = true
+                    self.spacecraftViewModel.cameraNode.constraints = []
+                }
                 Text("INVERTED")
                     .foregroundColor(.red)
                     .bold()
@@ -36,7 +35,10 @@ struct HUDView: View {
                             spacecraftViewModel.isInverted = false
                         }
                     }
-            }
+                Spacer()
+                Text("POINTS: \(spacecraftViewModel.points)")
+            }.foregroundColor(.red)
+            Spacer()
             if spacecraftViewModel.showScoreIncrement {
                 Text("+100")
                     .foregroundColor(.red)
@@ -55,8 +57,8 @@ struct HUDView: View {
                 .foregroundColor(.blue)
             HStack {
                 Text("THROTTLE").gesture(LongPressGesture().onChanged { value in
-                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 0.5)
-                })
+                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 1.0)
+                }).foregroundColor(.white)
             }
         }.padding()
     }

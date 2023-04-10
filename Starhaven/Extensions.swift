@@ -64,7 +64,13 @@ extension SCNVector3 {
     func length() -> Float {
         return sqrtf(x * x + y * y + z * z)
     }
-    
+    func crossProduct(_ vec: SCNVector3) -> SCNVector3 {
+        return SCNVector3(
+            x: self.y * vec.z - self.z * vec.y,
+            y: self.z * vec.x - self.x * vec.z,
+            z: self.x * vec.y - self.y * vec.x
+        )
+    }
     func normalized() -> SCNVector3 {
         let len = length()
         return SCNVector3(x / len, y / len, z / len)
@@ -87,7 +93,6 @@ extension SCNVector3 {
         return SCNVector3Make(left.x - right.x, left.y - right.y, left.z - right.z)
     }
 }
-
 extension UIColor {
     func lerp(to color: UIColor, alpha: CGFloat) -> UIColor {
         var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
@@ -100,4 +105,7 @@ extension UIColor {
         let a = a1 + (a2 - a1) * alpha
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
+}
+extension Int {
+    var degreesToRadians: Double { return Double(self) * .pi/180 }
 }
