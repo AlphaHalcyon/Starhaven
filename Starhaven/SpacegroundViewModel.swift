@@ -52,6 +52,7 @@ import CoreImage
         scnView.scene?.rootNode.addChildNode(self.cameraNode)
         self.ship.containerNode.position = SCNVector3(0, 10_000, -25_000)
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
+        self.ship.createEmitterNode(); self.ship.createWingParticleSystem(); self.ship.createWaterParticles()
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
         scnView.backgroundColor = UIColor.black
@@ -102,7 +103,7 @@ import CoreImage
             let orbitAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: 30))
             star.starNode.runAction(orbitAction)
         }
-        
+        scnView.prepare(self.scene)
         return scnView
     }
     // WORLD DYNAMICS
@@ -211,7 +212,8 @@ import CoreImage
     }
     // WORLD SET-UP
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
-        let blackHole: BlackHole = BlackHole(scene: self.scene, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
+        let blackHole: BlackHole = BlackHole(scene: self.scene, view: self.view, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
+        self.view.prepare(blackHole.blackHoleNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
         blackHole.blackHoleNode.worldPosition = SCNVector3(x: Float.random(in: -5000...5000), y:Float.random(in: -5000...5000), z: Float.random(in: -5000...5000))
         blackHole.blackHoleNode.renderingOrder = 0
@@ -313,8 +315,6 @@ import CoreImage
     }
     func throttle(value: Float) {
         ship.throttle = value
-        ship.fireParticleSystem.birthRate = CGFloat(10000 * (value/10))
-        ship.waterParticleSystem.birthRate = CGFloat(10000 * (value/10))
         print(ship.throttle)
     }
 
@@ -354,7 +354,7 @@ import CoreImage
         // Create a camera
         let camera = SCNCamera()
         camera.zFar = 100000
-        camera.zNear = 5
+        camera.zNear = 1
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera

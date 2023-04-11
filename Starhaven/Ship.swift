@@ -83,33 +83,69 @@ class Ship: ObservableObject {
         self.rearEmitterNode.position = SCNVector3(0, 0, 5)
         self.rearEmitterNode.addParticleSystem(self.waterParticleSystem)
         self.rearEmitterNode.addParticleSystem(self.fireParticleSystem)
-        self.shipNode.childNodes.first!.addChildNode(self.rearEmitterNode)
+        //self.shipNode.childNodes.first!.addChildNode(self.rearEmitterNode)
+        
+        // Create emitters for each wing
+        let leftWingEmitterNode = SCNNode()
+        let rightWingEmitterNode = SCNNode()
+        leftWingEmitterNode.position = SCNVector3(-5, 0, 0)
+        rightWingEmitterNode.position = SCNVector3(5, 0, 0)
+        // Configure particle systems for each wing
+        let leftWingParticleSystem = createWingParticleSystem()
+        let rightWingParticleSystem = createWingParticleSystem()
+
+        // Add particle systems to the wing emitter nodes
+        leftWingEmitterNode.addParticleSystem(waterParticleSystem)
+        rightWingEmitterNode.addParticleSystem(waterParticleSystem)
+
+        // Add wing emitter nodes to the wings
+        let leftWingNode = self.shipNode.childNodes.first!.childNodes[3] // Assuming wing1Node is at index 3
+        let rightWingNode = self.shipNode.childNodes.first!.childNodes[4] // Assuming wing2Node is at index 4
+        leftWingNode.addChildNode(leftWingEmitterNode)
+        rightWingNode.addChildNode(rightWingEmitterNode)
+    }
+    func createWingParticleSystem() -> SCNParticleSystem {
+        let wingParticleSystem = SCNParticleSystem()
+        wingParticleSystem.particleColor = UIColor.cyan
+        wingParticleSystem.particleSize = 0.01
+        wingParticleSystem.birthRate = 100
+        wingParticleSystem.emissionDuration = 1
+        wingParticleSystem.particleLifeSpan = 1
+        wingParticleSystem.particleVelocity = 10
+        wingParticleSystem.spreadingAngle = 180
+        wingParticleSystem.emitterShape = SCNSphere(radius: 0.1)
+        return wingParticleSystem
     }
     func createFireParticles() {
-        let geoMap = shipNode.childNodes.first!.geometry
+        let geoMap = shipNode.childNodes.first!.childNodes.first!.geometry
         // Create the particle system programmatically
         self.fireParticleSystem.particleColor = UIColor.cyan
         self.fireParticleSystem.particleSize = 0.005
-        self.fireParticleSystem.particleIntensity = 0.8
-        self.fireParticleSystem.particleLifeSpan = 5
-        self.fireParticleSystem.spreadingAngle = 180
-        self.fireParticleSystem.emitterShape = geoMap
+        self.fireParticleSystem.birthRate = 100000
+        self.fireParticleSystem.particleIntensity = 0.3
+        self.fireParticleSystem.emissionDuration = 1
+        self.fireParticleSystem.particleLifeSpan = 0.1
+        self.fireParticleSystem.emitterShape = shipNode.childNodes.first?.geometry
+        self.fireParticleSystem.particleAngularVelocity = 50
+        self.fireParticleSystem.emittingDirection = SCNVector3(x: -2, y: 0, z: 0)
         // Make the particle system surface-based
-        self.fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
+        self.fireParticleSystem.emissionDurationVariation = waterParticleSystem.emissionDuration
+        self.fireParticleSystem.emitterShape = geoMap
     }
     func createWaterParticles() {
         let geoMap = shipNode.childNodes.first!.childNodes.first!.geometry
         // Create the particle system programmatically
         self.waterParticleSystem.particleColor = UIColor.cyan
-        self.waterParticleSystem.particleSize = 0.05
-        self.waterParticleSystem.particleIntensity = 0.5
-        self.waterParticleSystem.particleLifeSpan = 5
-        self.waterParticleSystem.spreadingAngle = 180
+        self.waterParticleSystem.particleSize = 0.005
+        self.waterParticleSystem.birthRate = 100000
+        self.waterParticleSystem.particleIntensity = 0.3
+        self.waterParticleSystem.emissionDuration = 1
+        self.waterParticleSystem.particleLifeSpan = 0.1
         self.waterParticleSystem.emitterShape = shipNode.childNodes.first?.geometry
-        self.fireParticleSystem.particleAngularVelocity = 50
+        self.waterParticleSystem.particleAngularVelocity = 50
+        self.waterParticleSystem.emittingDirection = SCNVector3(x: 0, y: 0, z: 0)
         // Make the particle system surface-based
         self.waterParticleSystem.emissionDurationVariation = waterParticleSystem.emissionDuration
         self.waterParticleSystem.emitterShape = geoMap
-        self.waterParticleSystem.emittingDirection = SCNVector3(x: -5, y: 0, z: 0)
     }
 }

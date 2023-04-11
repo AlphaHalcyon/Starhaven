@@ -53,18 +53,37 @@ struct HUDView: View {
                         }
                     }
             }
-            Reticle()
-                .frame(width: 30, height: 30)
+            ReticleView()
                 .foregroundColor(.red)
             Spacer()
             HStack {
-                Text("REVERSE").gesture(LongPressGesture().onChanged { value in
-                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 1.0)
-                }).foregroundColor(.white)
                 Text("THROTTLE").gesture(LongPressGesture().onChanged { value in
-                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle - 1.0)
+                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 2.0)
+                }).foregroundColor(.white)
+                Text("REVERSE").gesture(LongPressGesture().onChanged { value in
+                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle - 2.0)
                 }).foregroundColor(.white)
             }
         }.padding()
+    }
+}
+struct ReticleView: View {
+    var body: some View {
+        ZStack {
+            Crosshair()
+                .stroke(Color.red, lineWidth: 1)
+                .frame(width: 40, height: 40).opacity(0.90)
+        }
+    }
+}
+
+struct Crosshair: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        return path
     }
 }

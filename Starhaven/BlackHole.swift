@@ -15,6 +15,7 @@ class BlackHole: ObservableObject {
     @Published var containerNode: SCNNode = SCNNode()
     @Published var blackHoleNode: SCNNode = SCNNode()
     @Published var scene: SCNScene
+    @Published var view: SCNView
     @State var radius: CGFloat
     @State var shipNode: SCNNode
     @State var vibeOffset: Int
@@ -23,8 +24,9 @@ class BlackHole: ObservableObject {
     @State var vibe: String
     @State var period: Float
     @State var discMaterial: SCNMaterial = SCNMaterial()
-    init(scene: SCNScene, radius: CGFloat, camera: SCNNode, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float, shipNode: SCNNode) {
+    init(scene: SCNScene, view: SCNView, radius: CGFloat, camera: SCNNode, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float, shipNode: SCNNode) {
         self.scene = scene
+        self.view = view
         self.radius = radius
         self.ringCount = ringCount
         self.vibeOffset = vibeOffset
@@ -52,8 +54,7 @@ class BlackHole: ObservableObject {
         self.blackHoleNode.isHidden = false
         let gaussianBlurFilter = CIFilter(name: "CIGaussianBlur")
         let pixellateFilter = CIFilter(name:"CIPixellate")
-
-        
+        self.view.prepare(blackHoleNode)
     }
     func addSpinningEdgeRings(count: Int, cameraNode: SCNNode, isWhite: Bool = false) {
         let parentNode = self.blackHoleNode
@@ -90,6 +91,7 @@ class BlackHole: ObservableObject {
         let z = self.blackHoleNode.position.z
         accretionDiskNode.position = SCNVector3(x, self.blackHoleNode.position.y, z)
         accretionDiskNode.opacity = CGFloat.random(in: 0.85...1.0)
+        self.view.prepare(accretionDiskNode)
         self.addRotationToAccretionDisk(accretionDiskNode)
         self.blackHoleNode.addChildNode(accretionDiskNode)
     }
@@ -106,7 +108,7 @@ class BlackHole: ObservableObject {
         let edgeRingParentNode = SCNNode()
         setBillboardConstraint(for: edgeRingParentNode)
         parentNode.addChildNode(edgeRingParentNode)
-
+        self.view.prepare(edgeRingNode)
         // Add the edge ring node as a child of the parent node
         edgeRingParentNode.addChildNode(edgeRingNode)
 
@@ -116,7 +118,7 @@ class BlackHole: ObservableObject {
     }
     func addSpinningEdgeRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let radius = self.radius
-        let torus = CustomTorus(radius: CGFloat(radius) + 1 + CGFloat(Double(i) * 1), ringRadius: 0.10 * radius, radialSegments: 30, ringSegments: 30)
+        let torus = CustomTorus(radius: CGFloat(radius) + 1 + CGFloat(Double(i) * 1.5), ringRadius: 0.10 * radius, radialSegments: 30, ringSegments: 30)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -124,7 +126,7 @@ class BlackHole: ObservableObject {
         let edgeRingParentNode = SCNNode()
         setBillboardConstraint(for: edgeRingParentNode)
         parentNode.addChildNode(edgeRingParentNode)
-
+        self.view.prepare(edgeRingNode)
         // Add the edge ring node as a child of the parent node
         edgeRingParentNode.addChildNode(edgeRingNode)
 
