@@ -34,6 +34,7 @@ import CoreImage
     @Published var distanceToBlackHole: CGFloat = .greatestFiniteMagnitude
     @Published var points: Int = 0
     @Published var showScoreIncrement: Bool = false
+    @Published var weaponType: String = "Missile"
     init() {
         rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
@@ -52,7 +53,6 @@ import CoreImage
         scnView.scene?.rootNode.addChildNode(self.cameraNode)
         self.ship.containerNode.position = SCNVector3(0, 10_000, -25_000)
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
-        self.ship.createEmitterNode(); self.ship.createWingParticleSystem(); self.ship.createWaterParticles()
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
         scnView.backgroundColor = UIColor.black
@@ -64,47 +64,28 @@ import CoreImage
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        
         // Create scattered black holes
         for _ in 1...10 {
-            let radius = CGFloat.random(in: 50...200)
-            let ringCount = Int.random(in: 10...30)
+            let radius = CGFloat.random(in: 30...150)
+            let ringCount = Int.random(in: 10...20)
             let blackHole = self.addBlackHole(radius: radius, ringCount: ringCount, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
-            blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -100000...100000), CGFloat.random(in: -100000...100000), CGFloat.random(in: -100000...100000))
             DispatchQueue.main.async {
                 self.blackHoles.append(blackHole)
             }
         }
-        
         // Create center black hole
         let centerBlackHoleRadius = CGFloat(500)
-        let centerBlackHole = self.addBlackHole(radius: centerBlackHoleRadius, ringCount: 50, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
-        
-        // Create dust cloud around center black hole programmatically
-            let dustCloud = SCNParticleSystem()
-            dustCloud.birthRate = 200
-            dustCloud.particleLifeSpan = 5
-            dustCloud.particleLifeSpanVariation = 1
-            dustCloud.particleSize = 0.1
-            dustCloud.particleColor = UIColor.gray
-            dustCloud.emissionDuration = .greatestFiniteMagnitude
-            dustCloud.emitterShape = SCNSphere(radius:centerBlackHoleRadius * 2)
-            dustCloud.particleVelocity = 0.5
-            dustCloud.particleVelocityVariation = 0.5
-            centerBlackHole.blackHoleNode.addParticleSystem(dustCloud)
-        // Create orbiting stars around center black hole
-        for _ in 1...1 {
-            let starRadius = CGFloat.random(in: 500...1500)
-            let star = Star(radius: starRadius, color: UIColor.red, camera: self.cameraNode)
-            star.starNode.position = SCNVector3(CGFloat.random(in:centerBlackHoleRadius + 20000...centerBlackHoleRadius + 30000), 0, 0)
-            centerBlackHole.blackHoleNode.addChildNode(star.starNode)
-            
-            // Add animation to make star orbit around black hole
-            let orbitAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: 30))
-            star.starNode.runAction(orbitAction)
-        }
+        let centerBlackHole = self.addBlackHole(radius: centerBlackHoleRadius, ringCount: 40, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
         scnView.prepare(self.scene)
         return scnView
+    }
+    // WEAPONS DYANMICS
+    func toggleWeapon() {
+        if weaponType == "Missile" {
+            weaponType = "Laser"
+        } else {
+            weaponType = "Missile"
+        }
     }
     // WORLD DYNAMICS
     func orbit(node1: SCNNode, node2: SCNNode, mass1: Float, mass2: Float) {
@@ -213,21 +194,20 @@ import CoreImage
     // WORLD SET-UP
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, view: self.view, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
+        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -100000...100000), CGFloat.random(in: -1000...1000), CGFloat.random(in: -10000...10000))
         self.view.prepare(blackHole.blackHoleNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
-        blackHole.blackHoleNode.worldPosition = SCNVector3(x: Float.random(in: -5000...5000), y:Float.random(in: -5000...5000), z: Float.random(in: -5000...5000))
-        blackHole.blackHoleNode.renderingOrder = 0
         return blackHole
     }
 
     // PILOT NAV
     func applyRotation() {
         if isRotationActive {
-            let adjustedDeltaX = isInverted ? -averageRotationVelocity.x : averageRotationVelocity.x
+            let adjustedDeltaX = averageRotationVelocity.x
 
-            let rotationY = simd_quatf(angle: adjustedDeltaX, axis: SIMD3<Float>(0, 1, 0))
+            let rotationY = simd_quatf(angle: adjustedDeltaX, axis: cameraNode.simdWorldUp)
             let cameraRight = cameraNode.simdWorldRight
-            let rotationX = simd_quatf(angle: averageRotationVelocity.y, axis: cameraRight)
+            let rotationX = simd_quatf(angle: averageRotationVelocity.y, axis: cameraNode.simdWorldRight)
 
             let totalRotation = simd_mul(rotationY, rotationX)
 
@@ -320,8 +300,8 @@ import CoreImage
 
     func dragChanged(value: DragGesture.Value) {
         let translation = value.translation
-        let deltaX = Float(translation.width - previousTranslation.width) * 0.01
-        let deltaY = Float(translation.height - previousTranslation.height) * 0.01
+        let deltaX = Float(translation.width - previousTranslation.width) * 0.005
+        let deltaY = Float(translation.height - previousTranslation.height) * 0.005
 
         // Add the deltaX and deltaY to their respective buffers
         rotationVelocityBufferX.addVelocity(CGFloat(deltaX))
@@ -341,8 +321,8 @@ import CoreImage
     func dragEnded() {
         previousTranslation = CGSize.zero
         isRotationActive = false
-        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 3)
-        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 3)
+        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
+        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
         startContinuousRotation()
     }
     func createLookAtConstraint() -> SCNLookAtConstraint {

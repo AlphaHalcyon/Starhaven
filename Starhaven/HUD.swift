@@ -15,18 +15,12 @@ struct HUDView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("Yaw: \(spacecraftViewModel.ship.yaw, specifier: "%.2f")")
-                Spacer()
                 Text("Pitch: \(spacecraftViewModel.ship.pitch, specifier: "%.2f")")
                 Spacer()
-                Text("Roll: \(spacecraftViewModel.ship.roll, specifier: "%.2f")")
+                Text("Speed: \(spacecraftViewModel.ship.throttle * 10, specifier: "%.2f") km/s")
             }
             .foregroundColor(.blue)
             HStack {
-                Text("FREE CAM").onTapGesture {
-                    self.spacecraftViewModel.view.allowsCameraControl = true
-                    self.spacecraftViewModel.cameraNode.constraints = []
-                }
                 if self.spacecraftViewModel.isInverted {
                     Text("INVERTED")
                         .foregroundColor(.red)
@@ -59,10 +53,16 @@ struct HUDView: View {
             HStack {
                 Text("THROTTLE").gesture(LongPressGesture().onChanged { value in
                     self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 2.0)
-                }).foregroundColor(.white)
+                }).foregroundColor(.white).padding()
                 Text("REVERSE").gesture(LongPressGesture().onChanged { value in
                     self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle - 2.0)
-                }).foregroundColor(.white)
+                }).foregroundColor(.white).padding()
+            }
+            HStack {
+                Text("MISSILE TIME").gesture(LongPressGesture().onChanged { value in
+                    print("fire!!!")
+                    self.spacecraftViewModel.ship.fireMissile()
+                }).foregroundColor(.white).padding()
             }
         }.padding()
     }

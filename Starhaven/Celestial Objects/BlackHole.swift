@@ -54,7 +54,6 @@ class BlackHole: ObservableObject {
         self.blackHoleNode.isHidden = false
         let gaussianBlurFilter = CIFilter(name: "CIGaussianBlur")
         let pixellateFilter = CIFilter(name:"CIPixellate")
-        self.view.prepare(blackHoleNode)
     }
     func addSpinningEdgeRings(count: Int, cameraNode: SCNNode, isWhite: Bool = false) {
         let parentNode = self.blackHoleNode
@@ -108,7 +107,6 @@ class BlackHole: ObservableObject {
         let edgeRingParentNode = SCNNode()
         setBillboardConstraint(for: edgeRingParentNode)
         parentNode.addChildNode(edgeRingParentNode)
-        self.view.prepare(edgeRingNode)
         // Add the edge ring node as a child of the parent node
         edgeRingParentNode.addChildNode(edgeRingNode)
 
@@ -126,7 +124,6 @@ class BlackHole: ObservableObject {
         let edgeRingParentNode = SCNNode()
         setBillboardConstraint(for: edgeRingParentNode)
         parentNode.addChildNode(edgeRingParentNode)
-        self.view.prepare(edgeRingNode)
         // Add the edge ring node as a child of the parent node
         edgeRingParentNode.addChildNode(edgeRingNode)
 

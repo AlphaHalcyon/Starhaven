@@ -19,11 +19,17 @@ struct ContentView: View {
 }
 struct SpacecraftView: View {
     @StateObject var spacecraftViewModel = SpacecraftViewModel()
-
     var body: some View {
+        ZStack {
+            self.space
+            HUDView()
+                .environmentObject(spacecraftViewModel)
+        }
+    }
+    var space: some View {
         Space()
             .gesture(
-                LongPressGesture(minimumDuration: 0.01)
+                LongPressGesture(minimumDuration: 0.00001)
                     .onEnded { _ in
                         if !self.spacecraftViewModel.view.allowsCameraControl {
                             spacecraftViewModel.isPressed.toggle()
@@ -43,10 +49,6 @@ struct SpacecraftView: View {
                     .onEnded { _ in
                         if !self.spacecraftViewModel.view.allowsCameraControl { spacecraftViewModel.dragEnded() }
                     }
-            )
-            .overlay(
-                HUDView()
-                    .environmentObject(spacecraftViewModel)
             )
             .environmentObject(spacecraftViewModel)
         //Slider(value: $spacecraftViewModel.ship.throttle, in: 0...10, step: 0.1)

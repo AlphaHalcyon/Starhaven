@@ -19,6 +19,22 @@ class Ship: ObservableObject {
     @Published var fireParticleSystem: SCNParticleSystem = SCNParticleSystem()
     @Published var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
     @Published var containerNode: SCNNode = SCNNode()
+    // WEAPONS MECHANICS
+    func fireMissile(target: SCNNode? = nil) {
+        print("fire!")
+        let missile = Missile(target: target)
+        var missilePosition = shipNode.position
+        missile.missileNode.position = missilePosition
+        missile.missileNode.orientation = shipNode.presentation.orientation
+        let direction = shipNode.presentation.worldFront
+        let missileMass = missile.missileNode.physicsBody?.mass ?? 1
+        let missileForce = 2 * CGFloat(throttle + 5) * 10 * missileMass
+        missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+        containerNode.parent!.addChildNode(missile.missileNode)
+        print("fire!")
+        print(missile.missileNode.position)
+    }
+    // CREATION
     func createShip() -> SCNNode {
         let node = SCNNode()
         node.geometry = SCNGeometry()
@@ -76,6 +92,7 @@ class Ship: ObservableObject {
         let containerNode = SCNNode()
         containerNode.geometry = SCNGeometry()
         containerNode.addChildNode(node)
+        self.shipNode = node
         self.containerNode = containerNode
         return containerNode
     }
@@ -91,18 +108,18 @@ class Ship: ObservableObject {
         leftWingEmitterNode.position = SCNVector3(-5, 0, 0)
         rightWingEmitterNode.position = SCNVector3(5, 0, 0)
         // Configure particle systems for each wing
-        let leftWingParticleSystem = createWingParticleSystem()
-        let rightWingParticleSystem = createWingParticleSystem()
+        //let leftWingParticleSystem = createWingParticleSystem()
+        //let rightWingParticleSystem = createWingParticleSystem()
 
         // Add particle systems to the wing emitter nodes
-        leftWingEmitterNode.addParticleSystem(waterParticleSystem)
-        rightWingEmitterNode.addParticleSystem(waterParticleSystem)
+        //leftWingEmitterNode.addParticleSystem(waterParticleSystem)
+        //rightWingEmitterNode.addParticleSystem(waterParticleSystem)
 
         // Add wing emitter nodes to the wings
-        let leftWingNode = self.shipNode.childNodes.first!.childNodes[3] // Assuming wing1Node is at index 3
-        let rightWingNode = self.shipNode.childNodes.first!.childNodes[4] // Assuming wing2Node is at index 4
-        leftWingNode.addChildNode(leftWingEmitterNode)
-        rightWingNode.addChildNode(rightWingEmitterNode)
+        //let leftWingNode = self.shipNode.childNodes.first!.childNodes[3] // Assuming wing1Node is at index 3
+        //let rightWingNode = self.shipNode.childNodes.first!.childNodes[4] // Assuming wing2Node is at index 4
+        //leftWingNode.addChildNode(leftWingEmitterNode)
+        //rightWingNode.addChildNode(rightWingEmitterNode)
     }
     func createWingParticleSystem() -> SCNParticleSystem {
         let wingParticleSystem = SCNParticleSystem()
