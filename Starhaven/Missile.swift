@@ -43,6 +43,33 @@ class Missile {
         self.missileNode.physicsBody?.isAffectedByGravity = false
         self.missileNode.physicsBody?.friction = 0
         self.missileNode.physicsBody?.damping = 0
+        let detonationTimer = Timer.scheduledTimer(withTimeInterval: 7, repeats: false) { _ in
+            self.detonate()
+        }
+    }
+    var timeSinceFired: TimeInterval = 0
+    let detonationTime: TimeInterval = 7
+    func handleCollision() {
+        detonate()
+    }
+    func detonate() {
+        // Create a particle system for the explosion
+        let explosion = SCNParticleSystem()
+        explosion.emitterShape = SCNSphere(radius: 50)
+        explosion.birthRate = 500000
+        explosion.particleLifeSpan = 0.5
+        explosion.particleVelocity = 10
+        explosion.particleVelocityVariation = 5
+        explosion.particleSize = 0.05
+        explosion.stretchFactor = 0.05
+
+        // Add the particle system to the missile node
+        missileNode.addParticleSystem(explosion)
+
+        // Remove the missile node from the scene after a delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.missileNode.removeFromParentNode()
+        }
     }
 }
 class Laser {
