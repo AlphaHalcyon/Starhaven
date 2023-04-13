@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
+		AF07022029E123AE00667F9B /* FireSystem.sks in Resources */ = {isa = PBXBuildFile; fileRef = AF07021F29E1231E00667F9B /* FireSystem.sks */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
+		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
 		AF6388DA29DF77940086C90F /* Space.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388D929DF77940086C90F /* Space.swift */; };
 		AF6388DC29DF77B80086C90F /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DB29DF77B80086C90F /* HUD.swift */; };
 		AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */; };
@@ -17,21 +20,22 @@
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
 		AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */ = {isa = PBXBuildFile; fileRef = AFC43CD929D7CF200080E891 /* Privacy Policy.txt */; };
 		AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */; };
-		AFD4C05229CFA48200A127BB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05129CFA48200A127BB /* ContentView.swift */; };
 		AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05329CFA48400A127BB /* Assets.xcassets */; };
 		AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05629CFA48400A127BB /* Preview Assets.xcassets */; };
 		AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05D29CFA49500A127BB /* BlackHole.swift */; };
-		AFD4C06029CFA8AF00A127BB /* SpaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05F29CFA8AF00A127BB /* SpaceViewModel.swift */; };
-		AFD4C06229CFAA2200A127BB /* SpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06129CFAA2200A127BB /* SpaceView.swift */; };
 		AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06329CFAAFC00A127BB /* Extensions.swift */; };
 		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
 		AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */; };
 		AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD7B1BB29D4A4C400840842 /* Pilot.swift */; };
 		AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* Spaceground.swift */; };
+		AFF42A8629E6689800B6C603 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF42A8529E6689800B6C603 /* Missile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF07021C29E120D300667F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AF07021F29E1231E00667F9B /* FireSystem.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireSystem.sks; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
+		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
 		AF6388D929DF77940086C90F /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
 		AF6388DB29DF77B80086C90F /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
 		AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelocityBuffer.swift; sourceTree = "<group>"; };
@@ -41,18 +45,16 @@
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
 		AFD4C04C29CFA48200A127BB /* Starhaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Starhaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarhavenApp.swift; sourceTree = "<group>"; };
-		AFD4C05129CFA48200A127BB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AFD4C05329CFA48400A127BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFD4C05629CFA48400A127BB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AFD4C05D29CFA49500A127BB /* BlackHole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHole.swift; sourceTree = "<group>"; };
-		AFD4C05F29CFA8AF00A127BB /* SpaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceViewModel.swift; sourceTree = "<group>"; };
-		AFD4C06129CFAA2200A127BB /* SpaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceView.swift; sourceTree = "<group>"; };
 		AFD4C06329CFAAFC00A127BB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AFD4C06529CFAF5100A127BB /* CustomTorus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTorus.swift; sourceTree = "<group>"; };
 		AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustParticleSystem.swift; sourceTree = "<group>"; };
 		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		AFD7B1BB29D4A4C400840842 /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
 		AFDBFDD929DD2775006DEB3E /* Spaceground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceground.swift; sourceTree = "<group>"; };
+		AFF42A8529E6689800B6C603 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,21 +69,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AF6388E129DF785E0086C90F /* Legacy */ = {
-			isa = PBXGroup;
-			children = (
-				AFD4C05129CFA48200A127BB /* ContentView.swift */,
-				AFD4C05F29CFA8AF00A127BB /* SpaceViewModel.swift */,
-				AFD4C06129CFAA2200A127BB /* SpaceView.swift */,
-			);
-			path = Legacy;
-			sourceTree = "<group>";
-		};
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
-				AF6388E629DFC9610086C90F /* Star.swift */,
-				AF6388D929DF77940086C90F /* Space.swift */,
+				AF07021C29E120D300667F9B /* Assets.xcassets */,
+				AF07021F29E1231E00667F9B /* FireSystem.sks */,
 				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFD4C04D29CFA48200A127BB /* Products */,
@@ -101,18 +93,18 @@
 			isa = PBXGroup;
 			children = (
 				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
-				AFDBFDD929DD2775006DEB3E /* Spaceground.swift */,
+				AFF42A8829E773FD00B6C603 /* Space View */,
 				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
 				AF6388DF29DF78430086C90F /* Ship.swift */,
 				AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */,
 				AF6388DB29DF77B80086C90F /* HUD.swift */,
+				AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */,
 				AFD7B1BB29D4A4C400840842 /* Pilot.swift */,
-				AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */,
-				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
+				AFF42A8729E773D000B6C603 /* Celestial Objects */,
+				AFF42A8529E6689800B6C603 /* Missile.swift */,
 				AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */,
-				AFD4C06529CFAF5100A127BB /* CustomTorus.swift */,
 				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
-				AF6388E129DF785E0086C90F /* Legacy */,
+				AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */,
 				AFD4C05329CFA48400A127BB /* Assets.xcassets */,
 				AFD4C05529CFA48400A127BB /* Preview Content */,
 			);
@@ -133,6 +125,25 @@
 				AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AFF42A8729E773D000B6C603 /* Celestial Objects */ = {
+			isa = PBXGroup;
+			children = (
+				AF6388E629DFC9610086C90F /* Star.swift */,
+				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
+				AFD4C06529CFAF5100A127BB /* CustomTorus.swift */,
+			);
+			path = "Celestial Objects";
+			sourceTree = "<group>";
+		};
+		AFF42A8829E773FD00B6C603 /* Space View */ = {
+			isa = PBXGroup;
+			children = (
+				AF6388D929DF77940086C90F /* Space.swift */,
+				AFDBFDD929DD2775006DEB3E /* Spaceground.swift */,
+			);
+			path = "Space View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,9 +204,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF07022029E123AE00667F9B /* FireSystem.sks in Resources */,
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
 				AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */,
+				AF07021E29E120D300667F9B /* Assets.xcassets in Resources */,
 				AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,20 +220,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFD4C05229CFA48200A127BB /* ContentView.swift in Sources */,
 				AF6388DA29DF77940086C90F /* Space.swift in Sources */,
 				AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */,
-				AFD4C06229CFAA2200A127BB /* SpaceView.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
+				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
 				AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
+				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
-				AFD4C06029CFA8AF00A127BB /* SpaceViewModel.swift in Sources */,
 				AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,
 			);
