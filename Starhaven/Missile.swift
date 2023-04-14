@@ -18,23 +18,23 @@ class Missile {
         self.target = target
 
         // Create missile geometry and node
-        let missileGeometry = SCNCylinder(radius: 1, height: 1)
+        let missileGeometry = SCNCylinder(radius: 0.5, height: 2)
         missileGeometry.firstMaterial?.diffuse.contents = UIColor.darkGray
         missileNode = SCNNode(geometry: missileGeometry)
         // Adjust the physicsBody
-                let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-                physicsBody.angularVelocityFactor = SCNVector3(0, 0, 0) // Prevent rotation after being fired
-                missileNode.physicsBody = physicsBody
+        let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        physicsBody.angularVelocityFactor = SCNVector3(0, 0, 0) // Prevent rotation after being fired
+        missileNode.physicsBody = physicsBody
         // Create red particle system
         redParticleSystem = SCNParticleSystem()
         redParticleSystem.particleColor = UIColor.red
         redParticleSystem.particleSize = 0.00725
         redParticleSystem.birthRate = 10000
         redParticleSystem.emissionDuration = 1
-        redParticleSystem.particleLifeSpan = 4
+        redParticleSystem.particleLifeSpan = 3.75
         redParticleSystem.spreadingAngle = 180
         redParticleSystem.emitterShape = missileGeometry
-
+        redParticleSystem.emissionDurationVariation = redParticleSystem.emissionDuration
         // Attach red particle system to the tail of the missile
         let emitterNode = SCNNode()
         emitterNode.position = SCNVector3(0, -1, 0)
@@ -43,7 +43,7 @@ class Missile {
         self.missileNode.physicsBody?.isAffectedByGravity = false
         self.missileNode.physicsBody?.friction = 0
         self.missileNode.physicsBody?.damping = 0
-        let detonationTimer = Timer.scheduledTimer(withTimeInterval: 7, repeats: false) { _ in
+        let detonationTimer = Timer.scheduledTimer(withTimeInterval: 8, repeats: false) { _ in
             self.detonate()
             print("boom")
             

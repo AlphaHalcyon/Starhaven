@@ -23,17 +23,23 @@ class Ship: ObservableObject {
     func fireMissile(target: SCNNode? = nil) {
         print("fire!")
         let missile = Missile(target: target)
-        var missilePosition = shipNode.position
-        missile.missileNode.position = missilePosition
+        
+        // Convert shipNode's local position to world position
+        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 0), to: containerNode.parent)
+        
+        missile.missileNode.position = worldPosition
         missile.missileNode.orientation = shipNode.presentation.orientation
         let direction = shipNode.presentation.worldFront
         let missileMass = missile.missileNode.physicsBody?.mass ?? 1
         let missileForce = 2 * CGFloat(throttle + 5) * 10 * missileMass
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         containerNode.parent!.addChildNode(missile.missileNode)
-        print("fire!")
+        
         print(missile.missileNode.position)
+        print(containerNode.position)
+        print(shipNode.position)
     }
+
     // CREATION
     func createShip() -> SCNNode {
         let node = SCNNode()
