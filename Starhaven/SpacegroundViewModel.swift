@@ -51,7 +51,12 @@ import CoreImage
         scnView.scene = self.scene
         self.ship.shipNode = self.ship.createShip()
         scnView.scene?.rootNode.addChildNode(self.cameraNode)
-        self.ship.containerNode.position = SCNVector3(0, 10_000, -25_000)
+        self.ship.containerNode.position = SCNVector3(0, 1_000, -5_000)
+        let enemyShip = EnemyShip().shipNode
+        let enemyShip2 = EnemyShip().shipNode
+        enemyShip.position = SCNVector3(0, 1_000, -4_999)
+        scnView.scene?.rootNode.addChildNode(enemyShip)
+        scnView.scene?.rootNode.addChildNode(enemyShip2)
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
@@ -68,14 +73,17 @@ import CoreImage
         for _ in 1...10 {
             let radius = CGFloat.random(in: 30...150)
             let ringCount = Int.random(in: 10...20)
-            let blackHole = self.addBlackHole(radius: radius, ringCount: ringCount, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
+            let blackHole = self.addBlackHole(radius: radius, ringCount: ringCount, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 8)
             DispatchQueue.main.async {
                 self.blackHoles.append(blackHole)
             }
         }
         // Create center black hole
-        let centerBlackHoleRadius = CGFloat(500)
-        let centerBlackHole = self.addBlackHole(radius: centerBlackHoleRadius, ringCount: 40, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 15)
+        let centerBlackHoleRadius = CGFloat(1000)
+        let centerBlackHole = self.addBlackHole(radius: centerBlackHoleRadius, ringCount: 25, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 8)
+        DispatchQueue.main.async {
+            self.blackHoles.append(centerBlackHole)
+        }
         scnView.prepare(self.scene)
         return scnView
     }
@@ -88,57 +96,7 @@ import CoreImage
         }
     }
     // WORLD DYNAMICS
-    func orbit(node1: SCNNode, node2: SCNNode, mass1: Float, mass2: Float) {
-        // Calculate the center of mass
-        let totalMass = mass1 + mass2
-        let centerOfMass = SCNVector3(
-            x: (node1.position.x * mass1 + node2.position.x * mass2) / totalMass,
-            y: (node1.position.y * mass1 + node2.position.y * mass2) / totalMass,
-            z: (node1.position.z * mass1 + node2.position.z * mass2) / totalMass
-        )
-        print(centerOfMass)
-        // Calculate the distance between the nodes and the center of mass
-        let distance1 = sqrt(pow(node1.position.x - centerOfMass.x, 2) + pow(node1.position.y - centerOfMass.y, 2) + pow(node1.position.z - centerOfMass.z, 2))
-        let distance2 = sqrt(pow(node2.position.x - centerOfMass.x, 2) + pow(node2.position.y - centerOfMass.y, 2) + pow(node2.position.z - centerOfMass.z, 2))
-
-        // Calculate the gravitational force between the nodes
-        let gravitationalConstant: Float = 6.674e-11
-        let force = gravitationalConstant * mass1 * mass2 / pow(distance1 + distance2, 2)
-
-        // Calculate the acceleration of each node
-        let acceleration1 = force / mass1
-        let acceleration2 = force / mass2
-
-        // Calculate the velocity of each node
-        let velocity1 = sqrt(acceleration1 * distance1)
-        let velocity2 = sqrt(acceleration2 * distance2)
-        // Calculate the direction vector between the nodes
-        let direction = node2.position - node1.position
-        
-        // Calculate the rotation axis using the cross product
-        let arbitraryVector = SCNVector3(1, 0, 0)
-        let rotationAxis = direction.crossProduct(arbitraryVector).normalized()
-
-        let orbitAction1 = SCNAction.customAction(duration: 100000000) { node, elapsedTime in
-            print(velocity1)
-            let angle = CGFloat(velocity1) * elapsedTime/1000000
-            let diff = node1.position - centerOfMass
-            let rotation = SCNMatrix4MakeRotation(Float(angle), rotationAxis.x, rotationAxis.y, rotationAxis.z)
-            let newPosition = self.applyAffineTransform(vector: diff, transform: rotation) + centerOfMass
-            node1.position = newPosition
-        }
-        let orbitAction2 = SCNAction.customAction(duration: 100000000) { node, elapsedTime in
-            let angle = CGFloat(velocity2) * elapsedTime/1000000
-            let diff = node2.position - centerOfMass
-            let rotation = SCNMatrix4MakeRotation(Float(angle), rotationAxis.x, rotationAxis.y, rotationAxis.z)
-            let newPosition = self.applyAffineTransform(vector: diff, transform: rotation) + centerOfMass
-            node2.position = newPosition
-        }
-        print(velocity1, velocity2)
-        // Run the actions on the nodes
-        node1.runAction(orbitAction1)
-        node2.runAction(orbitAction2)
-    }
+    
     // WORLD SCALE
     func applyAffineTransform(vector: SCNVector3, transform: SCNMatrix4) -> SCNVector3 {
         let x = transform.m11 * vector.x + transform.m21 * vector.y + transform.m31 * vector.z + transform.m41
@@ -146,55 +104,10 @@ import CoreImage
         let z = transform.m13 * vector.x + transform.m23 * vector.y + transform.m33 * vector.z + transform.m43
         return SCNVector3(x: x, y: y, z: z)
     }
-    func convertSolarUnitsToSceneKitUnits(radiusInSolarUnits: Float, massInSolarUnits: Float) -> (radius: Float, mass: Float) {
-        let solarValuesInSceneKitUnits = getSolarValuesInSceneKitUnits()
-        let solarRadiusInSceneKitUnits = solarValuesInSceneKitUnits.radius
-        let solarMassInSceneKitUnits = solarValuesInSceneKitUnits.mass
-
-        let radiusInSceneKitUnits = radiusInSolarUnits * solarRadiusInSceneKitUnits
-        let massInSceneKitUnits = massInSolarUnits * solarMassInSceneKitUnits
-
-        return (radiusInSceneKitUnits, massInSceneKitUnits)
-    }
-    func getSolarValuesInSceneKitUnits() -> (radius: Float, mass: Float) {
-        let solarRadiusInMeters: Float = 6.957e8
-        let solarMassInKg: Float = 1.988e30
-
-        let distanceConversionFactor: Float = 10_000
-        let massConversionFactor: Float = 10000000000
-
-        let solarRadiusInSceneKitUnits = solarRadiusInMeters / distanceConversionFactor
-        let solarMassInSceneKitUnits = solarMassInKg / massConversionFactor
-
-        return (solarRadiusInSceneKitUnits, solarMassInSceneKitUnits)
-    }
-    func convertToRealLifeUnits(sceneKitValue: Float, unitType: String) -> Float {
-        let conversionFactor: Float
-        if unitType == "distance" {
-            conversionFactor = 10_000
-        } else if unitType == "mass" {
-            conversionFactor = 10_000
-        } else {
-            return sceneKitValue
-        }
-        return sceneKitValue * conversionFactor
-    }
-
-    func convertToSceneKitUnits(realLifeValue: Float, unitType: String) -> Float {
-        let conversionFactor: Float
-        if unitType == "distance" {
-            conversionFactor = 10_000
-        } else if unitType == "mass" {
-            conversionFactor = 10_000
-        } else {
-            return realLifeValue
-        }
-        return realLifeValue / conversionFactor
-    }
     // WORLD SET-UP
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, view: self.view, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
-        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -100000...100000), CGFloat.random(in: -1000...1000), CGFloat.random(in: -10000...10000))
+        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...100000))
         self.view.prepare(blackHole.blackHoleNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
         return blackHole
@@ -259,29 +172,39 @@ import CoreImage
         ship.shipNode.simdPosition += ship.shipNode.simdWorldFront * ship.throttle
         // Find the closest black hole and its distance
         var closestDistance: Float = .greatestFiniteMagnitude
+        var closestContainerDistance: Float = .greatestFiniteMagnitude
         closestBlackHole = nil
         for blackHole in self.blackHoles {
-            let distance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, ship.containerNode.simdWorldPosition)
+            let distance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, ship.shipNode.simdWorldPosition)
+            let containerDistance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, ship.containerNode.simdWorldPosition)
             if distance < closestDistance {
                 self.closestBlackHole = blackHole
                 closestDistance = distance
+                closestContainerDistance = containerDistance
             }
         }
+        let minFov: Float = 120 // minimum field of view
+        let maxFov: Float = 160 // maximum field of view
+        let maxDistance: Float = 7500 // maximum distance at which the field of view starts to increase
 
+        if closestDistance < maxDistance {
+            let ratio = (maxDistance - closestDistance) / maxDistance
+            print(ratio)
+            self.cameraNode.camera!.fieldOfView = CGFloat(minFov + (maxFov - minFov) * ratio)
+        } else {
+            self.cameraNode.camera!.fieldOfView = CGFloat(minFov)
+        }
+        print(self.cameraNode.camera!.fieldOfView)
         // Check if the ship is in contact with the closest black hole (use a threshold value)
-        let contactThreshold: Float = self.closestBlackHole == nil ? 0 : Float(self.closestBlackHole!.radius)
-        if closestDistance < contactThreshold {
-            points += 100
+        let contactThreshold: Float = self.closestBlackHole == nil ? 0 : Float(self.closestBlackHole!.radius + 5)
+        if closestDistance < contactThreshold || closestContainerDistance < contactThreshold {
+            points += 100 * Int(self.ship.throttle)
             self.showScoreIncrement = true
             // Remove black hole from scene and view model
             closestBlackHole?.blackHoleNode.removeFromParentNode()
             if let index = blackHoles.firstIndex(where: { $0 === closestBlackHole }) {
                 blackHoles.remove(at: index)
             }
-
-            // Add a new random black hole
-            //let newBlackHole = addBlackHole(radius: CGFloat.random(in: 10...50), ringCount: Int.random(in: 1...4), vibeOffset: Int.random(in: 1...2), bothRings: Bool.random(), vibe: "discOh")
-            //blackHoles.append(newBlackHole)
             print("Contact with a black hole! Points: \(points)")
         }
         let distance: Float = 15.0 // Define the desired distance between the camera and the spaceship
@@ -300,8 +223,8 @@ import CoreImage
 
     func dragChanged(value: DragGesture.Value) {
         let translation = value.translation
-        let deltaX = Float(translation.width - previousTranslation.width) * 0.005
-        let deltaY = Float(translation.height - previousTranslation.height) * 0.005
+        let deltaX = Float(translation.width - previousTranslation.width) * 0.0075
+        let deltaY = Float(translation.height - previousTranslation.height) * 0.0075
 
         // Add the deltaX and deltaY to their respective buffers
         rotationVelocityBufferX.addVelocity(CGFloat(deltaX))
@@ -321,8 +244,8 @@ import CoreImage
     func dragEnded() {
         previousTranslation = CGSize.zero
         isRotationActive = false
-        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
-        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
+        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 1)
+        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 1)
         startContinuousRotation()
     }
     func createLookAtConstraint() -> SCNLookAtConstraint {

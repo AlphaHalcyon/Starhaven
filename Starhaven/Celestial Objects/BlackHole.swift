@@ -77,6 +77,55 @@ class BlackHole: ObservableObject {
         self.addLensingRing(parentNode: parentNode, cameraNode: cameraNode, i: count, mods: mod)
         self.addLensingRing(parentNode: parentNode, cameraNode: cameraNode, i: count, mods: mod)
         self.addAccretionRing(cameraNode: cameraNode, i: count, mods: mod, material: material)
+        //self.addFishEyeTorus(parentNode: self.blackHoleNode, cameraNode: cameraNode, i: count + 1)
+    }
+    func addFishEyeTorus(parentNode: SCNNode, cameraNode: SCNNode, i: Int) {
+        // Calculate the radius of the fisheye torus
+        let scaleConstant: Float = Float(self.radius * 0.2)
+        let scaleFactor: Float = scaleConstant * Float(i)
+        let ringRadius = Float(self.radius) + Float(self.radius) + scaleFactor
+        let pipeRadius = CGFloat(scaleConstant)
+        
+        // Create a custom torus geometry
+        let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 25, ringSegments: 35)
+        
+        // Define the fisheye lensing shader code
+        
+        // Create a new material and apply the fisheye shader to it
+        let fisheyeMaterial = SCNMaterial()
+        fisheyeMaterial.shaderModifiers = [
+            SCNShaderModifierEntryPoint.fragment: """
+                vec2 coord = gl_FragCoord.xy * u_inverseResolution.xy;
+                vec2 texCoord = 2.0 * coord - 1.0;
+                float r = length(texCoord);
+                float theta = atan2(texCoord.y, texCoord.x);
+                r = pow(r, 0.5);
+                texCoord.x = r * cos(theta);
+                texCoord.y = r * sin(theta);
+                coord = texCoord / 2.0 + 0.5;
+                _output.color.rgb = texture2D(u_diffuseTexture, coord).rgb;
+                """
+        ]
+        
+        // Set the transparency of the material
+        fisheyeMaterial.transparency = 0.5
+        
+        // Assign the material to the custom torus geometry
+        torus.geometry?.firstMaterial = fisheyeMaterial
+        
+        // Create a new node for the fisheye torus and add it to the parent node
+        let fishEyeTorusNode = SCNNode(geometry: torus.geometry)
+        
+        // Create a new parent node for the fisheye torus and apply the billboard constraint to it
+        let fishEyeTorusParentNode = SCNNode()
+        setBillboardConstraint(for: fishEyeTorusParentNode)
+        parentNode.addChildNode(fishEyeTorusParentNode)
+        
+        // Add the fisheye torus node as a child of the parent node
+        fishEyeTorusParentNode.addChildNode(fishEyeTorusNode)
+        setRotation(for: fishEyeTorusNode, relativeTo: blackHoleNode)
+
+        rotateAroundBlackHoleCenter(fishEyeTorusNode, isWhite: false, count: i)
     }
     func addAccretionRing(cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String], material: SCNMaterial) {
         let scaleConstant: Float = Float(self.radius * 0.1)
@@ -99,7 +148,7 @@ class BlackHole: ObservableObject {
             let scaleFactor: Float = scaleConstant * Float(i)
         let ringRadius = Float(self.radius) + Float(self.radius) + scaleFactor
             let pipeRadius = CGFloat(scaleConstant)
-            let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 25, ringSegments: 50)
+            let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 25, ringSegments: 35)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
         edgeRingNode.opacity = CGFloat.random(in: 0.85...1.0)
@@ -116,7 +165,7 @@ class BlackHole: ObservableObject {
     }
     func addSpinningEdgeRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let radius = self.radius
-        let torus = CustomTorus(radius: CGFloat(radius) + 1 + CGFloat(Double(i) * 1.5), ringRadius: 0.10 * radius, radialSegments: 30, ringSegments: 30)
+        let torus = CustomTorus(radius: CGFloat(radius) + CGFloat(Double(i) * 2), ringRadius: 0.05 * radius, radialSegments: 25, ringSegments: 25)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 

@@ -46,7 +46,6 @@ class Missile {
         let detonationTimer = Timer.scheduledTimer(withTimeInterval: 8, repeats: false) { _ in
             self.detonate()
             print("boom")
-            
         }
     }
     func handleCollision() {

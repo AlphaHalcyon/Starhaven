@@ -31,7 +31,7 @@ class Ship: ObservableObject {
         missile.missileNode.orientation = shipNode.presentation.orientation
         let direction = shipNode.presentation.worldFront
         let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        let missileForce = 2 * CGFloat(throttle + 5) * 10 * missileMass
+        let missileForce = CGFloat(throttle + 1) * 60 * missileMass
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         containerNode.parent!.addChildNode(missile.missileNode)
         

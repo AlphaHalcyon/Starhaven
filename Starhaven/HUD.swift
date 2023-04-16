@@ -34,9 +34,8 @@ struct HUDView: View {
                 Spacer()
                 Text("POINTS: \(spacecraftViewModel.points)")
             }.foregroundColor(.red)
-            Spacer()
             if spacecraftViewModel.showScoreIncrement {
-                Text("+100")
+                Text("+\(Int(self.spacecraftViewModel.ship.throttle) * 100)")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
@@ -47,9 +46,11 @@ struct HUDView: View {
                         }
                     }
             }
+            Spacer()
             ReticleView()
                 .foregroundColor(.red)
             Spacer()
+            
             HStack {
                 Text("THROTTLE").gesture(LongPressGesture().onChanged { value in
                     self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 2.0)
@@ -72,7 +73,7 @@ struct ReticleView: View {
         ZStack {
             Crosshair()
                 .stroke(Color.red, lineWidth: 1)
-                .frame(width: 40, height: 40).opacity(0.90)
+                .frame(width: 40, height: 30).opacity(0.80)
         }
     }
 }
@@ -80,10 +81,10 @@ struct ReticleView: View {
 struct Crosshair: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
-        path.move(to: CGPoint(x: rect.minX, y: rect.midY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY+50))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY+50))
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY+50))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY+50))
         return path
     }
 }
