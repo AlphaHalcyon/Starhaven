@@ -148,7 +148,7 @@ class BlackHole: ObservableObject {
             let scaleFactor: Float = scaleConstant * Float(i)
         let ringRadius = Float(self.radius) + Float(self.radius) + scaleFactor
             let pipeRadius = CGFloat(scaleConstant)
-            let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 25, ringSegments: 35)
+            let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 15, ringSegments: 15)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
         edgeRingNode.opacity = CGFloat.random(in: 0.85...1.0)
@@ -165,7 +165,7 @@ class BlackHole: ObservableObject {
     }
     func addSpinningEdgeRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let radius = self.radius
-        let torus = CustomTorus(radius: CGFloat(radius) + CGFloat(Double(i) * 2), ringRadius: 0.05 * radius, radialSegments: 25, ringSegments: 25)
+        let torus = CustomTorus(radius: CGFloat(radius) + CGFloat(Double(i) * 2), ringRadius: 0.05 * radius, radialSegments: 15, ringSegments: 15)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -185,7 +185,7 @@ class BlackHole: ObservableObject {
         let scaleFactor: Float = scaleConstant * Float(i)
         let ringRadius = Float(self.radius) + Float(self.radius/1.5) + scaleFactor
         let pipeRadius = CGFloat(scaleConstant) + CGFloat.random(in: -0.001...0.01)
-        let torus = LensedTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 30, ringSegments: 30)
+        let torus = LensedTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 15, ringSegments: 15)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 

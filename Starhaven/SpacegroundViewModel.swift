@@ -35,6 +35,7 @@ import CoreImage
     @Published var points: Int = 0
     @Published var showScoreIncrement: Bool = false
     @Published var weaponType: String = "Missile"
+    @Published var enemyControlTimer: Timer? = nil
     init() {
         rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
@@ -43,6 +44,7 @@ import CoreImage
         Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
             DispatchQueue.main.async {
                 self.updateShipPosition()
+                
             }
         }
     }
@@ -51,12 +53,24 @@ import CoreImage
         scnView.scene = self.scene
         self.ship.shipNode = self.ship.createShip()
         scnView.scene?.rootNode.addChildNode(self.cameraNode)
-        self.ship.containerNode.position = SCNVector3(0, 1_000, -5_000)
-        let enemyShip = EnemyShip().shipNode
-        let enemyShip2 = EnemyShip().shipNode
-        enemyShip.position = SCNVector3(0, 1_000, -4_999)
-        scnView.scene?.rootNode.addChildNode(enemyShip)
-        scnView.scene?.rootNode.addChildNode(enemyShip2)
+        self.ship.containerNode.position = SCNVector3(0, 1_000, -5_010)
+
+        // GHOST SHIP CREATION
+        let enemyShip = EnemyShip()
+        let enemyShip2 = EnemyShip()
+        let enemyShipNode = enemyShip.createShip(scale: 20.0)
+        let enemyShip2Node = enemyShip2.createShip(scale: 10.0)
+        enemyShipNode.position = SCNVector3(0, 1_000, -4_950)
+        enemyShip2Node.position = SCNVector3(20, 1_000, -4_950)
+        scnView.scene?.rootNode.addChildNode(enemyShipNode)
+        scnView.scene?.rootNode.addChildNode(enemyShip2Node)
+        // GHOST MOVEMENT SCHEDULE
+        self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+            DispatchQueue.main.async {
+                enemyShip.updateAI(playerShip: self.ship)
+                enemyShip2.updateAI(playerShip: self.ship)
+            }
+        }
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
@@ -84,6 +98,7 @@ import CoreImage
         DispatchQueue.main.async {
             self.blackHoles.append(centerBlackHole)
         }
+        
         scnView.prepare(self.scene)
         return scnView
     }
@@ -107,25 +122,33 @@ import CoreImage
     // WORLD SET-UP
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, view: self.view, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
-        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...100000))
+        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -100000...100000), CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...100000))
         self.view.prepare(blackHole.blackHoleNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
         return blackHole
     }
 
     // PILOT NAV
+    let dampingFactor: Float = 0.70
+
     func applyRotation() {
         if isRotationActive {
+            // Apply damping to the rotation velocity
+            averageRotationVelocity *= dampingFactor
             let adjustedDeltaX = averageRotationVelocity.x
-
             let rotationY = simd_quatf(angle: adjustedDeltaX, axis: cameraNode.simdWorldUp)
             let cameraRight = cameraNode.simdWorldRight
             let rotationX = simd_quatf(angle: averageRotationVelocity.y, axis: cameraNode.simdWorldRight)
 
             let totalRotation = simd_mul(rotationY, rotationX)
-
             currentRotation = simd_mul(totalRotation, currentRotation)
             ship.shipNode.simdOrientation = currentRotation
+
+            // Stop the rotation when the velocity is below a certain threshold
+            if length(averageRotationVelocity) < 0.00001 {
+                isRotationActive = false
+                averageRotationVelocity = .zero
+            }
         }
     }
     func startContinuousRotation() {
@@ -138,7 +161,7 @@ import CoreImage
         }
     }
     func stopContinuousRotation() {
-        longPressTimer.invalidate()
+        
     }
     func updateShipOrientation() {
         let worldUp = SIMD3<Float>(0, 1, 0)
@@ -184,17 +207,15 @@ import CoreImage
             }
         }
         let minFov: Float = 120 // minimum field of view
-        let maxFov: Float = 160 // maximum field of view
+        let maxFov: Float = 150 // maximum field of view
         let maxDistance: Float = 7500 // maximum distance at which the field of view starts to increase
 
         if closestDistance < maxDistance {
             let ratio = (maxDistance - closestDistance) / maxDistance
-            print(ratio)
             self.cameraNode.camera!.fieldOfView = CGFloat(minFov + (maxFov - minFov) * ratio)
         } else {
             self.cameraNode.camera!.fieldOfView = CGFloat(minFov)
         }
-        print(self.cameraNode.camera!.fieldOfView)
         // Check if the ship is in contact with the closest black hole (use a threshold value)
         let contactThreshold: Float = self.closestBlackHole == nil ? 0 : Float(self.closestBlackHole!.radius + 5)
         if closestDistance < contactThreshold || closestContainerDistance < contactThreshold {
@@ -243,9 +264,8 @@ import CoreImage
     }
     func dragEnded() {
         previousTranslation = CGSize.zero
-        isRotationActive = false
-        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 1)
-        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 1)
+        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 5)
+        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 5)
         startContinuousRotation()
     }
     func createLookAtConstraint() -> SCNLookAtConstraint {
@@ -286,7 +306,6 @@ import CoreImage
             y = atan2(-matrix[2][0], sy)
             z = 0
         }
-        print(x, y, z)
         return SCNVector3(x, y, z)
     }
 

@@ -11,13 +11,15 @@
 		AF07022029E123AE00667F9B /* FireSystem.sks in Resources */ = {isa = PBXBuildFile; fileRef = AF07021F29E1231E00667F9B /* FireSystem.sks */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
-		AF2D914E29EBAA8700B79D55 /* GhostShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2D914D29EBAA8700B79D55 /* GhostShip.swift */; };
 		AF6388DA29DF77940086C90F /* Space.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388D929DF77940086C90F /* Space.swift */; };
 		AF6388DC29DF77B80086C90F /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DB29DF77B80086C90F /* HUD.swift */; };
 		AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */; };
 		AF6388E029DF78430086C90F /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DF29DF78430086C90F /* Ship.swift */; };
 		AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */; };
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
+		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
+		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
+		AFB2534829ECFF2500084728 /* EnemyShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB2534729ECFF2500084728 /* EnemyShip.swift */; };
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
 		AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */ = {isa = PBXBuildFile; fileRef = AFC43CD929D7CF200080E891 /* Privacy Policy.txt */; };
 		AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */; };
@@ -37,13 +39,15 @@
 		AF07021F29E1231E00667F9B /* FireSystem.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireSystem.sks; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
-		AF2D914D29EBAA8700B79D55 /* GhostShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GhostShip.swift; path = ../../../.Trash/GhostShip.swift; sourceTree = "<group>"; };
 		AF6388D929DF77940086C90F /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
 		AF6388DB29DF77B80086C90F /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
 		AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelocityBuffer.swift; sourceTree = "<group>"; };
 		AF6388DF29DF78430086C90F /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacegroundViewModel.swift; sourceTree = "<group>"; };
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
+		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
+		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
+		AFB2534729ECFF2500084728 /* EnemyShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyShip.swift; sourceTree = "<group>"; };
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
 		AFD4C04C29CFA48200A127BB /* Starhaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Starhaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarhavenApp.swift; sourceTree = "<group>"; };
@@ -98,13 +102,14 @@
 				AFF42A8829E773FD00B6C603 /* Space View */,
 				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
 				AF6388DF29DF78430086C90F /* Ship.swift */,
-				AF2D914D29EBAA8700B79D55 /* GhostShip.swift */,
+				AFB2534729ECFF2500084728 /* EnemyShip.swift */,
 				AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */,
 				AF6388DB29DF77B80086C90F /* HUD.swift */,
 				AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */,
 				AFD7B1BB29D4A4C400840842 /* Pilot.swift */,
 				AFF42A8729E773D000B6C603 /* Celestial Objects */,
 				AFF42A8529E6689800B6C603 /* Missile.swift */,
+				AFAAB44A29F468D3007D5A2F /* Laser.swift */,
 				AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */,
 				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
 				AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */,
@@ -144,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				AF6388D929DF77940086C90F /* Space.swift */,
+				AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */,
 				AFDBFDD929DD2775006DEB3E /* Spaceground.swift */,
 			);
 			path = "Space View";
@@ -228,14 +234,16 @@
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
-				AF2D914E29EBAA8700B79D55 /* GhostShip.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
 				AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */,
+				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
+				AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
+				AFB2534829ECFF2500084728 /* EnemyShip.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
 				AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,

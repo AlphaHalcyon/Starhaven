@@ -52,21 +52,32 @@ struct HUDView: View {
             Spacer()
             
             HStack {
-                Text("THROTTLE").gesture(LongPressGesture().onChanged { value in
-                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 2.0)
-                }).foregroundColor(.white).padding()
-                Text("REVERSE").gesture(LongPressGesture().onChanged { value in
-                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle - 2.0)
-                }).foregroundColor(.white).padding()
-            }
-            HStack {
-                Text("MISSILE TIME").gesture(LongPressGesture().onChanged { value in
+                Button(action: {
                     print("fire!!!")
-                    self.spacecraftViewModel.ship.fireMissile()
-                }).foregroundColor(.white).padding()
+                    self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.ship.fireMissile() : self.spacecraftViewModel.ship.fireLaser()
+                    if self.spacecraftViewModel.weaponType == "Missile" {
+                        self.fireCooldown = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            self.fireCooldown = false
+                        }
+                    }
+                }) {
+                    Label("",systemImage: "flame")
+                }.disabled(self.fireCooldown)
+                .foregroundColor(.white)
+                .padding()
+            }
+            Slider(value: $spacecraftViewModel.ship.throttle, in: -100...100)
+            Button(action: {
+                self.spacecraftViewModel.toggleWeapon()
+            }) {
+                Text("Switch Weapon: \(spacecraftViewModel.weaponType)")
+                    .foregroundColor(.white)
+                    .padding()
             }
         }.padding()
     }
+    @State var fireCooldown: Bool = false
 }
 struct ReticleView: View {
     var body: some View {
