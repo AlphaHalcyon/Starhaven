@@ -16,7 +16,7 @@ class Missile {
     var explosionNode: SCNNode = SCNNode()
     init(target: SCNNode? = nil) {
         self.target = target
-
+        
         // Create missile geometry and node
         let missileGeometry = SCNCylinder(radius: 0.5, height: 2)
         missileGeometry.firstMaterial?.diffuse.contents = UIColor.darkGray
@@ -34,7 +34,7 @@ class Missile {
         redParticleSystem.particleSize = 0.1
         redParticleSystem.birthRate = 10000
         redParticleSystem.emissionDuration = 1
-        redParticleSystem.particleLifeSpan = 1.25
+        redParticleSystem.particleLifeSpan = 1
         redParticleSystem.spreadingAngle = 180
         redParticleSystem.emitterShape = missileGeometry
         redParticleSystem.emissionDurationVariation = redParticleSystem.emissionDuration
@@ -51,9 +51,22 @@ class Missile {
             print("boom")
         }
         self.setLookAtConstraint()
+        let trackingTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
+            self?.updateTracking()
+        }
+    }
+    func updateTracking() {
+        guard let target = self.target else { return }
+        let direction = target.position - missileNode.position
+        let directionNormalized = direction.normalized()
+
+        // Update missile's velocity
+        missileNode.physicsBody?.applyForce(directionNormalized * 10, asImpulse: true)
+        missileNode.physicsBody?.applyForce(directionNormalized, asImpulse: true)
     }
     func setLookAtConstraint() {
         guard let target = self.target else { return }
+        print(target)
         let lookAtConstraint = SCNLookAtConstraint(target: target)
         lookAtConstraint.isGimbalLockEnabled = true // This prevents the missile from flipping upside down
         self.missileNode.constraints = [lookAtConstraint]

@@ -58,21 +58,22 @@ import CoreImage
         self.ship.containerNode.position = SCNVector3(0, 1_000, -5_010)
 
         // GHOST SHIP CREATION
-        let enemyShip = EnemyShip(spacegroundViewModel: self)
-        let enemyShip2 = EnemyShip(spacegroundViewModel: self)
-        let enemyShipNode = enemyShip.createShip(scale: 20.0)
-        let enemyShip2Node = enemyShip2.createShip(scale: 10.0)
-        enemyShipNode.position = SCNVector3(0, 1_000, -4_950)
-        enemyShip2Node.position = SCNVector3(20, 1_000, -4_450)
-        scnView.scene?.rootNode.addChildNode(enemyShip.containerNode)
-        scnView.scene?.rootNode.addChildNode(enemyShip2.containerNode)
+        var ghosts: [EnemyShip] = []
+        for _ in 0...10 {
+            let enemyShip = EnemyShip(spacegroundViewModel: self)
+            let enemyShipNode = enemyShip.createShip(scale: 20.0)
+            enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...2000), Int.random(in: -5000...3000))
+            scnView.scene?.rootNode.addChildNode(enemyShip.containerNode)
+            ghosts.append(enemyShip)
+            self.belligerents.append(enemyShipNode)
+        }
         // GHOST MOVEMENT SCHEDULE
         DispatchQueue.main.async {
-            self.belligerents = [self.ship.shipNode, enemyShipNode, enemyShip2Node]
             self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
                 DispatchQueue.main.async {
-                    enemyShip.updateAI()
-                    enemyShip2.updateAI()
+                    for ghost in ghosts {
+                        ghost.updateAI()
+                    }
                 }
             }
         }

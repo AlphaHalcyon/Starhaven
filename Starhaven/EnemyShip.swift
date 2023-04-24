@@ -65,14 +65,15 @@ import simd
             let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
             
             // Set a minimum distance between the enemy and player ships
-            let minDistance: Float = 750
-            var speed: Float = 25
+            let minDistance: Float = 1000
+            var speed: Float = 5
             
             // If the enemy ship is closer than the minimum distance, move it away from the player
             if distance > minDistance {
                 speed *= Float.random(in: 0.5...1.05)
                 self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
             }
+            
         }
     }
     @MainActor func selectNewTarget() {
@@ -82,7 +83,7 @@ import simd
         // Select a new target from the list of available targets
         if let newTarget = availableTargets.randomElement() {
             currentTarget = newTarget
-            print("target acquired!")
+            //print("target acquired!")
         } else {
             // No targets available
             currentTarget = nil
@@ -183,7 +184,7 @@ import simd
         missileTube2Node.position = SCNVector3(1.5 * scale, 1.0 * scale, -1.2 * scale)
         missileTube2Node.rotation = SCNVector4(1, 0, 0, Float.pi / 2)
         node.addChildNode(missileTube2Node)
-        node.eulerAngles.x = 25
+        node.eulerAngles.x = 40
         node.position = SCNVector3(0, -10, 0)
         let containerNode = SCNNode()
         containerNode.geometry = SCNGeometry()
