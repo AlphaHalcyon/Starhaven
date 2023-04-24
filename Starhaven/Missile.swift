@@ -50,7 +50,15 @@ class Missile {
             self.detonate()
             print("boom")
         }
+        self.setLookAtConstraint()
     }
+    func setLookAtConstraint() {
+        guard let target = self.target else { return }
+        let lookAtConstraint = SCNLookAtConstraint(target: target)
+        lookAtConstraint.isGimbalLockEnabled = true // This prevents the missile from flipping upside down
+        self.missileNode.constraints = [lookAtConstraint]
+    }
+
     func handleCollision() {
         detonate()
     }
@@ -84,4 +92,9 @@ class Missile {
             self.missileNode.removeFromParentNode()
         }
     }
+    // In the Missile class, add the following function:
+    func getMissileNode() -> SCNNode {
+        return self.missileNode
+    }
+
 }

@@ -36,6 +36,8 @@ import CoreImage
     @Published var showScoreIncrement: Bool = false
     @Published var weaponType: String = "Missile"
     @Published var enemyControlTimer: Timer? = nil
+    @Published var belligerents: [SCNNode] = []
+    @Published var missiles: [Missile] = []
     init() {
         rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
@@ -48,7 +50,7 @@ import CoreImage
             }
         }
     }
-    public func makeSpaceView() -> SCNView {
+    @MainActor public func makeSpaceView() -> SCNView {
         let scnView = SCNView()
         scnView.scene = self.scene
         self.ship.shipNode = self.ship.createShip()
@@ -56,19 +58,22 @@ import CoreImage
         self.ship.containerNode.position = SCNVector3(0, 1_000, -5_010)
 
         // GHOST SHIP CREATION
-        let enemyShip = EnemyShip()
-        let enemyShip2 = EnemyShip()
+        let enemyShip = EnemyShip(spacegroundViewModel: self)
+        let enemyShip2 = EnemyShip(spacegroundViewModel: self)
         let enemyShipNode = enemyShip.createShip(scale: 20.0)
         let enemyShip2Node = enemyShip2.createShip(scale: 10.0)
         enemyShipNode.position = SCNVector3(0, 1_000, -4_950)
-        enemyShip2Node.position = SCNVector3(20, 1_000, -4_950)
-        scnView.scene?.rootNode.addChildNode(enemyShipNode)
-        scnView.scene?.rootNode.addChildNode(enemyShip2Node)
+        enemyShip2Node.position = SCNVector3(20, 1_000, -4_450)
+        scnView.scene?.rootNode.addChildNode(enemyShip.containerNode)
+        scnView.scene?.rootNode.addChildNode(enemyShip2.containerNode)
         // GHOST MOVEMENT SCHEDULE
-        self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-            DispatchQueue.main.async {
-                enemyShip.updateAI(playerShip: self.ship)
-                enemyShip2.updateAI(playerShip: self.ship)
+        DispatchQueue.main.async {
+            self.belligerents = [self.ship.shipNode, enemyShipNode, enemyShip2Node]
+            self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+                DispatchQueue.main.async {
+                    enemyShip.updateAI()
+                    enemyShip2.updateAI()
+                }
             }
         }
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
@@ -101,6 +106,11 @@ import CoreImage
         
         scnView.prepare(self.scene)
         return scnView
+    }
+    // GHOST WEAPONS
+    func createMissile(target: SCNNode? = nil) {
+        let missile = Missile(target: target)
+        self.missiles.append(missile)
     }
     // WEAPONS DYANMICS
     func toggleWeapon() {

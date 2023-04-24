@@ -11,7 +11,8 @@ import SceneKit
 import GLKit
 import simd
 
-class EnemyShip: ObservableObject {
+@MainActor class EnemyShip: ObservableObject {
+    @State var spacegroundViewModel: SpacecraftViewModel
     @Published var shipNode: SCNNode = SCNNode()
     @Published var pitch: CGFloat = 0
     @Published var yaw: CGFloat = 0
@@ -21,7 +22,9 @@ class EnemyShip: ObservableObject {
     @Published var fireParticleSystem: SCNParticleSystem = SCNParticleSystem()
     @Published var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
     @Published var containerNode: SCNNode = SCNNode()
-    // Add new properties
+    @Published var currentTime: TimeInterval = 0.0
+    @Published var currentTarget: SCNNode? = nil
+    @Published var belligerentCount: Int = 0
     private var minimumFiringRange: Float = 0.0
     private var pursuitRange: Float = 0.0
     private var lastFiringTime: TimeInterval = 0.0
@@ -29,37 +32,64 @@ class EnemyShip: ObservableObject {
     private var angle: Float = 0.0
     private let loiteringSpeed: Float = 1.0
     private let loiteringRadius: Float = 10.0
-    @Published var currentTime: TimeInterval = 0.0
+
     // INIT
-    init() {
+    init(spacegroundViewModel: SpacecraftViewModel) {
+        self.spacegroundViewModel = spacegroundViewModel
         // Initialize new properties
-        minimumFiringRange = Float.random(in: 25...50)
-        pursuitRange = Float.random(in: 200...300)
-        firingInterval = TimeInterval.random(in: 1.0...3.0)
+        self.selectNewTarget()
     }
     // GHOST MOVEMENTS
-    func updateAI(playerShip: Ship) {
-        // Create and apply a SCNLookAtConstraint to make the enemy ship always face the player's position
-        let constraint = SCNLookAtConstraint(target: playerShip.shipNode)
-        constraint.isGimbalLockEnabled = true
-        self.shipNode.constraints = [constraint]
+    @MainActor func updateAI() {
+        // Check if the current target is still valid
+        if self.belligerentCount != self.spacegroundViewModel.belligerents.count {
+            if currentTarget != nil {
+                if !self.spacegroundViewModel.belligerents.contains(where: { $0 == currentTarget! }) { selectNewTarget() }
+                self.belligerentCount = self.spacegroundViewModel.belligerents.count
+            }
+            else {
+                selectNewTarget()
+            }
+        }
+        
+        // Update the enemy ship's behavior based on the current target
+        if let target = currentTarget {
+            // Create and apply a SCNLookAtConstraint to make the enemy ship always face the current target's position
+            let constraint = SCNLookAtConstraint(target: target)
+            constraint.isGimbalLockEnabled = true
+            self.shipNode.constraints = [constraint]
 
-        // Move the enemy ship towards the player's position by a fixed amount on each frame
-        let direction = playerShip.shipNode.worldPosition - self.shipNode.worldPosition
-        let distance = direction.length()
-        let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
-        
-        // Set a minimum distance between the enemy and player ships
-        let minDistance: Float = 300
-        var speed: Float = 10
-        
-        // If the enemy ship is closer than the minimum distance, move it away from the player
-        if distance > minDistance {
-            print(distance)
-            speed *= Float.random(in: 0.5...1.5)
-            self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
+            // Move the enemy ship towards the current target's position by a fixed amount on each frame
+            let direction = target.worldPosition - self.shipNode.worldPosition
+            let distance = direction.length()
+            let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
+            
+            // Set a minimum distance between the enemy and player ships
+            let minDistance: Float = 750
+            var speed: Float = 25
+            
+            // If the enemy ship is closer than the minimum distance, move it away from the player
+            if distance > minDistance {
+                speed *= Float.random(in: 0.5...1.05)
+                self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
+            }
         }
     }
+    @MainActor func selectNewTarget() {
+        // Filter out the current ship from the list of available targets
+        let availableTargets = self.spacegroundViewModel.belligerents.filter { $0 != self.shipNode }
+
+        // Select a new target from the list of available targets
+        if let newTarget = availableTargets.randomElement() {
+            currentTarget = newTarget
+            print("target acquired!")
+        } else {
+            // No targets available
+            currentTarget = nil
+            print("no one left to kill :(")
+        }
+    }
+
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil) {
         print("fire!")
@@ -164,12 +194,13 @@ class EnemyShip: ObservableObject {
         let nodes = [shipNode] + shipNode.childNodes
         let shape = SCNPhysicsShape(node: shipNode, options: [.keepAsCompound: true])
         shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: shape)
+        shipNode.physicsBody?.isAffectedByGravity = false
         // Set the category, collision, and contact test bit masks
         self.shipNode.physicsBody?.categoryBitMask = CollisionCategory.enemyShip
         self.shipNode.physicsBody?.collisionBitMask = CollisionCategory.laser | CollisionCategory.missile
         self.shipNode.physicsBody?.contactTestBitMask = CollisionCategory.laser | CollisionCategory.missile
 
-        return containerNode
+        return self.shipNode
     }
     func createEmitterNode() {
         self.rearEmitterNode.position = SCNVector3(0, 0, 5)

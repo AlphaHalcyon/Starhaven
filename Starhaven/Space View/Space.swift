@@ -51,7 +51,7 @@ import SwiftUI
             // Determine which node is the laser and which is the enemy ship
             let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
             let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-
+            print(enemyNode)
             // Remove the laser and enemy ship from the scene
             laserNode.removeFromParentNode()
             enemyNode.removeFromParentNode()
@@ -67,16 +67,26 @@ import SwiftUI
             // Determine which node is the missile and which is the enemy ship
             let missileNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.missile ? contact.nodeA : contact.nodeB
             let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
+            // Find the corresponding missile object and call the handleCollision function
+            if let missile = view.spaceViewModel.missiles.first(where: { $0.getMissileNode() == missileNode }) {
+                print("nice!")
+                missile.handleCollision()
+            }
 
             // Remove the missile and enemy ship from the scene
-            missileNode.removeFromParentNode()
+            DispatchQueue.main.async {
+                self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
+                print(enemyNode)
+                print(self.view.spaceViewModel.belligerents)
+                print(self.view.spaceViewModel.belligerents.count)
+            }
             enemyNode.removeFromParentNode()
-
             // Add logic for updating the score or other game state variables
             // For example, you could call a function in the SpacecraftViewModel to increase the score:
             // DispatchQueue.main.async {
             //     self.view.spaceViewModel.incrementScore(points: 200)
             // }
+            
         }
     }
 }

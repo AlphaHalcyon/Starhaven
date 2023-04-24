@@ -8,10 +8,12 @@
 import Foundation
 import SceneKit
 import SwiftUI
+import simd
 
-struct HUDView: View {
+@MainActor struct HUDView: View {
     @EnvironmentObject var spacecraftViewModel: SpacecraftViewModel
-
+    @State private var reticlePosition: CGPoint = CGPoint()
+    @State var fireCooldown: Bool = false
     var body: some View {
         VStack {
             HStack {
@@ -48,13 +50,14 @@ struct HUDView: View {
             }
             Spacer()
             ReticleView()
+                .position(self.reticlePosition)
                 .foregroundColor(.red)
             Spacer()
             
             HStack {
                 Button(action: {
                     print("fire!!!")
-                    self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.ship.fireMissile() : self.spacecraftViewModel.ship.fireLaser()
+                    self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.missiles.append(self.spacecraftViewModel.ship.fireMissile()) : self.spacecraftViewModel.ship.fireLaser()
                     if self.spacecraftViewModel.weaponType == "Missile" {
                         self.fireCooldown = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -75,9 +78,35 @@ struct HUDView: View {
                     .foregroundColor(.white)
                     .padding()
             }
-        }.padding()
+        }
+        .padding().onAppear {
+            Timer.scheduledTimer(withTimeInterval: 1/60.0, repeats: true, block: { _ in
+                self.updateReticle()
+            })
+        }
     }
-    @State var fireCooldown: Bool = false
+    func updateReticle() {
+        // Find the enemy ship that is closest to the player's ship
+        var closestEnemy: SCNNode?
+        var closestDistance: Float = .greatestFiniteMagnitude
+        for enemy in spacecraftViewModel.belligerents {
+            let distance = simd_distance(enemy.simdPosition, self.spacecraftViewModel.ship.shipNode.simdPosition)
+            if distance < closestDistance && enemy != self.spacecraftViewModel.ship.shipNode {
+                closestDistance = distance
+                closestEnemy = enemy
+            }
+        }
+
+        // Check if there is a closest enemy within a certain distance
+        if let closestEnemy = closestEnemy, closestDistance < 4000 {
+            // Convert the 3D position of the closest enemy to a 2D position in the view
+            let projectedPoint = self.spacecraftViewModel.view.projectPoint(closestEnemy.worldPosition)
+            let reticlePosition = CGPoint(x: CGFloat(projectedPoint.x), y: CGFloat(projectedPoint.y))
+            //print(projectedPoint, reticlePosition)
+            // Pass the reticlePosition to your ReticleView and use it to update its position on the screen
+            self.reticlePosition = reticlePosition
+        }
+    }
 }
 struct ReticleView: View {
     var body: some View {

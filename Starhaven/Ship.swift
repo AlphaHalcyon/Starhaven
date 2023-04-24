@@ -20,7 +20,7 @@ class Ship: ObservableObject {
     @Published var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
     @Published var containerNode: SCNNode = SCNNode()
     // WEAPONS MECHANICS
-    func fireMissile(target: SCNNode? = nil) {
+    func fireMissile(target: SCNNode? = nil) -> Missile {
         print("fire!")
         let missile = Missile(target: target)
         
@@ -32,10 +32,10 @@ class Ship: ObservableObject {
         missile.missileNode.eulerAngles.x += Float.pi / 2
         let direction = shipNode.presentation.worldFront
         let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        let missileForce = CGFloat(throttle + 1) * 100 * missileMass
+        let missileForce = CGFloat(abs(throttle) + 1) * 125 * missileMass
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         containerNode.parent!.addChildNode(missile.missileNode)
-        
+        return missile
     }
     func fireLaser(target: SCNNode? = nil) {
         print("fire laser!")
@@ -49,7 +49,7 @@ class Ship: ObservableObject {
         laser.laserNode.eulerAngles.x += Float.pi / 2
         let direction = shipNode.presentation.worldFront
         let laserMass = laser.laserNode.physicsBody?.mass ?? 1
-        let laserForce = CGFloat(throttle + 1) * 100 * laserMass
+        let laserForce = CGFloat(abs(throttle) + 1) * 750 * laserMass
         laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
         containerNode.parent!.addChildNode(laser.laserNode)
     }
