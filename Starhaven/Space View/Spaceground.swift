@@ -35,8 +35,6 @@ struct SpacecraftView: View {
                             spacecraftViewModel.isPressed.toggle()
                             if spacecraftViewModel.isPressed {
                                 spacecraftViewModel.startContinuousRotation()
-                            } else {
-                                spacecraftViewModel.stopContinuousRotation()
                             }
                         }
                     }

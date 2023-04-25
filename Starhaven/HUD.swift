@@ -8,10 +8,14 @@
 import Foundation
 import SceneKit
 import SwiftUI
+import simd
 
-struct HUDView: View {
+@MainActor struct HUDView: View {
     @EnvironmentObject var spacecraftViewModel: SpacecraftViewModel
-
+    @State private var reticlePosition: CGPoint = CGPoint()
+    @State var fireCooldown: Bool = false
+    @State var boundingBoxNode: SCNNode? = nil
+    @State var closestEnemy: SCNNode? = nil
     var body: some View {
         VStack {
             HStack {
@@ -34,9 +38,32 @@ struct HUDView: View {
                 Spacer()
                 Text("POINTS: \(spacecraftViewModel.points)")
             }.foregroundColor(.red)
-            Spacer()
+            Button(action: {
+                self.spacecraftViewModel.toggleWeapon()
+            }) {
+                Text("Switch Weapon: \(spacecraftViewModel.weaponType)")
+                    .foregroundColor(.white)
+                    .padding()
+            }
+            if spacecraftViewModel.showKillIncrement {
+                Text("+10,000")
+                    .foregroundColor(.red)
+                    .font(.largeTitle)
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showKillIncrement)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            spacecraftViewModel.showKillIncrement = false
+                        }
+                    }
+                Text("GHOST DESTROYED")
+                    .foregroundColor(.red)
+                    .font(.largeTitle)
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showKillIncrement)
+            }
             if spacecraftViewModel.showScoreIncrement {
-                Text("+100")
+                Text("+\(Int(self.spacecraftViewModel.ship.throttle) * 100)")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
@@ -47,32 +74,94 @@ struct HUDView: View {
                         }
                     }
             }
+            Spacer()
             ReticleView()
+                .opacity(0.80)
                 .foregroundColor(.red)
             Spacer()
+            
             HStack {
-                Text("THROTTLE").gesture(LongPressGesture().onChanged { value in
-                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle + 2.0)
-                }).foregroundColor(.white).padding()
-                Text("REVERSE").gesture(LongPressGesture().onChanged { value in
-                    self.spacecraftViewModel.throttle(value: self.spacecraftViewModel.ship.throttle - 2.0)
-                }).foregroundColor(.white).padding()
-            }
-            HStack {
-                Text("MISSILE TIME").gesture(LongPressGesture().onChanged { value in
+                Button(action: {
                     print("fire!!!")
-                    self.spacecraftViewModel.ship.fireMissile()
-                }).foregroundColor(.white).padding()
+                    self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.missiles.append(self.spacecraftViewModel.ship.fireMissile(target: self.closestEnemy)) : self.spacecraftViewModel.ship.fireLaser()
+                    if self.spacecraftViewModel.weaponType == "Missile" {
+                        self.fireCooldown = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            self.fireCooldown = false
+                        }
+                    }
+                }) {
+                    Label("FIRE",systemImage: "flame")
+                }.disabled(self.fireCooldown)
+                .foregroundColor(.white)
+                .padding()
             }
-        }.padding()
+            Slider(value: $spacecraftViewModel.ship.throttle, in: -100...100)
+        }
+        .padding().onAppear {
+            Timer.scheduledTimer(withTimeInterval: 1/60.0, repeats: true, block: { _ in
+                DispatchQueue.main.async {
+                    if self.fireCooldown {
+                        boundingBoxNode?.removeFromParentNode()
+                        boundingBoxNode = nil
+                    }
+                    else {
+                        self.updateReticle()
+                    }
+                }
+            })
+        }
     }
+    func updateReticle() {
+        // Find the enemy ship that is closest to the player's ship
+        var closestDistance: Float = .greatestFiniteMagnitude
+        for enemy in spacecraftViewModel.belligerents {
+            let distance = simd_distance(enemy.simdPosition, self.spacecraftViewModel.ship.shipNode.simdPosition)
+            if distance < closestDistance && enemy != self.spacecraftViewModel.ship.shipNode {
+                closestDistance = distance
+                closestEnemy = enemy
+            }
+        }
+
+        // Remove the existing bounding box if it's attached to a different enemy
+        if let existingBoundingBox = boundingBoxNode, let parentNode = existingBoundingBox.parent, parentNode != closestEnemy {
+            existingBoundingBox.removeFromParentNode()
+            boundingBoxNode = nil
+        }
+
+        // Check if there is a closest enemy within a certain distance
+        if let closestEnemy = closestEnemy, closestDistance < 100000 {
+            // If a bounding box node does not exist, create it and add it as a child node to the closest enemy
+            if boundingBoxNode == nil {
+                let boundingBox = closestEnemy.boundingBox
+                let width = CGFloat(boundingBox.max.x - boundingBox.min.x)
+                let height = CGFloat(boundingBox.max.x - boundingBox.min.x)
+                let box = SCNBox(width: width * 2, height: height * 2, length: width * 2, chamferRadius: 10)
+                box.firstMaterial?.diffuse.contents = UIColor.red
+                let planeNode = SCNNode(geometry: box)
+                planeNode.opacity = 0.15
+                planeNode.position = SCNVector3((boundingBox.min.x + boundingBox.max.x) / 2, (boundingBox.min.y + boundingBox.max.y) / 2, 0)
+                
+                closestEnemy.addChildNode(planeNode)
+                boundingBoxNode = planeNode
+                let constraint = SCNBillboardConstraint()
+                constraint.freeAxes = .all
+                boundingBoxNode?.constraints = [constraint]
+            }
+        } else {
+            // If there is no closest enemy or it's out of range, remove the bounding box
+            boundingBoxNode?.removeFromParentNode()
+            boundingBoxNode = nil
+        }
+    }
+
 }
 struct ReticleView: View {
     var body: some View {
         ZStack {
             Crosshair()
                 .stroke(Color.red, lineWidth: 1)
-                .frame(width: 40, height: 40).opacity(0.90)
+                .frame(width: 40, height: 30).opacity(0.80)
         }
     }
 }

@@ -52,8 +52,6 @@ class BlackHole: ObservableObject {
         let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: self.period == 0 ? 2  * Double.random(in: 0.5...1.15) : Double(self.period)))
         self.blackHoleNode.runAction(rotationAction)
         self.blackHoleNode.isHidden = false
-        let gaussianBlurFilter = CIFilter(name: "CIGaussianBlur")
-        let pixellateFilter = CIFilter(name:"CIPixellate")
     }
     func addSpinningEdgeRings(count: Int, cameraNode: SCNNode, isWhite: Bool = false) {
         let parentNode = self.blackHoleNode
@@ -77,6 +75,55 @@ class BlackHole: ObservableObject {
         self.addLensingRing(parentNode: parentNode, cameraNode: cameraNode, i: count, mods: mod)
         self.addLensingRing(parentNode: parentNode, cameraNode: cameraNode, i: count, mods: mod)
         self.addAccretionRing(cameraNode: cameraNode, i: count, mods: mod, material: material)
+        //self.addFishEyeTorus(parentNode: self.blackHoleNode, cameraNode: cameraNode, i: count + 1)
+    }
+    func addFishEyeTorus(parentNode: SCNNode, cameraNode: SCNNode, i: Int) {
+        // Calculate the radius of the fisheye torus
+        let scaleConstant: Float = Float(self.radius * 0.2)
+        let scaleFactor: Float = scaleConstant * Float(i)
+        let ringRadius = Float(self.radius) + Float(self.radius) + scaleFactor
+        let pipeRadius = CGFloat(scaleConstant)
+        
+        // Create a custom torus geometry
+        let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 25, ringSegments: 35)
+        
+        // Define the fisheye lensing shader code
+        
+        // Create a new material and apply the fisheye shader to it
+        let fisheyeMaterial = SCNMaterial()
+        fisheyeMaterial.shaderModifiers = [
+            SCNShaderModifierEntryPoint.fragment: """
+                vec2 coord = gl_FragCoord.xy * u_inverseResolution.xy;
+                vec2 texCoord = 2.0 * coord - 1.0;
+                float r = length(texCoord);
+                float theta = atan2(texCoord.y, texCoord.x);
+                r = pow(r, 0.5);
+                texCoord.x = r * cos(theta);
+                texCoord.y = r * sin(theta);
+                coord = texCoord / 2.0 + 0.5;
+                _output.color.rgb = texture2D(u_diffuseTexture, coord).rgb;
+                """
+        ]
+        
+        // Set the transparency of the material
+        fisheyeMaterial.transparency = 0.5
+        
+        // Assign the material to the custom torus geometry
+        torus.geometry?.firstMaterial = fisheyeMaterial
+        
+        // Create a new node for the fisheye torus and add it to the parent node
+        let fishEyeTorusNode = SCNNode(geometry: torus.geometry)
+        
+        // Create a new parent node for the fisheye torus and apply the billboard constraint to it
+        let fishEyeTorusParentNode = SCNNode()
+        setBillboardConstraint(for: fishEyeTorusParentNode)
+        parentNode.addChildNode(fishEyeTorusParentNode)
+        
+        // Add the fisheye torus node as a child of the parent node
+        fishEyeTorusParentNode.addChildNode(fishEyeTorusNode)
+        setRotation(for: fishEyeTorusNode, relativeTo: blackHoleNode)
+
+        rotateAroundBlackHoleCenter(fishEyeTorusNode, isWhite: false, count: i)
     }
     func addAccretionRing(cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String], material: SCNMaterial) {
         let scaleConstant: Float = Float(self.radius * 0.1)
@@ -99,7 +146,7 @@ class BlackHole: ObservableObject {
             let scaleFactor: Float = scaleConstant * Float(i)
         let ringRadius = Float(self.radius) + Float(self.radius) + scaleFactor
             let pipeRadius = CGFloat(scaleConstant)
-            let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 25, ringSegments: 50)
+            let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 15, ringSegments: 15)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
         edgeRingNode.opacity = CGFloat.random(in: 0.85...1.0)
@@ -116,7 +163,7 @@ class BlackHole: ObservableObject {
     }
     func addSpinningEdgeRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let radius = self.radius
-        let torus = CustomTorus(radius: CGFloat(radius) + 1 + CGFloat(Double(i) * 1.5), ringRadius: 0.10 * radius, radialSegments: 30, ringSegments: 30)
+        let torus = CustomTorus(radius: CGFloat(radius) + CGFloat(Double(i) * 2), ringRadius: 0.05 * radius, radialSegments: 15, ringSegments: 15)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -136,7 +183,7 @@ class BlackHole: ObservableObject {
         let scaleFactor: Float = scaleConstant * Float(i)
         let ringRadius = Float(self.radius) + Float(self.radius/1.5) + scaleFactor
         let pipeRadius = CGFloat(scaleConstant) + CGFloat.random(in: -0.001...0.01)
-        let torus = LensedTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 30, ringSegments: 30)
+        let torus = LensedTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 15, ringSegments: 15)
         torus.geometry!.shaderModifiers = mods
         let edgeRingNode = SCNNode(geometry: torus.geometry)
 
@@ -152,13 +199,11 @@ class BlackHole: ObservableObject {
 
         rotateAroundBlackHoleCenter(edgeRingNode, isWhite: isWhite, count: i)
     }
-
     func setBillboardConstraint(for node: SCNNode) {
         let billboardConstraint = SCNBillboardConstraint()
         billboardConstraint.freeAxes = [.X, .Y]
         node.constraints = [billboardConstraint]
     }
-
     func setRotation(for node: SCNNode, relativeTo blackHoleNode: SCNNode?) {
         guard let blackHoleNode = blackHoleNode else { return }
         let dx = node.position.x - blackHoleNode.position.x
@@ -207,31 +252,6 @@ class BlackHole: ObservableObject {
 
         return [.geometry: String(), .fragment: fragmentShaderCode]
     }
-    func colorForRadiusFromCenter(_ radiusFromCenter: Float, randomColorFactor: Float) -> UIColor {
-        let whiteFactor = smoothstep(2.45, 2.55, radiusFromCenter) * 2 * randomColorFactor
-        let orangeFactor = smoothstep(2.55, 2.65, radiusFromCenter) * randomColorFactor
-        let redFactor = smoothstep(2.65, 2.75, radiusFromCenter) * (1.25 * randomColorFactor)
-        let darkRedFactor = smoothstep(2.75, 2.85, radiusFromCenter) * (2 * randomColorFactor)
-        let blackColor = UIColor(red: 17/255, green: 17/255, blue: 21/255, alpha: 1.0)
-        let purpleColor = UIColor(red: 46/255, green: 33/255, blue: 55/255, alpha: 1.0)
-        let orangeColor = UIColor(red: 219/255, green: 144/255, blue: 78/255, alpha: 1.0)
-        let redColor = UIColor(red: 199/255, green: 74/255, blue: 0/255, alpha: 1.0)
-        let darkRedColor = UIColor(red: 119/255, green: 0/255, blue: 0/255, alpha: 1.0)
-        let whiteColor = UIColor.white
-        let color = blackColor.lerp(to: purpleColor, alpha: CGFloat(darkRedFactor))
-            .lerp(to: orangeColor, alpha: CGFloat(redFactor))
-            .lerp(to: redColor, alpha: CGFloat(orangeFactor))
-            .lerp(to: whiteColor, alpha: CGFloat(whiteFactor))
-        return color
-    }
-    func smoothstep(_ edge0: Float, _ edge1: Float, _ x: Float) -> Float {
-        let t = min(max((x - edge0) / (edge1 - edge0), 0.0), 1.0)
-        return t * t * (3.0 - 2.0 * t)
-    }
-
-    func mix(_ a: Float, _ b: Float, _ t: Float) -> Float {
-        return a * (1.0 - t) + b * t
-    }
 }
 
 struct ShaderVibe {
@@ -254,8 +274,11 @@ struct ShaderVibe {
         else if (t < 5.5/6.0) {
             color = mix(purple, blue, (t - 5.0/6.0) * 6.0);
         }
-        else if (t < 5.95/6.0) {
-            color = mix(blue, red, (t - 5.5/6.0) * 6.0);
+        else if (t < 5.75/6.0) {
+            color = mix(blue, purple, (t - 5.5/6.0) * 6.0);
+        }
+        else if (t < 5.98/6.0) {
+            color = mix(purple, red, (t - 5.5/6.0) * 6.0);
         }
         else {
             color = red;
