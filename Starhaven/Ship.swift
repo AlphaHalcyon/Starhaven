@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SceneKit
 
-class Ship: ObservableObject {
+@MainActor class Ship: ObservableObject {
     @Published var shipNode: SCNNode = SCNNode()
     @Published var pitch: CGFloat = 0
     @Published var yaw: CGFloat = 0
@@ -25,14 +25,15 @@ class Ship: ObservableObject {
         let missile = Missile(target: target)
         
         // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 0), to: containerNode.parent)
+        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, -5), to: containerNode.parent)
         
         missile.missileNode.position = worldPosition
         missile.missileNode.orientation = shipNode.presentation.orientation
         missile.missileNode.eulerAngles.x += Float.pi / 2
         let direction = shipNode.presentation.worldFront
         let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        let missileForce = CGFloat(abs(throttle) + 1) * 125 * missileMass
+        let missileForce = CGFloat(abs(throttle) + 1) * 2 * missileMass
+        missile.missileNode.physicsBody?.velocity = self.shipNode.physicsBody!.velocity
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         containerNode.parent!.addChildNode(missile.missileNode)
         return missile

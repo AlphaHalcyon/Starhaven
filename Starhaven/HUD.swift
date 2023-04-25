@@ -38,6 +38,30 @@ import simd
                 Spacer()
                 Text("POINTS: \(spacecraftViewModel.points)")
             }.foregroundColor(.red)
+            Button(action: {
+                self.spacecraftViewModel.toggleWeapon()
+            }) {
+                Text("Switch Weapon: \(spacecraftViewModel.weaponType)")
+                    .foregroundColor(.white)
+                    .padding()
+            }
+            if spacecraftViewModel.showKillIncrement {
+                Text("+10,000")
+                    .foregroundColor(.red)
+                    .font(.largeTitle)
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showKillIncrement)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            spacecraftViewModel.showKillIncrement = false
+                        }
+                    }
+                Text("GHOST DESTROYED")
+                    .foregroundColor(.red)
+                    .font(.largeTitle)
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showKillIncrement)
+            }
             if spacecraftViewModel.showScoreIncrement {
                 Text("+\(Int(self.spacecraftViewModel.ship.throttle) * 100)")
                     .foregroundColor(.red)
@@ -67,19 +91,12 @@ import simd
                         }
                     }
                 }) {
-                    Label("",systemImage: "flame")
+                    Label("FIRE",systemImage: "flame")
                 }.disabled(self.fireCooldown)
                 .foregroundColor(.white)
                 .padding()
             }
             Slider(value: $spacecraftViewModel.ship.throttle, in: -100...100)
-            Button(action: {
-                self.spacecraftViewModel.toggleWeapon()
-            }) {
-                Text("Switch Weapon: \(spacecraftViewModel.weaponType)")
-                    .foregroundColor(.white)
-                    .padding()
-            }
         }
         .padding().onAppear {
             Timer.scheduledTimer(withTimeInterval: 1/60.0, repeats: true, block: { _ in
@@ -113,18 +130,16 @@ import simd
         }
 
         // Check if there is a closest enemy within a certain distance
-        if let closestEnemy = closestEnemy, closestDistance < 5000 {
+        if let closestEnemy = closestEnemy, closestDistance < 100000 {
             // If a bounding box node does not exist, create it and add it as a child node to the closest enemy
             if boundingBoxNode == nil {
                 let boundingBox = closestEnemy.boundingBox
                 let width = CGFloat(boundingBox.max.x - boundingBox.min.x)
                 let height = CGFloat(boundingBox.max.x - boundingBox.min.x)
-                let plane = SCNPlane(width: width, height: height)
-                plane.firstMaterial?.diffuse.contents = UIColor.red
-                plane.firstMaterial?.isDoubleSided = true
-                
-                let planeNode = SCNNode(geometry: plane)
-                planeNode.opacity = 0.33
+                let box = SCNBox(width: width * 2, height: height * 2, length: width * 2, chamferRadius: 10)
+                box.firstMaterial?.diffuse.contents = UIColor.red
+                let planeNode = SCNNode(geometry: box)
+                planeNode.opacity = 0.15
                 planeNode.position = SCNVector3((boundingBox.min.x + boundingBox.max.x) / 2, (boundingBox.min.y + boundingBox.max.y) / 2, 0)
                 
                 closestEnemy.addChildNode(planeNode)
@@ -154,10 +169,10 @@ struct ReticleView: View {
 struct Crosshair: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.minY+50))
-        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY+50))
-        path.move(to: CGPoint(x: rect.minX, y: rect.midY+50))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY+50))
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
         return path
     }
 }

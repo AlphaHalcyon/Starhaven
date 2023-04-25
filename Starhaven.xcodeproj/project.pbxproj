@@ -29,7 +29,6 @@
 		AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06329CFAAFC00A127BB /* Extensions.swift */; };
 		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
 		AFD4C06829CFF77600A127BB /* DustParticleSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */; };
-		AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD7B1BB29D4A4C400840842 /* Pilot.swift */; };
 		AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* Spaceground.swift */; };
 		AFF42A8629E6689800B6C603 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF42A8529E6689800B6C603 /* Missile.swift */; };
 /* End PBXBuildFile section */
@@ -58,7 +57,6 @@
 		AFD4C06529CFAF5100A127BB /* CustomTorus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTorus.swift; sourceTree = "<group>"; };
 		AFD4C06729CFF77600A127BB /* DustParticleSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustParticleSystem.swift; sourceTree = "<group>"; };
 		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
-		AFD7B1BB29D4A4C400840842 /* Pilot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pilot.swift; sourceTree = "<group>"; };
 		AFDBFDD929DD2775006DEB3E /* Spaceground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceground.swift; sourceTree = "<group>"; };
 		AFF42A8529E6689800B6C603 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -106,7 +104,6 @@
 				AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */,
 				AF6388DB29DF77B80086C90F /* HUD.swift */,
 				AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */,
-				AFD7B1BB29D4A4C400840842 /* Pilot.swift */,
 				AFF42A8729E773D000B6C603 /* Celestial Objects */,
 				AFF42A8529E6689800B6C603 /* Missile.swift */,
 				AFAAB44A29F468D3007D5A2F /* Laser.swift */,
@@ -245,7 +242,6 @@
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
 				AFB2534829ECFF2500084728 /* EnemyShip.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
-				AFD7B1BC29D4A4C400840842 /* Pilot.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

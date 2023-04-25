@@ -38,6 +38,7 @@ import CoreImage
     @Published var enemyControlTimer: Timer? = nil
     @Published var belligerents: [SCNNode] = []
     @Published var missiles: [Missile] = []
+    @Published var showKillIncrement: Bool = false
     init() {
         rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
@@ -54,29 +55,10 @@ import CoreImage
         let scnView = SCNView()
         scnView.scene = self.scene
         self.ship.shipNode = self.ship.createShip()
+        self.ship.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         scnView.scene?.rootNode.addChildNode(self.cameraNode)
         self.ship.containerNode.position = SCNVector3(0, 1_000, -5_010)
-
-        // GHOST SHIP CREATION
-        var ghosts: [EnemyShip] = []
-        for _ in 0...10 {
-            let enemyShip = EnemyShip(spacegroundViewModel: self)
-            let enemyShipNode = enemyShip.createShip(scale: 20.0)
-            enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...2000), Int.random(in: -5000...3000))
-            scnView.scene?.rootNode.addChildNode(enemyShip.containerNode)
-            ghosts.append(enemyShip)
-            self.belligerents.append(enemyShipNode)
-        }
-        // GHOST MOVEMENT SCHEDULE
-        DispatchQueue.main.async {
-            self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-                DispatchQueue.main.async {
-                    for ghost in ghosts {
-                        ghost.updateAI()
-                    }
-                }
-            }
-        }
+        
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
@@ -89,37 +71,40 @@ import CoreImage
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        // Create scattered black holes
-        for _ in 1...10 {
-            let radius = CGFloat.random(in: 30...150)
-            let ringCount = Int.random(in: 10...20)
-            let blackHole = self.addBlackHole(radius: radius, ringCount: ringCount, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 8)
-            DispatchQueue.main.async {
-                self.blackHoles.append(blackHole)
-            }
-        }
-        // Create center black hole
-        let centerBlackHoleRadius = CGFloat(1000)
-        let centerBlackHole = self.addBlackHole(radius: centerBlackHoleRadius, ringCount: 25, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 8)
-        DispatchQueue.main.async {
-            self.blackHoles.append(centerBlackHole)
-        }
-        
+        scnView.scene?.background.intensity = 0.5
+        self.scatterCelestialObjects()
+        self.createGhosts(scnView: scnView)
         scnView.prepare(self.scene)
         return scnView
+    }
+    // GHOST CREATION
+    func createGhosts(scnView: SCNView) {
+        var ghosts: [EnemyShip] = []
+        for _ in 0...15 {
+            let enemyShip = EnemyShip(spacegroundViewModel: self)
+            let enemyShipNode = enemyShip.createShip(scale: CGFloat.random(in: 10.0...25.0))
+            enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...5000), Int.random(in: -5000...5000))
+            scnView.scene?.rootNode.addChildNode(enemyShip.containerNode)
+            ghosts.append(enemyShip)
+            DispatchQueue.main.async {
+                self.belligerents.append(enemyShipNode)
+            }
+        }
+        // GHOST MOVEMENT SCHEDULE
+        DispatchQueue.main.async {
+            self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+                DispatchQueue.main.async {
+                    for ghost in ghosts {
+                        ghost.updateAI()
+                    }
+                }
+            }
+        }
     }
     // GHOST WEAPONS
     func createMissile(target: SCNNode? = nil) {
         let missile = Missile(target: target)
         self.missiles.append(missile)
-    }
-    // WEAPONS DYANMICS
-    func toggleWeapon() {
-        if weaponType == "Missile" {
-            weaponType = "Laser"
-        } else {
-            weaponType = "Missile"
-        }
     }
     // WORLD DYNAMICS
     
@@ -131,17 +116,42 @@ import CoreImage
         return SCNVector3(x: x, y: y, z: z)
     }
     // WORLD SET-UP
+    func scatterCelestialObjects() {
+        // Create scattered black holes
+        for _ in 1...5 {
+            let radius = CGFloat.random(in: 40...150)
+            let ringCount = Int.random(in: 5...25)
+            let blackHole = self.addBlackHole(radius: radius, ringCount: ringCount, vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 4)
+            DispatchQueue.main.async {
+                self.blackHoles.append(blackHole)
+            }
+        }
+        // Create center black hole
+        let centerBlackHoleRadius = CGFloat(1000)
+        let centerBlackHole = self.addBlackHole(radius: centerBlackHoleRadius, ringCount: 25, vibeOffset: 2, bothRings: false, vibe: ShaderVibe.discOh, period: 4)
+        DispatchQueue.main.async {
+            self.blackHoles.append(centerBlackHole)
+        }
+    }
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, view: self.view, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
-        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -100000...100000), CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...100000))
+        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...100000))
         self.view.prepare(blackHole.blackHoleNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
         return blackHole
     }
 
     // PILOT NAV
+    /// WEAPONS DYANMICS
+    func toggleWeapon() {
+        if weaponType == "Missile" {
+            weaponType = "Laser"
+        } else {
+            weaponType = "Missile"
+        }
+    }
+    /// FLIGHT
     let dampingFactor: Float = 0.70
-
     func applyRotation() {
         if isRotationActive {
             // Apply damping to the rotation velocity
@@ -149,7 +159,7 @@ import CoreImage
             let adjustedDeltaX = averageRotationVelocity.x
             let rotationY = simd_quatf(angle: adjustedDeltaX, axis: cameraNode.simdWorldUp)
             let cameraRight = cameraNode.simdWorldRight
-            let rotationX = simd_quatf(angle: averageRotationVelocity.y, axis: cameraNode.simdWorldRight)
+            let rotationX = simd_quatf(angle: averageRotationVelocity.y, axis: cameraRight)
 
             let totalRotation = simd_mul(rotationY, rotationX)
             currentRotation = simd_mul(totalRotation, currentRotation)
@@ -168,11 +178,8 @@ import CoreImage
 
         // Create a new timer that calls applyRotation continuously
         longPressTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-            self.applyRotation()
+            Task { await self.applyRotation() }
         }
-    }
-    func stopContinuousRotation() {
-        
     }
     func updateShipOrientation() {
         let worldUp = SIMD3<Float>(0, 1, 0)
@@ -190,7 +197,6 @@ import CoreImage
                 self.isInverted = false
             }
         }
-
         let shipQuaternion = ship.shipNode.presentation.orientation
         let eulerAngles = quaternionToEulerAngles(shipQuaternion)
 
@@ -201,7 +207,7 @@ import CoreImage
         }
     }
     func updateShipPosition() {
-        applyRotation() // Add this line
+        applyRotation() // CONTINUE UPDATING ROTATION
 
         ship.shipNode.simdPosition += ship.shipNode.simdWorldFront * ship.throttle
         // Find the closest black hole and its distance
@@ -228,16 +234,15 @@ import CoreImage
             self.cameraNode.camera!.fieldOfView = CGFloat(minFov)
         }
         // Check if the ship is in contact with the closest black hole (use a threshold value)
-        let contactThreshold: Float = self.closestBlackHole == nil ? 0 : Float(self.closestBlackHole!.radius + 5)
+        let contactThreshold: Float = self.closestBlackHole == nil ? 0 : Float(self.closestBlackHole!.radius * 1.25 + 5)
         if closestDistance < contactThreshold || closestContainerDistance < contactThreshold {
-            points += 100 * Int(self.ship.throttle)
-            self.showScoreIncrement = true
+            self.incrementScore(killsOrBlackHoles: 1)
             // Remove black hole from scene and view model
             closestBlackHole?.blackHoleNode.removeFromParentNode()
             if let index = blackHoles.firstIndex(where: { $0 === closestBlackHole }) {
                 blackHoles.remove(at: index)
             }
-            print("Contact with a black hole! Points: \(points)")
+            print("Contact with a black hole at \(self.ship.throttle * 10.0) km/s! Points: +\(points)")
         }
         let distance: Float = 15.0 // Define the desired distance between the camera and the spaceship
         let cameraPosition = ship.shipNode.simdPosition - (ship.shipNode.simdWorldFront * distance)
@@ -252,10 +257,9 @@ import CoreImage
         ship.throttle = value
         print(ship.throttle)
     }
-
     func dragChanged(value: DragGesture.Value) {
         let translation = value.translation
-        let deltaX = Float(translation.width - previousTranslation.width) * 0.0075
+        let deltaX = Float(translation.width - previousTranslation.width) * 0.006
         let deltaY = Float(translation.height - previousTranslation.height) * 0.0075
 
         // Add the deltaX and deltaY to their respective buffers
@@ -271,7 +275,6 @@ import CoreImage
 
         previousTranslation = translation
         isRotationActive = true
-        stopContinuousRotation()
     }
     func dragEnded() {
         previousTranslation = CGSize.zero
@@ -300,6 +303,7 @@ import CoreImage
         // Add a look-at constraint to the camera node
         cameraNode.constraints = [createLookAtConstraint()]
     }
+    // QUAT MATRIX ROTATION HELPERS
     func worldQuaternionToEulerAngles(_ node: SCNNode) -> SCNVector3 {
         let worldOrientation = node.presentation.simdWorldOrientation
         let matrix = simd_float3x3(worldOrientation)
@@ -319,7 +323,6 @@ import CoreImage
         }
         return SCNVector3(x, y, z)
     }
-
     func quaternionToEulerAngles(_ quaternion: SCNQuaternion) -> SCNVector3 {
         let q = simd_quatf(ix: quaternion.x, iy: quaternion.y, iz: quaternion.z, r: quaternion.w)
         let matrix = simd_float3x3(q)
@@ -338,5 +341,18 @@ import CoreImage
             z = 0
         }
         return SCNVector3(x, y, z)
+    }
+    // GAME METRICS AND WORLD STATE
+    func incrementScore(killsOrBlackHoles: Int) {
+        switch killsOrBlackHoles {
+        case 1:
+            points += 100 * Int(self.ship.throttle) * 60
+            self.showScoreIncrement = true
+        case 2:
+            points += 10000
+            self.showKillIncrement = true
+        default:
+            self.points += 0
+        }
     }
 }

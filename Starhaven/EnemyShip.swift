@@ -192,7 +192,6 @@ import simd
         self.shipNode = node
         self.containerNode = containerNode
         // Create the physics body for the enemy ship using its geometry
-        let nodes = [shipNode] + shipNode.childNodes
         let shape = SCNPhysicsShape(node: shipNode, options: [.keepAsCompound: true])
         shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: shape)
         shipNode.physicsBody?.isAffectedByGravity = false

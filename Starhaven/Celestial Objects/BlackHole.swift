@@ -52,8 +52,6 @@ class BlackHole: ObservableObject {
         let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: self.period == 0 ? 2  * Double.random(in: 0.5...1.15) : Double(self.period)))
         self.blackHoleNode.runAction(rotationAction)
         self.blackHoleNode.isHidden = false
-        let gaussianBlurFilter = CIFilter(name: "CIGaussianBlur")
-        let pixellateFilter = CIFilter(name:"CIPixellate")
     }
     func addSpinningEdgeRings(count: Int, cameraNode: SCNNode, isWhite: Bool = false) {
         let parentNode = self.blackHoleNode
@@ -265,7 +263,6 @@ class BlackHole: ObservableObject {
         let purpleColor = UIColor(red: 46/255, green: 33/255, blue: 55/255, alpha: 1.0)
         let orangeColor = UIColor(red: 219/255, green: 144/255, blue: 78/255, alpha: 1.0)
         let redColor = UIColor(red: 199/255, green: 74/255, blue: 0/255, alpha: 1.0)
-        let darkRedColor = UIColor(red: 119/255, green: 0/255, blue: 0/255, alpha: 1.0)
         let whiteColor = UIColor.white
         let color = blackColor.lerp(to: purpleColor, alpha: CGFloat(darkRedFactor))
             .lerp(to: orangeColor, alpha: CGFloat(redFactor))
