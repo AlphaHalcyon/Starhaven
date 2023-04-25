@@ -43,11 +43,10 @@ import CoreImage
         rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
         self.setupCamera()
-        // Create a timer to update the ship's position
+        // WORLD CONTROLLER TIMER <- move things in here
         Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
             DispatchQueue.main.async {
                 self.updateShipPosition()
-                
             }
         }
     }
@@ -60,18 +59,7 @@ import CoreImage
         self.ship.containerNode.position = SCNVector3(0, 1_000, -5_010)
         
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
-        scnView.allowsCameraControl = false
-        scnView.autoenablesDefaultLighting = true
-        scnView.backgroundColor = UIColor.black
-        scnView.scene?.background.contents = [
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky")
-        ]
-        scnView.scene?.background.intensity = 0.5
+        self.createSkybox(scnView: scnView)
         self.scatterCelestialObjects()
         self.createGhosts(scnView: scnView)
         scnView.prepare(self.scene)
@@ -82,7 +70,7 @@ import CoreImage
         var ghosts: [EnemyShip] = []
         for _ in 0...15 {
             let enemyShip = EnemyShip(spacegroundViewModel: self)
-            let enemyShipNode = enemyShip.createShip(scale: CGFloat.random(in: 10.0...25.0))
+            let enemyShipNode = enemyShip.createShip(scale: CGFloat.random(in: 10.0...50.0))
             enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...5000), Int.random(in: -5000...5000))
             scnView.scene?.rootNode.addChildNode(enemyShip.containerNode)
             ghosts.append(enemyShip)
@@ -92,7 +80,8 @@ import CoreImage
         }
         // GHOST MOVEMENT SCHEDULE
         DispatchQueue.main.async {
-            self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+            self.belligerents.append(self.ship.shipNode)
+            self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 65.0, repeats: true) { _ in
                 DispatchQueue.main.async {
                     for ghost in ghosts {
                         ghost.updateAI()
@@ -105,15 +94,6 @@ import CoreImage
     func createMissile(target: SCNNode? = nil) {
         let missile = Missile(target: target)
         self.missiles.append(missile)
-    }
-    // WORLD DYNAMICS
-    
-    // WORLD SCALE
-    func applyAffineTransform(vector: SCNVector3, transform: SCNMatrix4) -> SCNVector3 {
-        let x = transform.m11 * vector.x + transform.m21 * vector.y + transform.m31 * vector.z + transform.m41
-        let y = transform.m12 * vector.x + transform.m22 * vector.y + transform.m32 * vector.z + transform.m42
-        let z = transform.m13 * vector.x + transform.m23 * vector.y + transform.m33 * vector.z + transform.m43
-        return SCNVector3(x: x, y: y, z: z)
     }
     // WORLD SET-UP
     func scatterCelestialObjects() {
@@ -139,6 +119,20 @@ import CoreImage
         self.view.prepare(blackHole.blackHoleNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
         return blackHole
+    }
+    func createSkybox(scnView: SCNView) {
+        scnView.allowsCameraControl = false
+        scnView.autoenablesDefaultLighting = true
+        scnView.backgroundColor = UIColor.black
+        scnView.scene?.background.contents = [
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky"),
+            UIImage(named: "sky")
+        ]
+        scnView.scene?.background.intensity = 0.5
     }
 
     // PILOT NAV

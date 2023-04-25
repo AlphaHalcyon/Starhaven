@@ -199,13 +199,11 @@ class BlackHole: ObservableObject {
 
         rotateAroundBlackHoleCenter(edgeRingNode, isWhite: isWhite, count: i)
     }
-
     func setBillboardConstraint(for node: SCNNode) {
         let billboardConstraint = SCNBillboardConstraint()
         billboardConstraint.freeAxes = [.X, .Y]
         node.constraints = [billboardConstraint]
     }
-
     func setRotation(for node: SCNNode, relativeTo blackHoleNode: SCNNode?) {
         guard let blackHoleNode = blackHoleNode else { return }
         let dx = node.position.x - blackHoleNode.position.x
@@ -254,30 +252,6 @@ class BlackHole: ObservableObject {
 
         return [.geometry: String(), .fragment: fragmentShaderCode]
     }
-    func colorForRadiusFromCenter(_ radiusFromCenter: Float, randomColorFactor: Float) -> UIColor {
-        let whiteFactor = smoothstep(2.45, 2.55, radiusFromCenter) * 2 * randomColorFactor
-        let orangeFactor = smoothstep(2.55, 2.65, radiusFromCenter) * randomColorFactor
-        let redFactor = smoothstep(2.65, 2.75, radiusFromCenter) * (1.25 * randomColorFactor)
-        let darkRedFactor = smoothstep(2.75, 2.85, radiusFromCenter) * (2 * randomColorFactor)
-        let blackColor = UIColor(red: 17/255, green: 17/255, blue: 21/255, alpha: 1.0)
-        let purpleColor = UIColor(red: 46/255, green: 33/255, blue: 55/255, alpha: 1.0)
-        let orangeColor = UIColor(red: 219/255, green: 144/255, blue: 78/255, alpha: 1.0)
-        let redColor = UIColor(red: 199/255, green: 74/255, blue: 0/255, alpha: 1.0)
-        let whiteColor = UIColor.white
-        let color = blackColor.lerp(to: purpleColor, alpha: CGFloat(darkRedFactor))
-            .lerp(to: orangeColor, alpha: CGFloat(redFactor))
-            .lerp(to: redColor, alpha: CGFloat(orangeFactor))
-            .lerp(to: whiteColor, alpha: CGFloat(whiteFactor))
-        return color
-    }
-    func smoothstep(_ edge0: Float, _ edge1: Float, _ x: Float) -> Float {
-        let t = min(max((x - edge0) / (edge1 - edge0), 0.0), 1.0)
-        return t * t * (3.0 - 2.0 * t)
-    }
-
-    func mix(_ a: Float, _ b: Float, _ t: Float) -> Float {
-        return a * (1.0 - t) + b * t
-    }
 }
 
 struct ShaderVibe {
@@ -300,8 +274,11 @@ struct ShaderVibe {
         else if (t < 5.5/6.0) {
             color = mix(purple, blue, (t - 5.0/6.0) * 6.0);
         }
-        else if (t < 5.95/6.0) {
-            color = mix(blue, red, (t - 5.5/6.0) * 6.0);
+        else if (t < 5.75/6.0) {
+            color = mix(blue, purple, (t - 5.5/6.0) * 6.0);
+        }
+        else if (t < 5.98/6.0) {
+            color = mix(purple, red, (t - 5.5/6.0) * 6.0);
         }
         else {
             color = red;

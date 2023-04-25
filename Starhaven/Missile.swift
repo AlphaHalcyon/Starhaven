@@ -48,31 +48,40 @@ import SwiftUI
         self.missileNode.physicsBody?.friction = 0
         self.missileNode.physicsBody?.damping = 0
         _ = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
-            self.detonate()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                self.detonate()
+            })
             print("boom")
         }
         if self.target != nil {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                self.timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
-                    self?.updateTracking()
-                }
-            })
+            self.updateTracking()
         }
     }
     func updateTracking() {
-        guard let target = self.target else { return }
-        let direction = target.position - missileNode.position
+        if let target = self.target {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                self.timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
+                    if let self = self {
+                        DispatchQueue.main.async {
+                            self.trackTarget(target: target)
+                        }
+                    }
+                }
+            })
+        } else { return }
+    }
+    func trackTarget(target: SCNNode) {
+        let direction = target.position - self.missileNode.position
         let directionNormalized = direction.normalized()
         // Predict the future position of the target
         let predictionTime: TimeInterval = 5
         let targetVelocity = target.physicsBody?.velocity ?? SCNVector3Zero
         let predictedTargetPosition = target.position + (targetVelocity * Float(predictionTime))
         // Update missile's velocity
-        let newDirection = predictedTargetPosition - missileNode.position
-        missileNode.physicsBody?.velocity.x = newDirection.x
-        missileNode.physicsBody?.velocity.y = newDirection.y
-        missileNode.physicsBody?.velocity.z = newDirection.z
-        
+        let newDirection = predictedTargetPosition - self.missileNode.position
+        self.missileNode.physicsBody?.velocity.x = newDirection.x
+        self.missileNode.physicsBody?.velocity.y = newDirection.y
+        self.missileNode.physicsBody?.velocity.z = newDirection.z
     }
     func setLookAtConstraint() {
         guard let target = self.target else { return }
