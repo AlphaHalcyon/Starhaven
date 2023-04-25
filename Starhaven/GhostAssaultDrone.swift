@@ -1,17 +1,16 @@
 //
-//  Ship.swift
+//  GhostAssaultDrone.swift
 //  Starhaven
 //
-//  Created by JxR on 4/6/23.
+//  Created by JxR on 4/25/23.
 //
-
 import Foundation
 import SwiftUI
 import SceneKit
 import GLKit
 import simd
 
-@MainActor class EnemyShip: ObservableObject {
+@MainActor class AssaultDrone: ObservableObject {
     @State var spacegroundViewModel: SpacecraftViewModel
     @Published var shipNode: SCNNode = SCNNode()
     @Published var pitch: CGFloat = 0
@@ -32,12 +31,17 @@ import simd
     private var angle: Float = 0.0
     private let loiteringSpeed: Float = 1.0
     private let loiteringRadius: Float = 10.0
-
+    @Published var timer: Timer = Timer()
     // INIT
     init(spacegroundViewModel: SpacecraftViewModel) {
         self.spacegroundViewModel = spacegroundViewModel
         // Initialize new properties
         self.selectNewTarget()
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+            DispatchQueue.main.async {
+                self.updateAI()
+            }
+        }
     }
     // GHOST MOVEMENTS
     @MainActor func updateAI() {
@@ -65,7 +69,7 @@ import simd
             let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
             
             // Set a minimum distance between the enemy and player ships
-            let minDistance: Float = 1000
+            let minDistance: Float = 1500
             var speed: Float = 5
             
             // If the enemy ship is closer than the minimum distance, move it away from the player
@@ -74,9 +78,9 @@ import simd
                 self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
             }
             // Check if the target is within the specified range
-            if distance > minDistance - 50 && distance < minDistance + 150 {
+            if distance > minDistance - 500 && distance < minDistance + 500 {
                 // Engaging the target, fire weapons
-                if Float.random(in: 0...1) > 1/30 { fireLaser() }
+                if Float.random(in: 0...1) > 0.95 { fireLaser() }
                 //if Float.random(in: 0...1) > 0.95 { fireMissile() }
             }
         }
@@ -113,19 +117,19 @@ import simd
         containerNode.parent!.addChildNode(missile.missileNode)
     }
     func fireLaser(target: SCNNode? = nil) {
-        print("fire!")
-        let missile = Laser(target: target)
+        let laser = Laser()
         
         // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 0), to: containerNode.parent)
+        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, -1), to: containerNode.parent)
         
-        missile.laserNode.position = worldPosition
-        missile.laserNode.orientation = shipNode.presentation.orientation
+        laser.laserNode.position = worldPosition
+        laser.laserNode.orientation = shipNode.presentation.orientation
+        laser.laserNode.eulerAngles.x += Float.pi / 2
         let direction = shipNode.presentation.worldFront
-        let missileMass = missile.laserNode.physicsBody?.mass ?? 1
-        let missileForce = CGFloat(throttle + 1) * 1000 * missileMass
-        missile.laserNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        containerNode.parent!.addChildNode(missile.laserNode)
+        let laserMass = laser.laserNode.physicsBody?.mass ?? 1
+        let laserForce = CGFloat(abs(throttle) + 1) * 750 * laserMass
+        laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
+        containerNode.parent!.addChildNode(laser.laserNode)
         
     }
 
@@ -197,7 +201,7 @@ import simd
         self.shipNode.physicsBody?.categoryBitMask = CollisionCategory.enemyShip
         self.shipNode.physicsBody?.collisionBitMask = CollisionCategory.laser | CollisionCategory.missile
         self.shipNode.physicsBody?.contactTestBitMask = CollisionCategory.laser | CollisionCategory.missile
-
+        shipNode.physicsBody?.collisionBitMask &= ~CollisionCategory.laser
         return self.shipNode
     }
 }

@@ -42,7 +42,8 @@ struct SpacecraftView: View {
             .simultaneousGesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged { value in
-                        if !self.spacecraftViewModel.view.allowsCameraControl { spacecraftViewModel.dragChanged(value: value) }
+                        if !self.spacecraftViewModel.view.allowsCameraControl {
+                            spacecraftViewModel.dragChanged(value: value) }
                     }
                     .onEnded { _ in
                         if !self.spacecraftViewModel.view.allowsCameraControl { spacecraftViewModel.dragEnded() }

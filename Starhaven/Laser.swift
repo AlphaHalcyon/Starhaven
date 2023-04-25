@@ -17,7 +17,7 @@ class Laser {
         self.target = target
 
         // Create laser geometry and node
-        let laserGeometry = SCNCylinder(radius: 0.1, height: 2)
+        let laserGeometry = SCNCylinder(radius: 0.15, height: 2)
         laserGeometry.firstMaterial?.diffuse.contents = UIColor.red
         laserNode = SCNNode(geometry: laserGeometry)
         // Adjust the physicsBody
@@ -29,7 +29,7 @@ class Laser {
         laserNode.physicsBody = physicsBody      // Create laser particle system
         laserParticleSystem = self.createLaser()
         laserParticleSystem.emitterShape = laserGeometry
-        laserNode.opacity = 0.90
+        laserNode.opacity = 0.9
         // Attach laser particle system to the tail of the laser
         let emitterNode = SCNNode()
         emitterNode.position = SCNVector3(0, 5, 0)
@@ -37,17 +37,17 @@ class Laser {
         laserNode.addChildNode(emitterNode)
 
         self.laserNode.physicsBody?.isAffectedByGravity = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
+            self.laserNode.removeFromParentNode()
+        })
     }
     func createLaser() -> SCNParticleSystem {
         let laser = SCNParticleSystem()
         laser.birthRate = 10000
         laser.particleLifeSpan = 0.1
-        laser.emissionDuration = 0.2
         laser.spreadingAngle = 0
-        laser.particleSize = 0.05
+        laser.particleSize = 1
         laser.particleColor = UIColor.green
-        laser.particleVelocity = 50
-        laser.particleVelocityVariation = 5
         return laser
     }
 }

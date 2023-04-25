@@ -17,6 +17,7 @@
 		AF6388E029DF78430086C90F /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DF29DF78430086C90F /* Ship.swift */; };
 		AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */; };
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
+		AF67FBB129F78C0B007CE669 /* GhostAssaultDrone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* GhostAssaultDrone.swift */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
 		AFB2534829ECFF2500084728 /* EnemyShip.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB2534729ECFF2500084728 /* EnemyShip.swift */; };
@@ -44,6 +45,7 @@
 		AF6388DF29DF78430086C90F /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacegroundViewModel.swift; sourceTree = "<group>"; };
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
+		AF67FBB029F78C0B007CE669 /* GhostAssaultDrone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostAssaultDrone.swift; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
 		AFB2534729ECFF2500084728 /* EnemyShip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemyShip.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
 				AF6388DF29DF78430086C90F /* Ship.swift */,
 				AFB2534729ECFF2500084728 /* EnemyShip.swift */,
+				AF67FBB029F78C0B007CE669 /* GhostAssaultDrone.swift */,
 				AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */,
 				AF6388DB29DF77B80086C90F /* HUD.swift */,
 				AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */,
@@ -240,6 +243,7 @@
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
+				AF67FBB129F78C0B007CE669 /* GhostAssaultDrone.swift in Sources */,
 				AFB2534829ECFF2500084728 /* EnemyShip.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,

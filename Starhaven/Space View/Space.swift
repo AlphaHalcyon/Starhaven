@@ -29,7 +29,6 @@ import SwiftUI
         }
         @MainActor func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
             let contactMask = contact.nodeA.physicsBody!.categoryBitMask | contact.nodeB.physicsBody!.categoryBitMask
-            print(contactMask)
             switch contactMask {
             case CollisionCategory.laser | CollisionCategory.enemyShip:
                 handleLaserEnemyCollision(contact: contact)
@@ -40,20 +39,20 @@ import SwiftUI
             }
         }
         @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
-            // Determine which node is the laser and which is the enemy ship
             let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
             let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            print(enemyNode)
-            createExplosion(at: enemyNode.position)
-            // Remove the laser and enemy ship from the scene
-            laserNode.removeFromParentNode()
-            enemyNode.removeFromParentNode()
+            if 0 > 1 {
+                createExplosion(at: enemyNode.position)
+                DispatchQueue.main.async {
+                    self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
+                    self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
+                }
+                // Remove the laser and enemy ship from the scene
+                enemyNode.parent!.removeFromParentNode()
+            }
+            let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
+            //laserNode.removeFromParentNode()
             print("laser collision!")
-            // Add logic for updating the score or other game state variables
-            // For example, you could call a function in the SpacecraftViewModel to increase the score:
-            // DispatchQueue.main.async {
-            //     self.view.spaceViewModel.incrementScore(points: 100)
-            // }
         }
         @MainActor func handleMissileEnemyCollision(contact: SCNPhysicsContact) {
             // Determine which node is the missile and which is the enemy ship
@@ -62,17 +61,20 @@ import SwiftUI
             // Find the corresponding missile object and call the handleCollision function
             if let missile = view.spaceViewModel.missiles.first(where: { $0.getMissileNode() == missileNode }) {
                 print("nice!")
-                missile.detonate()
+                DispatchQueue.main.async { missile.detonate() }
             }
-
+            let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
+            node?.timer.invalidate()
             // Remove the missile and enemy ship from the scene
             DispatchQueue.main.async {
                 self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
+                self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
+                self.view.spaceViewModel.closestEnemy = nil
             }
-            createExplosion(at: enemyNode.position)
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                self.createExplosion(at: enemyNode.position)
                 enemyNode.removeFromParentNode()
-                
             }
             // Add logic for updating the score or other game state variables
             // For example, you could call a function in the SpacecraftViewModel to increase the score:

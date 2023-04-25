@@ -15,7 +15,6 @@ import simd
     @State private var reticlePosition: CGPoint = CGPoint()
     @State var fireCooldown: Bool = false
     @State var boundingBoxNode: SCNNode? = nil
-    @State var closestEnemy: SCNNode? = nil
     var body: some View {
         VStack {
             HStack {
@@ -83,10 +82,10 @@ import simd
             HStack {
                 Button(action: {
                     print("fire!!!")
-                    self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.missiles.append(self.spacecraftViewModel.ship.fireMissile(target: self.closestEnemy)) : self.spacecraftViewModel.ship.fireLaser()
+                    self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.missiles.append(self.spacecraftViewModel.ship.fireMissile(target: self.spacecraftViewModel.closestEnemy)) : self.spacecraftViewModel.ship.fireLaser()
                     if self.spacecraftViewModel.weaponType == "Missile" {
                         self.fireCooldown = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             self.fireCooldown = false
                         }
                     }
@@ -106,47 +105,44 @@ import simd
                         boundingBoxNode = nil
                     }
                     else {
-                        self.updateReticle()
+                        self.updateMissileLockBoundingBox()
                     }
                 }
             })
         }
     }
-    func updateReticle() {
+    func updateMissileLockBoundingBox() {
         // Find the enemy ship that is closest to the player's ship
         var closestDistance: Float = .greatestFiniteMagnitude
-        for enemy in spacecraftViewModel.belligerents {
-            let distance = simd_distance(enemy.simdPosition, self.spacecraftViewModel.ship.shipNode.simdPosition)
-            if distance < closestDistance && enemy != self.spacecraftViewModel.ship.shipNode {
+        for enemy in spacecraftViewModel.ghosts {
+            let node = enemy.shipNode
+            let distance = simd_distance(node.simdPosition, self.spacecraftViewModel.ship.shipNode.simdPosition)
+            if distance < closestDistance && node != self.spacecraftViewModel.ship.shipNode {
                 closestDistance = distance
-                closestEnemy = enemy
+                self.spacecraftViewModel.closestEnemy = node
             }
         }
 
         // Remove the existing bounding box if it's attached to a different enemy
-        if let existingBoundingBox = boundingBoxNode, let parentNode = existingBoundingBox.parent, parentNode != closestEnemy {
+        if let existingBoundingBox = boundingBoxNode, let parentNode = existingBoundingBox.parent, parentNode != self.spacecraftViewModel.closestEnemy {
             existingBoundingBox.removeFromParentNode()
             boundingBoxNode = nil
         }
 
         // Check if there is a closest enemy within a certain distance
-        if let closestEnemy = closestEnemy, closestDistance < 100000 {
+        if let closestEnemy = self.spacecraftViewModel.closestEnemy, closestDistance < 100000 {
             // If a bounding box node does not exist, create it and add it as a child node to the closest enemy
             if boundingBoxNode == nil {
                 let boundingBox = closestEnemy.boundingBox
                 let width = CGFloat(boundingBox.max.x - boundingBox.min.x)
                 let height = CGFloat(boundingBox.max.x - boundingBox.min.x)
-                let box = SCNBox(width: width * 2, height: height * 2, length: width * 2, chamferRadius: 10)
+                let box = SCNBox(width: width * 2, height: height * 2, length: height * 2, chamferRadius: 1)
                 box.firstMaterial?.diffuse.contents = UIColor.red
                 let planeNode = SCNNode(geometry: box)
-                planeNode.opacity = 0.15
+                planeNode.opacity = 0.1
                 planeNode.position = SCNVector3((boundingBox.min.x + boundingBox.max.x) / 2, (boundingBox.min.y + boundingBox.max.y) / 2, 0)
-                
                 closestEnemy.addChildNode(planeNode)
                 boundingBoxNode = planeNode
-                let constraint = SCNBillboardConstraint()
-                constraint.freeAxes = .all
-                boundingBoxNode?.constraints = [constraint]
             }
         } else {
             // If there is no closest enemy or it's out of range, remove the bounding box

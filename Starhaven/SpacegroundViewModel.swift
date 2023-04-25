@@ -13,7 +13,7 @@ import CoreImage
 
 @MainActor class SpacecraftViewModel: ObservableObject {
     @Published var previousTranslation: CGSize = CGSize.zero
-    @Published var currentRotation = simd_quatf(ix: 0, iy: 0, iz: 0, r: 1)
+    @Published var currentRotation = simd_quatf(angle: .pi, axis: simd_float3(x: 0, y: 1, z: 0))
     @Published var view: SCNView = SCNView()
     @Published var scene: SCNScene = SCNScene()
     @Published var ship = Ship()
@@ -39,6 +39,8 @@ import CoreImage
     @Published var belligerents: [SCNNode] = []
     @Published var missiles: [Missile] = []
     @Published var showKillIncrement: Bool = false
+    @Published var ghosts: [AssaultDrone] = []
+    @Published var closestEnemy: SCNNode? = nil
     init() {
         rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
@@ -57,37 +59,28 @@ import CoreImage
         self.ship.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         scnView.scene?.rootNode.addChildNode(self.cameraNode)
         self.ship.containerNode.position = SCNVector3(0, 1_000, -5_010)
-        
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
         self.createSkybox(scnView: scnView)
         self.scatterCelestialObjects()
-        self.createGhosts(scnView: scnView)
         scnView.prepare(self.scene)
+        self.createGhosts(scnView: scnView)
         return scnView
     }
     // GHOST CREATION
     func createGhosts(scnView: SCNView) {
-        var ghosts: [EnemyShip] = []
         for _ in 0...15 {
-            let enemyShip = EnemyShip(spacegroundViewModel: self)
-            let enemyShipNode = enemyShip.createShip(scale: CGFloat.random(in: 10.0...50.0))
+            let ghost = AssaultDrone(spacegroundViewModel: self)
+            let enemyShipNode = ghost.createShip(scale: CGFloat.random(in: 10.0...50.0))
             enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...5000), Int.random(in: -5000...5000))
-            scnView.scene?.rootNode.addChildNode(enemyShip.containerNode)
-            ghosts.append(enemyShip)
+            scnView.scene?.rootNode.addChildNode(ghost.containerNode)
             DispatchQueue.main.async {
+                self.ghosts.append(ghost)
                 self.belligerents.append(enemyShipNode)
             }
         }
         // GHOST MOVEMENT SCHEDULE
         DispatchQueue.main.async {
             self.belligerents.append(self.ship.shipNode)
-            self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 65.0, repeats: true) { _ in
-                DispatchQueue.main.async {
-                    for ghost in ghosts {
-                        ghost.updateAI()
-                    }
-                }
-            }
         }
     }
     // GHOST WEAPONS
@@ -112,6 +105,7 @@ import CoreImage
         DispatchQueue.main.async {
             self.blackHoles.append(centerBlackHole)
         }
+        
     }
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, view: self.view, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)

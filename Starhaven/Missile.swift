@@ -17,7 +17,7 @@ import SwiftUI
     var timer: Timer = Timer()
     init(target: SCNNode? = nil) {
         self.target = target
-        
+        print(target)
         // Create missile geometry and node
         let missileGeometry = SCNCylinder(radius: 0.5, height: 2)
         missileGeometry.firstMaterial?.diffuse.contents = UIColor.darkGray
@@ -32,10 +32,10 @@ import SwiftUI
         // Create red particle system
         redParticleSystem = SCNParticleSystem()
         redParticleSystem.particleColor = UIColor.red
-        redParticleSystem.particleSize = 0.02
+        redParticleSystem.particleSize = 0.033
         redParticleSystem.birthRate = 100000
         redParticleSystem.emissionDuration = 1
-        redParticleSystem.particleLifeSpan = 1.25
+        redParticleSystem.particleLifeSpan = 0.33
         redParticleSystem.spreadingAngle = 180
         redParticleSystem.emitterShape = missileGeometry
         redParticleSystem.emissionDurationVariation = redParticleSystem.emissionDuration
@@ -72,7 +72,7 @@ import SwiftUI
     }
     func trackTarget(target: SCNNode) {
         let direction = target.position - self.missileNode.position
-        let directionNormalized = direction.normalized()
+        _ = direction.normalized()
         // Predict the future position of the target
         let predictionTime: TimeInterval = 5
         let targetVelocity = target.physicsBody?.velocity ?? SCNVector3Zero
