@@ -10,7 +10,7 @@ import SceneKit
 import GLKit
 import simd
 
-@MainActor class AssaultDrone: ObservableObject {
+class AssaultDrone: ObservableObject {
     @State var spacegroundViewModel: SpacecraftViewModel
     @Published var shipNode: SCNNode = SCNNode()
     @Published var pitch: CGFloat = 0
@@ -38,65 +38,67 @@ import simd
         // Initialize new properties
         self.selectNewTarget()
         self.timer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-            DispatchQueue.main.async {
-                self.updateAI()
-            }
+            self.updateAI()
         }
     }
     // GHOST MOVEMENTS
-    @MainActor func updateAI() {
-        // Check if the current target is still valid
-        if self.belligerentCount != self.spacegroundViewModel.belligerents.count {
-            if currentTarget != nil {
-                if !self.spacegroundViewModel.belligerents.contains(where: { $0 == currentTarget! }) { selectNewTarget() }
-                self.belligerentCount = self.spacegroundViewModel.belligerents.count
+    func updateAI() {
+        DispatchQueue.main.async {
+            // Check if the current target is still valid
+            if self.belligerentCount != self.spacegroundViewModel.belligerents.count {
+                if self.currentTarget != nil {
+                    if !self.spacegroundViewModel.belligerents.contains(where: { $0 == self.currentTarget! }) { self.selectNewTarget() }
+                    self.belligerentCount = self.spacegroundViewModel.belligerents.count
+                }
+                else {
+                    self.selectNewTarget()
+                }
             }
-            else {
-                selectNewTarget()
-            }
-        }
-        
-        // Update the enemy ship's behavior based on the current target
-        if let target = currentTarget {
-            // Create and apply a SCNLookAtConstraint to make the enemy ship always face the current target's position
-            let constraint = SCNLookAtConstraint(target: target)
-            constraint.isGimbalLockEnabled = true
-            self.shipNode.constraints = [constraint]
+            
+            // Update the enemy ship's behavior based on the current target
+            if let target = self.currentTarget {
+                // Create and apply a SCNLookAtConstraint to make the enemy ship always face the current target's position
+                let constraint = SCNLookAtConstraint(target: target)
+                constraint.isGimbalLockEnabled = true
+                self.shipNode.constraints = [constraint]
 
-            // Move the enemy ship towards the current target's position by a fixed amount on each frame
-            let direction = target.worldPosition - self.shipNode.worldPosition
-            let distance = direction.length()
-            let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
-            
-            // Set a minimum distance between the enemy and player ships
-            let minDistance: Float = 1500
-            var speed: Float = 5
-            
-            // If the enemy ship is closer than the minimum distance, move it away from the player
-            if distance > minDistance {
-                speed *= Float.random(in: 0.5...1.05)
-                self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
-            }
-            // Check if the target is within the specified range
-            if distance > minDistance - 500 && distance < minDistance + 500 {
-                // Engaging the target, fire weapons
-                if Float.random(in: 0...1) > 0.95 { fireLaser() }
-                //if Float.random(in: 0...1) > 0.95 { fireMissile() }
+                // Move the enemy ship towards the current target's position by a fixed amount on each frame
+                let direction = target.worldPosition - self.shipNode.worldPosition
+                let distance = direction.length()
+                let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
+                
+                // Set a minimum distance between the enemy and player ships
+                let minDistance: Float = 1500
+                var speed: Float = 5
+                
+                // If the enemy ship is closer than the minimum distance, move it away from the player
+                if distance > minDistance {
+                    speed *= Float.random(in: 0.5...1.05)
+                    self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
+                }
+                // Check if the target is within the specified range
+                if distance > minDistance - 500 && distance < minDistance + 500 {
+                    // Engaging the target, fire weapons
+                    if Float.random(in: 0...1) > 0.99 { self.fireLaser() }
+                    //if Float.random(in: 0...1) > 0.95 { fireMissile() }
+                }
             }
         }
     }
-    @MainActor func selectNewTarget() {
-        // Filter out the current ship from the list of available targets
-        let availableTargets = self.spacegroundViewModel.belligerents.filter { $0 != self.shipNode  }
+    func selectNewTarget() {
+        DispatchQueue.main.async {
+            // Filter out the current ship from the list of available targets
+            let availableTargets = self.spacegroundViewModel.belligerents.filter { $0 != self.shipNode  }
 
-        // Select a new target from the list of available targets
-        if let newTarget = availableTargets.randomElement() {
-            currentTarget = newTarget
-            //print("target acquired!")
-        } else {
-            // No targets available
-            currentTarget = nil
-            print("no one left to kill :(")
+            // Select a new target from the list of available targets
+            if let newTarget = availableTargets.randomElement() {
+                self.currentTarget = newTarget
+                //print("target acquired!")
+            } else {
+                // No targets available
+                self.currentTarget = nil
+                print("no one left to kill :(")
+            }
         }
     }
 

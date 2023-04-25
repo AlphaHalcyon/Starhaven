@@ -9,7 +9,7 @@ import Foundation
 import SceneKit
 import SwiftUI
 
-@MainActor class Missile {
+class Missile {
     var missileNode: SCNNode
     var target: SCNNode?
     var redParticleSystem: SCNParticleSystem
@@ -32,8 +32,8 @@ import SwiftUI
         // Create red particle system
         redParticleSystem = SCNParticleSystem()
         redParticleSystem.particleColor = UIColor.red
-        redParticleSystem.particleSize = 0.033
-        redParticleSystem.birthRate = 100000
+        redParticleSystem.particleSize = 0.05
+        redParticleSystem.birthRate = 10000
         redParticleSystem.emissionDuration = 1
         redParticleSystem.particleLifeSpan = 0.33
         redParticleSystem.spreadingAngle = 180
@@ -62,9 +62,7 @@ import SwiftUI
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 self.timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
                     if let self = self {
-                        DispatchQueue.main.async {
-                            self.trackTarget(target: target)
-                        }
+                        self.trackTarget(target: target)
                     }
                 }
             })
@@ -99,7 +97,7 @@ import SwiftUI
         // Create the particle system programmatically
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
-        fireParticleSystem.birthRate = 500000
+        fireParticleSystem.birthRate = 450000
         fireParticleSystem.particleSize = 0.5
         fireParticleSystem.particleIntensity = 0.75
         fireParticleSystem.particleLifeSpan = 0.33

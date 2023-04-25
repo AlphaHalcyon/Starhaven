@@ -10,7 +10,7 @@ import SceneKit
 import SwiftUI
 import simd
 
-@MainActor struct HUDView: View {
+struct HUDView: View {
     @EnvironmentObject var spacecraftViewModel: SpacecraftViewModel
     @State private var reticlePosition: CGPoint = CGPoint()
     @State var fireCooldown: Bool = false
@@ -85,7 +85,7 @@ import simd
                     self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.missiles.append(self.spacecraftViewModel.ship.fireMissile(target: self.spacecraftViewModel.closestEnemy)) : self.spacecraftViewModel.ship.fireLaser()
                     if self.spacecraftViewModel.weaponType == "Missile" {
                         self.fireCooldown = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                             self.fireCooldown = false
                         }
                     }

@@ -37,16 +37,16 @@ class Laser {
         laserNode.addChildNode(emitterNode)
 
         self.laserNode.physicsBody?.isAffectedByGravity = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
             self.laserNode.removeFromParentNode()
         })
     }
     func createLaser() -> SCNParticleSystem {
         let laser = SCNParticleSystem()
-        laser.birthRate = 10000
+        laser.birthRate = 1000
         laser.particleLifeSpan = 0.1
         laser.spreadingAngle = 0
-        laser.particleSize = 1
+        laser.particleSize = 2
         laser.particleColor = UIColor.green
         return laser
     }

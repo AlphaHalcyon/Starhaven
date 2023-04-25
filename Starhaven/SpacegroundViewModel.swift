@@ -126,7 +126,8 @@ import CoreImage
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        scnView.scene?.background.intensity = 0.5
+        scnView.scene?.background.intensity = 0.8
+        self.ship.shipNode.simdOrientation = currentRotation
     }
 
     // PILOT NAV
