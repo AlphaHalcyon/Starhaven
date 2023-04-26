@@ -38,21 +38,56 @@ import SwiftUI
                 return
             }
         }
+        @MainActor func hndleLaserEnemyCollision(contact: SCNPhysicsContact) {
+            let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
+            let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
+            let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
+            if Float.random(in: 0...1) > 0.99 {
+                createExplosion(at: enemyNode.position)
+                DispatchQueue.main.async {
+                    laserNode.removeFromParentNode()
+                    enemyNode.removeFromParentNode()
+                    node?.timer.invalidate()
+                    self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
+                    self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
+                    print("ghosts", self.view.spaceViewModel.ghosts)
+                }
+            }
+        }
         @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
             let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
             let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            if 0 > 1 {
-                createExplosion(at: enemyNode.position)
-                DispatchQueue.main.async {
-                    self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
-                    self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
-                }
-                // Remove the laser and enemy ship from the scene
-                enemyNode.parent!.removeFromParentNode()
-            }
             let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
-            //laserNode.removeFromParentNode()
-            print("laser collision!")
+            if let color = laserNode.childNodes.first?.particleSystems?.first?.particleColor {
+                switch node?.faction {
+                case .Wraith:
+                    if color == .green {
+                        if Float.random(in: 0...1) > 0.5 {
+                            node?.timer.invalidate()
+                            self.death(node: laserNode, enemyNode: enemyNode)
+                        }
+                    }
+                case .Phantom:
+                    if color == .red {
+                        if Float.random(in: 0...1) > 0.5 {
+                            node?.timer.invalidate()
+                            self.death(node: laserNode, enemyNode: enemyNode)
+                        }
+                    }
+                default:
+                    return
+                }
+            }
+        }
+        func death(node: SCNNode, enemyNode: SCNNode) {
+            DispatchQueue.main.async {
+                self.createExplosion(at: enemyNode.position)
+                node.removeFromParentNode()
+                enemyNode.removeFromParentNode()
+                self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
+                self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
+                print("ghosts", self.view.spaceViewModel.ghosts)
+            }
         }
         @MainActor func handleMissileEnemyCollision(contact: SCNPhysicsContact) {
             // Determine which node is the missile and which is the enemy ship
@@ -63,7 +98,7 @@ import SwiftUI
                 print("nice!")
                 DispatchQueue.main.async { missile.detonate() }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
                 DispatchQueue.main.async { self.createExplosion(at: enemyNode.position) }
                 enemyNode.removeFromParentNode()
             }

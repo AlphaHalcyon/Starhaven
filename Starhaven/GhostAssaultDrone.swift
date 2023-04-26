@@ -24,18 +24,13 @@ class AssaultDrone: ObservableObject {
     @Published var currentTime: TimeInterval = 0.0
     @Published var currentTarget: SCNNode? = nil
     @Published var belligerentCount: Int = 0
-    private var minimumFiringRange: Float = 0.0
-    private var pursuitRange: Float = 0.0
-    private var lastFiringTime: TimeInterval = 0.0
-    private var firingInterval: TimeInterval = 0.0
-    private var angle: Float = 0.0
-    private let loiteringSpeed: Float = 1.0
-    private let loiteringRadius: Float = 10.0
     @Published var timer: Timer = Timer()
+    @Published var faction: Faction
     // INIT
     init(spacegroundViewModel: SpacecraftViewModel) {
         self.spacegroundViewModel = spacegroundViewModel
         // Initialize new properties
+        self.faction = Faction.allCases.randomElement()!
         self.selectNewTarget()
         self.timer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
             self.updateAI()
@@ -51,7 +46,7 @@ class AssaultDrone: ObservableObject {
                     self.belligerentCount = self.spacegroundViewModel.belligerents.count
                 }
                 else {
-                    self.selectNewTarget()
+                    DispatchQueue.main.async { self.selectNewTarget() }
                 }
             }
             
@@ -68,19 +63,16 @@ class AssaultDrone: ObservableObject {
                 let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
                 
                 // Set a minimum distance between the enemy and player ships
-                let minDistance: Float = 1500
-                var speed: Float = 5
+                let minDistance: Float = 5550
+                var speed: Float = 10
                 
                 // If the enemy ship is closer than the minimum distance, move it away from the player
                 if distance > minDistance {
                     speed *= Float.random(in: 0.5...1.05)
                     self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
                 }
-                // Check if the target is within the specified range
-                if distance > minDistance - 500 && distance < minDistance + 500 {
-                    // Engaging the target, fire weapons
-                    if Float.random(in: 0...1) > 0.99 { self.fireLaser() }
-                    //if Float.random(in: 0...1) > 0.95 { fireMissile() }
+                if Float.random(in: 0...1) > 0.95 {
+                    DispatchQueue.main.async { self.fireLaser(color: self.faction == .Wraith ? .red : .green) }
                 }
             }
         }
@@ -88,11 +80,11 @@ class AssaultDrone: ObservableObject {
     func selectNewTarget() {
         DispatchQueue.main.async {
             // Filter out the current ship from the list of available targets
-            let availableTargets = self.spacegroundViewModel.belligerents.filter { $0 != self.shipNode  }
+            let availableTargets = self.spacegroundViewModel.ghosts.filter { $0.shipNode != self.shipNode && $0.faction != self.faction }
 
             // Select a new target from the list of available targets
             if let newTarget = availableTargets.randomElement() {
-                self.currentTarget = newTarget
+                self.currentTarget = newTarget.shipNode
                 //print("target acquired!")
             } else {
                 // No targets available
@@ -118,21 +110,22 @@ class AssaultDrone: ObservableObject {
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         containerNode.parent!.addChildNode(missile.missileNode)
     }
-    func fireLaser(target: SCNNode? = nil) {
-        let laser = Laser()
+    func fireLaser(target: SCNNode? = nil, color: UIColor) {
+        let laser = Laser(color: color)
         
         // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, -1), to: containerNode.parent)
+        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 5), to: containerNode.parent)
         
         laser.laserNode.position = worldPosition
         laser.laserNode.orientation = shipNode.presentation.orientation
         laser.laserNode.eulerAngles.x += Float.pi / 2
         let direction = shipNode.presentation.worldFront
         let laserMass = laser.laserNode.physicsBody?.mass ?? 1
-        let laserForce = CGFloat(abs(throttle) + 1) * 750 * laserMass
+        let laserForce = CGFloat(abs(throttle) + 1) * 3000 * laserMass
         laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
-        containerNode.parent!.addChildNode(laser.laserNode)
-        
+        if let rootNode = containerNode.parent {
+            rootNode.addChildNode(laser.laserNode)
+        }
     }
 
     // CREATION
@@ -201,7 +194,7 @@ class AssaultDrone: ObservableObject {
         shipNode.physicsBody?.isAffectedByGravity = false
         // Set the category, collision, and contact test bit masks
         self.shipNode.physicsBody?.categoryBitMask = CollisionCategory.enemyShip
-        self.shipNode.physicsBody?.collisionBitMask = CollisionCategory.laser | CollisionCategory.missile
+        self.shipNode.physicsBody?.collisionBitMask = CollisionCategory.missile
         self.shipNode.physicsBody?.contactTestBitMask = CollisionCategory.laser | CollisionCategory.missile
         shipNode.physicsBody?.collisionBitMask &= ~CollisionCategory.laser
         return self.shipNode

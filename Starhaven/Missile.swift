@@ -32,10 +32,10 @@ class Missile {
         // Create red particle system
         redParticleSystem = SCNParticleSystem()
         redParticleSystem.particleColor = UIColor.red
-        redParticleSystem.particleSize = 0.05
-        redParticleSystem.birthRate = 10000
+        redParticleSystem.particleSize = 0.33
+        redParticleSystem.birthRate = 5000
         redParticleSystem.emissionDuration = 1
-        redParticleSystem.particleLifeSpan = 0.33
+        redParticleSystem.particleLifeSpan = 0.25
         redParticleSystem.spreadingAngle = 180
         redParticleSystem.emitterShape = missileGeometry
         redParticleSystem.emissionDurationVariation = redParticleSystem.emissionDuration
@@ -43,24 +43,24 @@ class Missile {
         let emitterNode = SCNNode()
         emitterNode.position = SCNVector3(0, -1, 0)
         emitterNode.addParticleSystem(redParticleSystem)
-        missileNode.addChildNode(emitterNode)
-        self.missileNode.physicsBody?.isAffectedByGravity = false
-        self.missileNode.physicsBody?.friction = 0
-        self.missileNode.physicsBody?.damping = 0
-        _ = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                self.detonate()
-            })
-            print("boom")
-        }
-        if self.target != nil {
-            self.updateTracking()
+        DispatchQueue.main.async {
+            self.missileNode.addChildNode(emitterNode)
+            self.missileNode.physicsBody?.isAffectedByGravity = false
+            self.missileNode.physicsBody?.friction = 0
+            self.missileNode.physicsBody?.damping = 0
+            if self.target != nil {
+                self.updateTracking()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.33) {
+                self.timer.invalidate()
+                self.missileNode.removeFromParentNode()
+            }
         }
     }
     func updateTracking() {
         if let target = self.target {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                self.timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] _ in
+                self.timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true) { [weak self] _ in
                     if let self = self {
                         self.trackTarget(target: target)
                     }
@@ -69,17 +69,21 @@ class Missile {
         } else { return }
     }
     func trackTarget(target: SCNNode) {
-        let direction = target.position - self.missileNode.position
-        _ = direction.normalized()
-        // Predict the future position of the target
-        let predictionTime: TimeInterval = 5
-        let targetVelocity = target.physicsBody?.velocity ?? SCNVector3Zero
-        let predictedTargetPosition = target.position + (targetVelocity * Float(predictionTime))
-        // Update missile's velocity
-        let newDirection = predictedTargetPosition - self.missileNode.position
-        self.missileNode.physicsBody?.velocity.x = newDirection.x
-        self.missileNode.physicsBody?.velocity.y = newDirection.y
-        self.missileNode.physicsBody?.velocity.z = newDirection.z
+        DispatchQueue.global().async {
+            let direction = target.position - self.missileNode.position
+            _ = direction.normalized()
+            // Predict the future position of the target
+            let predictionTime: TimeInterval = 5
+            let targetVelocity = target.physicsBody?.velocity ?? SCNVector3Zero
+            let predictedTargetPosition = target.position + (targetVelocity * Float(predictionTime))
+            // Update missile's velocity
+            let newDirection = predictedTargetPosition - self.missileNode.position
+            DispatchQueue.main.async {
+                self.missileNode.physicsBody?.velocity.x = newDirection.x
+                self.missileNode.physicsBody?.velocity.y = newDirection.y
+                self.missileNode.physicsBody?.velocity.z = newDirection.z
+            }
+        }
     }
     func setLookAtConstraint() {
         guard let target = self.target else { return }
@@ -89,38 +93,40 @@ class Missile {
     }
 
     func handleCollision() {
-        detonate()
+        self.detonate() // boom
     }
     func detonate() {
-        let coronaGeo = SCNSphere(radius: 50)
-        
-        // Create the particle system programmatically
-        let fireParticleSystem = SCNParticleSystem()
-        fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
-        fireParticleSystem.birthRate = 450000
-        fireParticleSystem.particleSize = 0.5
-        fireParticleSystem.particleIntensity = 0.75
-        fireParticleSystem.particleLifeSpan = 0.33
-        fireParticleSystem.spreadingAngle = 180
-        fireParticleSystem.particleAngularVelocity = 50
-        fireParticleSystem.emitterShape = coronaGeo
-        // Make the particle system surface-based
-        fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
-        // Add the particle system to the warhead
-        
-        
-        let implodeAction = SCNAction.scale(to: 10, duration: 0.20)
-        let implodeActionStep = SCNAction.scale(to: 5, duration: 1)
-        let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
-        let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
-        self.explosionNode.addParticleSystem(fireParticleSystem)
-        self.missileNode.addChildNode(self.explosionNode)
-        self.explosionNode.runAction(SCNAction.repeat(pulseSequence, count: 1))
-        // Remove the missile node from the scene after a delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
-            self.missileNode.removeFromParentNode()
-        }
         self.timer.invalidate()
+        DispatchQueue.global().async {
+            let coronaGeo = SCNSphere(radius: 50)
+            
+            // Create the particle system programmatically
+            let fireParticleSystem = SCNParticleSystem()
+            fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
+            fireParticleSystem.birthRate = 450000
+            fireParticleSystem.particleSize = 0.4
+            fireParticleSystem.particleIntensity = 0.75
+            fireParticleSystem.particleLifeSpan = 0.33
+            fireParticleSystem.spreadingAngle = 180
+            fireParticleSystem.particleAngularVelocity = 50
+            fireParticleSystem.emitterShape = coronaGeo
+            // Make the particle system surface-based
+            fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
+            // Add the particle system to the warhead
+            let implodeAction = SCNAction.scale(to: 10, duration: 0.20)
+            let implodeActionStep = SCNAction.scale(to: 5, duration: 1)
+            let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
+            let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
+            DispatchQueue.main.async {
+                self.explosionNode.addParticleSystem(fireParticleSystem)
+                self.missileNode.addChildNode(self.explosionNode)
+                self.explosionNode.runAction(SCNAction.repeat(pulseSequence, count: 1))
+                // Remove the missile node from the scene after a delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                    self.missileNode.removeFromParentNode()
+                }
+            }
+        }
     }
     // In the Missile class, add the following function:
     func getMissileNode() -> SCNNode {

@@ -13,41 +13,39 @@ class Laser {
     var laserNode: SCNNode
     var target: SCNNode?
     var laserParticleSystem: SCNParticleSystem = SCNParticleSystem()
-    init(target: SCNNode? = nil) {
+    init(target: SCNNode? = nil, color: UIColor) {
         self.target = target
-
-        // Create laser geometry and node
-        let laserGeometry = SCNCylinder(radius: 0.15, height: 2)
+        let laserGeometry = SCNCylinder(radius: 0.12, height: 1.5)
         laserGeometry.firstMaterial?.diffuse.contents = UIColor.red
-        laserNode = SCNNode(geometry: laserGeometry)
+        self.laserNode = SCNNode(geometry: laserGeometry)
         // Adjust the physicsBody
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: laserGeometry, options: nil))
         physicsBody.angularVelocityFactor = SCNVector3(0, 0, 0) // Prevent rotation after being fired
         physicsBody.categoryBitMask = CollisionCategory.laser
         physicsBody.collisionBitMask = CollisionCategory.enemyShip
         physicsBody.contactTestBitMask = CollisionCategory.enemyShip
-        laserNode.physicsBody = physicsBody      // Create laser particle system
-        laserParticleSystem = self.createLaser()
-        laserParticleSystem.emitterShape = laserGeometry
-        laserNode.opacity = 0.9
+        self.laserNode.physicsBody = physicsBody      // Create laser particle system
+        self.laserParticleSystem = self.createLaser(color: color)
+        self.laserParticleSystem.emitterShape = laserGeometry
         // Attach laser particle system to the tail of the laser
         let emitterNode = SCNNode()
         emitterNode.position = SCNVector3(0, 5, 0)
-        emitterNode.addParticleSystem(laserParticleSystem)
-        laserNode.addChildNode(emitterNode)
-
+        emitterNode.addParticleSystem(self.laserParticleSystem)
         self.laserNode.physicsBody?.isAffectedByGravity = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-            self.laserNode.removeFromParentNode()
-        })
+        DispatchQueue.main.async {
+            self.laserNode.addChildNode(emitterNode)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
+                self.laserNode.removeFromParentNode()
+            })
+        }
     }
-    func createLaser() -> SCNParticleSystem {
+    func createLaser(color: UIColor) -> SCNParticleSystem {
         let laser = SCNParticleSystem()
-        laser.birthRate = 1000
+        laser.birthRate = 50
         laser.particleLifeSpan = 0.1
         laser.spreadingAngle = 0
-        laser.particleSize = 2
-        laser.particleColor = UIColor.green
+        laser.particleSize = 5
+        laser.particleColor = color
         return laser
     }
 }

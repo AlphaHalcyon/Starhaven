@@ -46,11 +46,6 @@ import CoreImage
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
         self.setupCamera()
         // WORLD CONTROLLER TIMER <- move things in here
-        Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-            DispatchQueue.main.async {
-                self.updateShipPosition()
-            }
-        }
     }
     @MainActor public func makeSpaceView() -> SCNView {
         let scnView = SCNView()
@@ -58,19 +53,19 @@ import CoreImage
         self.ship.shipNode = self.ship.createShip()
         self.ship.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         scnView.scene?.rootNode.addChildNode(self.cameraNode)
-        self.ship.containerNode.position = SCNVector3(0, 1_000, -5_010)
+        self.ship.containerNode.position = SCNVector3(0, 3_250, -5_045)
         scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
         self.createSkybox(scnView: scnView)
         self.scatterCelestialObjects()
-        scnView.prepare(self.scene)
         self.createGhosts(scnView: scnView)
+        scnView.prepare(self.scene)
         return scnView
     }
     // GHOST CREATION
     func createGhosts(scnView: SCNView) {
-        for _ in 0...15 {
+        for _ in 0...25 {
             let ghost = AssaultDrone(spacegroundViewModel: self)
-            let enemyShipNode = ghost.createShip(scale: CGFloat.random(in: 10.0...50.0))
+            let enemyShipNode = ghost.createShip(scale: CGFloat.random(in: 20.0...80.0))
             enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...5000), Int.random(in: -5000...5000))
             scnView.scene?.rootNode.addChildNode(ghost.containerNode)
             DispatchQueue.main.async {
@@ -81,6 +76,11 @@ import CoreImage
         // GHOST MOVEMENT SCHEDULE
         DispatchQueue.main.async {
             self.belligerents.append(self.ship.shipNode)
+            Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
+                DispatchQueue.main.async {
+                    self.updateShipPosition()
+                }
+            }
         }
     }
     // GHOST WEAPONS
@@ -92,8 +92,8 @@ import CoreImage
     func scatterCelestialObjects() {
         // Create scattered black holes
         for _ in 1...5 {
-            let radius = CGFloat.random(in: 40...150)
-            let ringCount = Int.random(in: 5...25)
+            let radius = CGFloat.random(in: 80...250)
+            let ringCount = Int.random(in: 5...22)
             let blackHole = self.addBlackHole(radius: radius, ringCount: ringCount, vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 4)
             DispatchQueue.main.async {
                 self.blackHoles.append(blackHole)
@@ -109,7 +109,7 @@ import CoreImage
     }
     func addBlackHole(radius: CGFloat, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float) -> BlackHole {
         let blackHole: BlackHole = BlackHole(scene: self.scene, view: self.view, radius: radius, camera: self.cameraNode, ringCount: ringCount, vibeOffset: vibeOffset, bothRings: bothRings, vibe: vibe, period: period, shipNode: self.ship.shipNode)
-        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...10000), CGFloat.random(in: -10000...100000))
+        blackHole.blackHoleNode.position = SCNVector3(CGFloat.random(in: -10_000...10_000), CGFloat.random(in: -10_000...10_000), CGFloat.random(in: -10_000...20_000))
         self.view.prepare(blackHole.blackHoleNode)
         self.scene.rootNode.addChildNode(blackHole.containerNode)
         return blackHole
@@ -126,7 +126,7 @@ import CoreImage
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        scnView.scene?.background.intensity = 0.8
+        scnView.scene?.background.intensity = 0.98
         self.ship.shipNode.simdOrientation = currentRotation
     }
 
@@ -140,7 +140,7 @@ import CoreImage
         }
     }
     /// FLIGHT
-    let dampingFactor: Float = 0.70
+    let dampingFactor: Float = 0.80
     func applyRotation() {
         if isRotationActive {
             // Apply damping to the rotation velocity
@@ -210,6 +210,9 @@ import CoreImage
                 self.closestBlackHole = blackHole
                 closestDistance = distance
                 closestContainerDistance = containerDistance
+                self.blackHoles.forEach { hole in
+                    DispatchQueue.main.async { hole.updateSpinningState() }
+                }
             }
         }
         let minFov: Float = 120 // minimum field of view

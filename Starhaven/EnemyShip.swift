@@ -114,7 +114,7 @@ import simd
     }
     func fireLaser(target: SCNNode? = nil) {
         print("fire!")
-        let missile = Laser(target: target)
+        let missile = Laser(target: target, color: .green)
         
         // Convert shipNode's local position to world position
         let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 0), to: containerNode.parent)

@@ -40,7 +40,7 @@ import SceneKit
     }
     func fireLaser(target: SCNNode? = nil) {
         print("fire laser!")
-        let laser = Laser(target: target)
+        let laser = Laser(target: target, color: .purple)
         
         // Convert shipNode's local position to world position
         let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, -1), to: containerNode.parent)

@@ -82,7 +82,7 @@ struct HUDView: View {
             HStack {
                 Button(action: {
                     print("fire!!!")
-                    self.spacecraftViewModel.weaponType == "Missile" ? self.spacecraftViewModel.missiles.append(self.spacecraftViewModel.ship.fireMissile(target: self.spacecraftViewModel.closestEnemy)) : self.spacecraftViewModel.ship.fireLaser()
+                    self.spacecraftViewModel.weaponType == "Missile" ? DispatchQueue.main.async { self.spacecraftViewModel.missiles.append(self.spacecraftViewModel.ship.fireMissile(target: self.spacecraftViewModel.closestEnemy)) } : self.spacecraftViewModel.ship.fireLaser()
                     if self.spacecraftViewModel.weaponType == "Missile" {
                         self.fireCooldown = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -98,14 +98,14 @@ struct HUDView: View {
             Slider(value: $spacecraftViewModel.ship.throttle, in: -100...100)
         }
         .padding().onAppear {
-            Timer.scheduledTimer(withTimeInterval: 1/60.0, repeats: true, block: { _ in
+            Timer.scheduledTimer(withTimeInterval: 1/30.0, repeats: true, block: { _ in
                 DispatchQueue.main.async {
                     if self.fireCooldown {
                         boundingBoxNode?.removeFromParentNode()
                         boundingBoxNode = nil
                     }
                     else {
-                        self.updateMissileLockBoundingBox()
+                        DispatchQueue.main.async { self.updateMissileLockBoundingBox() }
                     }
                 }
             })
