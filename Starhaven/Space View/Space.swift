@@ -27,30 +27,26 @@ import SwiftUI
         init(_ view: Space) {
             self.view = view
         }
-        @MainActor func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-            let contactMask = contact.nodeA.physicsBody!.categoryBitMask | contact.nodeB.physicsBody!.categoryBitMask
-            switch contactMask {
-            case CollisionCategory.laser | CollisionCategory.enemyShip:
-                handleLaserEnemyCollision(contact: contact)
-            case CollisionCategory.missile | CollisionCategory.enemyShip:
-                handleMissileEnemyCollision(contact: contact)
-            default:
-                return
+        func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+            DispatchQueue.main.async {
+                let contactMask = contact.nodeA.physicsBody!.categoryBitMask | contact.nodeB.physicsBody!.categoryBitMask
+                switch contactMask {
+                case CollisionCategory.laser | CollisionCategory.enemyShip:
+                    self.handleLaserEnemyCollision(contact: contact)
+                case CollisionCategory.missile | CollisionCategory.enemyShip:
+                    self.handleMissileEnemyCollision(contact: contact)
+                default:
+                    return
+                }
             }
         }
-        @MainActor func hndleLaserEnemyCollision(contact: SCNPhysicsContact) {
-            let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
-            let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
-            if Float.random(in: 0...1) > 0.99 {
-                createExplosion(at: enemyNode.position)
-                DispatchQueue.main.async {
-                    laserNode.removeFromParentNode()
-                    enemyNode.removeFromParentNode()
-                    node?.timer.invalidate()
-                    self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
-                    print("ghosts", self.view.spaceViewModel.ghosts)
-                }
+        func death(node: SCNNode, enemyNode: SCNNode) {
+            DispatchQueue.main.async {
+                self.createExplosion(at: enemyNode.position)
+                node.removeFromParentNode()
+                enemyNode.removeFromParentNode()
+                self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
+                print("ghosts", self.view.spaceViewModel.ghosts)
             }
         }
         @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
@@ -76,15 +72,6 @@ import SwiftUI
                 default:
                     return
                 }
-            }
-        }
-        func death(node: SCNNode, enemyNode: SCNNode) {
-            DispatchQueue.main.async {
-                self.createExplosion(at: enemyNode.position)
-                node.removeFromParentNode()
-                enemyNode.removeFromParentNode()
-                self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
-                print("ghosts", self.view.spaceViewModel.ghosts)
             }
         }
         @MainActor func handleMissileEnemyCollision(contact: SCNPhysicsContact) {

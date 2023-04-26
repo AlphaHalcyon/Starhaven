@@ -63,16 +63,24 @@ import CoreImage
     @MainActor public func makeSpaceView() -> SCNView {
         let scnView = SCNView()
         scnView.scene = self.scene
-        self.ship.shipNode = self.ship.createShip()
-        self.ship.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-        scnView.scene?.rootNode.addChildNode(self.cameraNode)
-        self.ship.containerNode.position = SCNVector3(0, 3_250, -5_045)
-        scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
+        self.createShip(scnView: scnView)
         self.createSkybox(scnView: scnView)
         self.scatterCelestialObjects()
         self.createGhosts(scnView: scnView)
         scnView.prepare(self.scene)
         return scnView
+    }
+    public func createShip(scnView: SCNView) {
+        DispatchQueue.main.async {
+            self.ship.shipNode = self.ship.createShip()
+            self.ship.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+            scnView.scene?.rootNode.addChildNode(self.cameraNode)
+            self.ship.containerNode.position = SCNVector3(0, 3_250, -5_045)
+            scnView.scene?.rootNode.addChildNode(self.ship.containerNode)
+        }
+    }
+    public func createEcosystem() {
+        self.ecosystems.append(Ecosystem(spacegroundViewModel: self))
     }
     public func removeEcosystem(system: Ecosystem) {
         self.ecosystems = self.ecosystems.filter { $0.id != system.id }
@@ -83,11 +91,11 @@ import CoreImage
     // GHOST CREATION
     func createGhosts(scnView: SCNView) {
         for _ in 0...25 {
-            let ghost = AssaultDrone(spacegroundViewModel: self)
-            let enemyShipNode = ghost.createShip(scale: CGFloat.random(in: 20.0...80.0))
-            enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...5000), Int.random(in: -5000...5000))
-            scnView.scene?.rootNode.addChildNode(ghost.containerNode)
             DispatchQueue.main.async {
+                let ghost = AssaultDrone(spacegroundViewModel: self)
+                let enemyShipNode = ghost.createShip(scale: CGFloat.random(in: 20.0...80.0))
+                enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...5000), Int.random(in: -5000...5000))
+                scnView.scene?.rootNode.addChildNode(ghost.containerNode)
                 self.ghosts.append(ghost)
             }
         }
