@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SceneKit
 
-class Ecosystem: ObservableObject, Identifiable {
+@MainActor class Ecosystem: ObservableObject  {
     @Published var spacegroundViewModel: SpacegroundViewModel
     @Published var centralNode: SCNNode = SCNNode()
     @Published var centralBlackHoles: [BlackHole] = []
@@ -21,17 +21,22 @@ class Ecosystem: ObservableObject, Identifiable {
     init(spacegroundViewModel: SpacegroundViewModel) {
         self.spacegroundViewModel = spacegroundViewModel
     }
+    // LAYOUT central BH and array its satellites and debris fields at random but reasonably
+    func fastenNodeToEcosystem(node: SCNNode, position: SCNVector3) {
+        node.position = position
+        self.centralNode.addChildNode(node)
+    }
+    // CREATE central BH and its satellites and debris fields
     private var centralBlackHoleRadius = CGFloat.random(in: 750...1250)
     private var centralBlackHoleRingCount = Int.random(in: 16...24)
-    // LAYOUT central BH and array its satellites and debris fields at random but reasonably
-    @MainActor func createCentralBlackHole() -> BlackHole {
+    func createCentralBlackHole() -> BlackHole {
         let blackHole = self.createBlackHole(radius: centralBlackHoleRadius, ringCount: centralBlackHoleRingCount)
         DispatchQueue.main.async {
             self.spacegroundViewModel.blackHoles.append(blackHole)
         }
         return blackHole
     }
-    @MainActor func createPeripheralBlackHoles(num: Int) -> [BlackHole] {
+    func createPeripheralBlackHoles(num: Int) -> [BlackHole] {
         var blackHoles: [BlackHole] = []
         for _ in 0...num {
             let radius = CGFloat.random(in: 100...250)
@@ -40,7 +45,7 @@ class Ecosystem: ObservableObject, Identifiable {
         }
         return blackHoles
     }
-    @MainActor func createBlackHole(radius: CGFloat, ringCount: Int) -> BlackHole {
+    func createBlackHole(radius: CGFloat, ringCount: Int) -> BlackHole {
         return BlackHole(scene: self.spacegroundViewModel.scene, view: self.spacegroundViewModel.view, radius: radius, camera: self.spacegroundViewModel.cameraNode, ringCount: ringCount, vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 3, shipNode: self.spacegroundViewModel.ship.shipNode)
     }
     

@@ -32,6 +32,7 @@
 		AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* GhostEnums.swift */; };
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
 		AFDE46EA29F911A800401509 /* Ghosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E929F911A800401509 /* Ghosts.swift */; };
+		AFDE46F229F91E2400401509 /* HalcyonDreadknought.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46F129F91E2400401509 /* HalcyonDreadknought.swift */; };
 		AFF42A8629E6689800B6C603 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF42A8529E6689800B6C603 /* Missile.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		AFDE46E329F8A17500401509 /* GhostEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostEnums.swift; sourceTree = "<group>"; };
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
 		AFDE46E929F911A800401509 /* Ghosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ghosts.swift; sourceTree = "<group>"; };
+		AFDE46F129F91E2400401509 /* HalcyonDreadknought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalcyonDreadknought.swift; sourceTree = "<group>"; };
 		AFF42A8529E6689800B6C603 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				AFDE46E929F911A800401509 /* Ghosts.swift */,
+				AFDE46F129F91E2400401509 /* HalcyonDreadknought.swift */,
 				AF67FBB029F78C0B007CE669 /* AssaultDrone.swift */,
 				AFDE46E329F8A17500401509 /* GhostEnums.swift */,
 			);
@@ -298,6 +301,7 @@
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
 				AF67FBB129F78C0B007CE669 /* AssaultDrone.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
+				AFDE46F229F91E2400401509 /* HalcyonDreadknought.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
