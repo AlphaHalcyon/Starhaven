@@ -10,7 +10,7 @@ import SceneKit
 import SwiftUI
 
 @MainActor struct Space: UIViewRepresentable {
-    @EnvironmentObject var spaceViewModel: SpacecraftViewModel
+    @EnvironmentObject var spaceViewModel: SpacegroundViewModel
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -48,7 +48,6 @@ import SwiftUI
                     laserNode.removeFromParentNode()
                     enemyNode.removeFromParentNode()
                     node?.timer.invalidate()
-                    self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
                     self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
                     print("ghosts", self.view.spaceViewModel.ghosts)
                 }
@@ -62,14 +61,14 @@ import SwiftUI
                 switch node?.faction {
                 case .Wraith:
                     if color == .green {
-                        if Float.random(in: 0...1) > 0.5 {
+                        if Float.random(in: 0...1) > 0.95 {
                             node?.timer.invalidate()
                             self.death(node: laserNode, enemyNode: enemyNode)
                         }
                     }
                 case .Phantom:
                     if color == .red {
-                        if Float.random(in: 0...1) > 0.5 {
+                        if Float.random(in: 0...1) > 0.95 {
                             node?.timer.invalidate()
                             self.death(node: laserNode, enemyNode: enemyNode)
                         }
@@ -84,7 +83,6 @@ import SwiftUI
                 self.createExplosion(at: enemyNode.position)
                 node.removeFromParentNode()
                 enemyNode.removeFromParentNode()
-                self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
                 self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
                 print("ghosts", self.view.spaceViewModel.ghosts)
             }
@@ -103,7 +101,7 @@ import SwiftUI
                 enemyNode.removeFromParentNode()
             }
             // Add logic for updating the score or other game state variables
-            // For example, you could call a function in the SpacecraftViewModel to increase the score:
+            // For example, you could call a function in the SpacegroundViewModel to increase the score:
             DispatchQueue.main.async {
                  self.view.spaceViewModel.incrementScore(killsOrBlackHoles: 2)
             }
@@ -111,7 +109,6 @@ import SwiftUI
             DispatchQueue.main.async {
                 let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
                 node?.timer.invalidate()
-                self.view.spaceViewModel.belligerents = self.view.spaceViewModel.belligerents.filter { $0 != enemyNode }
                 self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
                 print("ghosts", self.view.spaceViewModel.ghosts)
             }

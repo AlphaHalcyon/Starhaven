@@ -11,7 +11,7 @@ import SwiftUI
 import simd
 
 struct HUDView: View {
-    @EnvironmentObject var spacecraftViewModel: SpacecraftViewModel
+    @EnvironmentObject var spacecraftViewModel: SpacegroundViewModel
     @State private var reticlePosition: CGPoint = CGPoint()
     @State var fireCooldown: Bool = false
     @State var boundingBoxNode: SCNNode? = nil

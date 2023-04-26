@@ -12,13 +12,11 @@ import simd
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            SpacecraftView()
-        }
+        Spaceground()
     }
 }
-struct SpacecraftView: View {
-    @StateObject var spacecraftViewModel = SpacecraftViewModel()
+struct Spaceground: View {
+    @StateObject var spacecraftViewModel = SpacegroundViewModel()
     var body: some View {
         ZStack {
             self.space
@@ -29,7 +27,7 @@ struct SpacecraftView: View {
     var space: some View {
         Space()
             .gesture(
-                LongPressGesture(minimumDuration: 0.00001)
+                LongPressGesture(minimumDuration: 0.0001)
                     .onEnded { _ in
                         if !self.spacecraftViewModel.view.allowsCameraControl {
                             spacecraftViewModel.isPressed.toggle()
@@ -40,7 +38,7 @@ struct SpacecraftView: View {
                     }
             )
             .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
+                DragGesture(minimumDistance: 0.0001)
                     .onChanged { value in
                         if !self.spacecraftViewModel.view.allowsCameraControl {
                             spacecraftViewModel.dragChanged(value: value) }
@@ -48,8 +46,6 @@ struct SpacecraftView: View {
                     .onEnded { _ in
                         if !self.spacecraftViewModel.view.allowsCameraControl { spacecraftViewModel.dragEnded() }
                     }
-            )
-            .environmentObject(spacecraftViewModel)
-        //Slider(value: $spacecraftViewModel.ship.throttle, in: 0...10, step: 0.1)
+            ).environmentObject(spacecraftViewModel)
     }
 }

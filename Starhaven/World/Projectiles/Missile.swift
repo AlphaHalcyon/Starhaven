@@ -17,9 +17,8 @@ class Missile {
     var timer: Timer = Timer()
     init(target: SCNNode? = nil) {
         self.target = target
-        print(target)
         // Create missile geometry and node
-        let missileGeometry = SCNCylinder(radius: 0.5, height: 2)
+        let missileGeometry = SCNCylinder(radius: 1, height: 2)
         missileGeometry.firstMaterial?.diffuse.contents = UIColor.darkGray
         missileNode = SCNNode(geometry: missileGeometry)
         // Adjust the physicsBody
@@ -32,7 +31,7 @@ class Missile {
         // Create red particle system
         redParticleSystem = SCNParticleSystem()
         redParticleSystem.particleColor = UIColor.red
-        redParticleSystem.particleSize = 0.33
+        redParticleSystem.particleSize = 0.2
         redParticleSystem.birthRate = 5000
         redParticleSystem.emissionDuration = 1
         redParticleSystem.particleLifeSpan = 0.25

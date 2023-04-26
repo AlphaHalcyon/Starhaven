@@ -11,7 +11,7 @@ import GLKit
 import simd
 
 class AssaultDrone: ObservableObject {
-    @State var spacegroundViewModel: SpacecraftViewModel
+    @State var spacegroundViewModel: SpacegroundViewModel
     @Published var shipNode: SCNNode = SCNNode()
     @Published var pitch: CGFloat = 0
     @Published var yaw: CGFloat = 0
@@ -23,11 +23,12 @@ class AssaultDrone: ObservableObject {
     @Published var containerNode: SCNNode = SCNNode()
     @Published var currentTime: TimeInterval = 0.0
     @Published var currentTarget: SCNNode? = nil
-    @Published var belligerentCount: Int = 0
     @Published var timer: Timer = Timer()
     @Published var faction: Faction
+    @Published var scale: CGFloat = 0
+    @Published var ghostGhount: Int = 0
     // INIT
-    init(spacegroundViewModel: SpacecraftViewModel) {
+    init(spacegroundViewModel: SpacegroundViewModel) {
         self.spacegroundViewModel = spacegroundViewModel
         // Initialize new properties
         self.faction = Faction.allCases.randomElement()!
@@ -40,10 +41,10 @@ class AssaultDrone: ObservableObject {
     func updateAI() {
         DispatchQueue.main.async {
             // Check if the current target is still valid
-            if self.belligerentCount != self.spacegroundViewModel.belligerents.count {
+            if self.ghostGhount != self.spacegroundViewModel.ghosts.count {
                 if self.currentTarget != nil {
-                    if !self.spacegroundViewModel.belligerents.contains(where: { $0 == self.currentTarget! }) { self.selectNewTarget() }
-                    self.belligerentCount = self.spacegroundViewModel.belligerents.count
+                    if !self.spacegroundViewModel.ghosts.contains(where: { $0.shipNode == self.currentTarget! }) { self.selectNewTarget() }
+                    self.ghostGhount = self.spacegroundViewModel.ghosts.count
                 }
                 else {
                     DispatchQueue.main.async { self.selectNewTarget() }
@@ -63,15 +64,15 @@ class AssaultDrone: ObservableObject {
                 let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
                 
                 // Set a minimum distance between the enemy and player ships
-                let minDistance: Float = 5550
-                var speed: Float = 10
+                let minDistance: Float = 5000
+                var speed: Float = 12
                 
                 // If the enemy ship is closer than the minimum distance, move it away from the player
                 if distance > minDistance {
                     speed *= Float.random(in: 0.5...1.05)
                     self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
                 }
-                if Float.random(in: 0...1) > 0.95 {
+                if Float.random(in: 0...1) > 0.925 {
                     DispatchQueue.main.async { self.fireLaser(color: self.faction == .Wraith ? .red : .green) }
                 }
             }
@@ -81,15 +82,18 @@ class AssaultDrone: ObservableObject {
         DispatchQueue.main.async {
             // Filter out the current ship from the list of available targets
             let availableTargets = self.spacegroundViewModel.ghosts.filter { $0.shipNode != self.shipNode && $0.faction != self.faction }
-
+            
             // Select a new target from the list of available targets
             if let newTarget = availableTargets.randomElement() {
                 self.currentTarget = newTarget.shipNode
                 //print("target acquired!")
             } else {
                 // No targets available
-                self.currentTarget = nil
+                self.currentTarget = self.spacegroundViewModel.ship.shipNode
                 print("no one left to kill :(")
+            }
+            DispatchQueue.main.async {
+                self.currentTarget = Float.random(in: 0...1) > 0.95 ? self.spacegroundViewModel.ship.shipNode : self.currentTarget
             }
         }
     }
@@ -114,14 +118,14 @@ class AssaultDrone: ObservableObject {
         let laser = Laser(color: color)
         
         // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 5), to: containerNode.parent)
+        let worldPosition = shipNode.convertPosition(SCNVector3(Bool.random() == true ? -3 * scale : 3 * scale, -10, 2), to: containerNode.parent)
         
         laser.laserNode.position = worldPosition
         laser.laserNode.orientation = shipNode.presentation.orientation
         laser.laserNode.eulerAngles.x += Float.pi / 2
         let direction = shipNode.presentation.worldFront
         let laserMass = laser.laserNode.physicsBody?.mass ?? 1
-        let laserForce = CGFloat(abs(throttle) + 1) * 3000 * laserMass
+        let laserForce = CGFloat(abs(throttle) + 1) * 5000 * laserMass
         laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
         if let rootNode = containerNode.parent {
             rootNode.addChildNode(laser.laserNode)
@@ -131,6 +135,7 @@ class AssaultDrone: ObservableObject {
     // CREATION
     func createShip(scale: CGFloat = 1.0) -> SCNNode {
         let node = SCNNode()
+        self.scale = scale
         node.geometry = SCNGeometry()
         // Create the main body of the spaceship
         let body = SCNCylinder(radius: 1.0 * scale, height: 10.0 * scale)

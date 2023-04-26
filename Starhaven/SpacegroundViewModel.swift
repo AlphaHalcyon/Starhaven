@@ -11,36 +11,49 @@ import SceneKit
 import simd
 import CoreImage
 
-@MainActor class SpacecraftViewModel: ObservableObject {
-    @Published var previousTranslation: CGSize = CGSize.zero
-    @Published var currentRotation = simd_quatf(angle: .pi, axis: simd_float3(x: 0, y: 1, z: 0))
+@MainActor class SpacegroundViewModel: ObservableObject {
+    // View and Scene
     @Published var view: SCNView = SCNView()
     @Published var scene: SCNScene = SCNScene()
-    @Published var ship = Ship()
     @Published var cameraNode: SCNNode!
-    @Published var blackHoles: [BlackHole] = []
-    @Published var isInverted: Bool = false
+
+    // Player Ship and Navigation
+    @Published var ship = Ship()
+    @Published var currentRotation = simd_quatf(angle: .pi, axis: simd_float3(x: 0, y: 1, z: 0))
     @Published var rotationDeltaX: Float = 0
     @Published var rotationDeltaY: Float = 0
-    @Published var isDragging: Bool = false
     @Published var rotationVelocity: SIMD2<Float> = SIMD2<Float>(0, 0)
     @Published var isRotationActive: Bool = false
+    @Published var isDragging: Bool = false
     @Published var isPressed: Bool = false
+    @Published var isInverted: Bool = false
+    // Nav. control extensions
+    @Published var previousTranslation: CGSize = CGSize.zero
     @Published var longPressTimer: Timer = Timer()
     @Published var averageRotationVelocity: SIMD2<Float> = SIMD2<Float>(0, 0)
     @Published var rotationVelocityBufferX: VelocityBuffer
     @Published var rotationVelocityBufferY: VelocityBuffer
+    // Weapon systems
+    @Published var missiles: [Missile] = []
+    @Published var weaponType: String = "Missile"
+    
+    // Black Holes
+    @Published var blackHoles: [BlackHole] = []
     @Published var closestBlackHole: BlackHole?
     @Published var distanceToBlackHole: CGFloat = .greatestFiniteMagnitude
-    @Published var points: Int = 0
-    @Published var showScoreIncrement: Bool = false
-    @Published var weaponType: String = "Missile"
-    @Published var enemyControlTimer: Timer? = nil
-    @Published var belligerents: [SCNNode] = []
-    @Published var missiles: [Missile] = []
-    @Published var showKillIncrement: Bool = false
+
+    // Enemies
     @Published var ghosts: [AssaultDrone] = []
     @Published var closestEnemy: SCNNode? = nil
+    @Published var enemyControlTimer: Timer? = nil
+
+    // Scoring
+    @Published var points: Int = 0
+    @Published var showScoreIncrement: Bool = false
+    @Published var showKillIncrement: Bool = false
+
+    // Helper View Model
+    @Published var ecosystems: [Ecosystem] = []
     init() {
         rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
         rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
@@ -61,6 +74,12 @@ import CoreImage
         scnView.prepare(self.scene)
         return scnView
     }
+    public func removeEcosystem(system: Ecosystem) {
+        self.ecosystems = self.ecosystems.filter { $0.id != system.id }
+    }
+    public func checkWinCondition() -> Bool {
+        return ecosystems.isEmpty
+    }
     // GHOST CREATION
     func createGhosts(scnView: SCNView) {
         for _ in 0...25 {
@@ -70,12 +89,10 @@ import CoreImage
             scnView.scene?.rootNode.addChildNode(ghost.containerNode)
             DispatchQueue.main.async {
                 self.ghosts.append(ghost)
-                self.belligerents.append(enemyShipNode)
             }
         }
         // GHOST MOVEMENT SCHEDULE
         DispatchQueue.main.async {
-            self.belligerents.append(self.ship.shipNode)
             Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
                 DispatchQueue.main.async {
                     self.updateShipPosition()
