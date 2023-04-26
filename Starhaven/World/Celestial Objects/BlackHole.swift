@@ -24,6 +24,7 @@ class BlackHole: ObservableObject {
     @State var vibe: String
     @State var period: Float
     @State var discMaterial: SCNMaterial = SCNMaterial()
+    @State var rotationAction: SCNAction?
     init(scene: SCNScene, view: SCNView, radius: CGFloat, camera: SCNNode, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float, shipNode: SCNNode) {
         self.scene = scene
         self.view = view
@@ -49,10 +50,25 @@ class BlackHole: ObservableObject {
         self.blackHoleNode = SCNNode(geometry: sphere)
         //let particleSystem = createGravitationalLensingParticleSystem(radius: self.radius)
         //self.blackHoleNode.addParticleSystem(particleSystem)
-        let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: self.period == 0 ? 2  * Double.random(in: 0.5...1.15) : Double(self.period)))
-        self.blackHoleNode.runAction(rotationAction)
+        self.rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: self.period == 0 ? 2  * Double.random(in: 0.5...1.15) : Double(self.period)))
+        if let action = self.rotationAction { self.blackHoleNode.runAction(action) }
         self.blackHoleNode.isHidden = false
     }
+    func updateSpinningState() {
+        let distanceThreshold: Float = 1000 // Set the distance threshold
+        let distance = simd_distance(shipNode.simdPosition, blackHoleNode.simdPosition)
+
+        if distance <= distanceThreshold {
+            if blackHoleNode.action(forKey: "spinning") == nil {
+                if let action = rotationAction {
+                    blackHoleNode.runAction(action, forKey: "spinning")
+                }
+            }
+        } else {
+            blackHoleNode.removeAction(forKey: "spinning")
+        }
+    }
+
     func addSpinningEdgeRings(count: Int, cameraNode: SCNNode, isWhite: Bool = false) {
         let parentNode = self.blackHoleNode
         let mod = self.gravitationalLensingShaderModifiers(currentRing: 1, totalRings: 1)
