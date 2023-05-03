@@ -23,7 +23,6 @@ import SceneKit
     func fireMissile(target: SCNNode? = nil) -> Missile {
         print("fire!")
         let missile = Missile(target: target)
-        
         // Convert shipNode's local position to world position
         let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, -5), to: containerNode.parent)
         

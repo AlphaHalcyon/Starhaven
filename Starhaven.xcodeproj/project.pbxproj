@@ -16,8 +16,9 @@
 		AF6388E029DF78430086C90F /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DF29DF78430086C90F /* Ship.swift */; };
 		AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */; };
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
-		AF67FBB129F78C0B007CE669 /* AssaultDrone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* AssaultDrone.swift */; };
+		AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* Drone.swift */; };
 		AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */; };
+		AF778F0829F9F44700F299E5 /* Raider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF778F0729F9F44700F299E5 /* Raider.swift */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
@@ -28,11 +29,12 @@
 		AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05D29CFA49500A127BB /* BlackHole.swift */; };
 		AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06329CFAAFC00A127BB /* Extensions.swift */; };
 		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
+		AFD6936C29FEB48D003FC2DE /* Temp Space VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */; };
 		AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* Spaceground.swift */; };
 		AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* GhostEnums.swift */; };
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
-		AFDE46EA29F911A800401509 /* Ghosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E929F911A800401509 /* Ghosts.swift */; };
-		AFDE46F229F91E2400401509 /* HalcyonDreadknought.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46F129F91E2400401509 /* HalcyonDreadknought.swift */; };
+		AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E929F911A800401509 /* FactionSystem.swift */; };
+		AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46F129F91E2400401509 /* Dreadknought.swift */; };
 		AFF42A8629E6689800B6C603 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF42A8529E6689800B6C603 /* Missile.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,8 +48,9 @@
 		AF6388DF29DF78430086C90F /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacegroundViewModel.swift; sourceTree = "<group>"; };
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
-		AF67FBB029F78C0B007CE669 /* AssaultDrone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssaultDrone.swift; sourceTree = "<group>"; };
+		AF67FBB029F78C0B007CE669 /* Drone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drone.swift; sourceTree = "<group>"; };
 		AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AF778F0729F9F44700F299E5 /* Raider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raider.swift; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
@@ -59,11 +62,12 @@
 		AFD4C06329CFAAFC00A127BB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AFD4C06529CFAF5100A127BB /* CustomTorus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTorus.swift; sourceTree = "<group>"; };
 		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Temp Space VM.swift"; sourceTree = "<group>"; };
 		AFDBFDD929DD2775006DEB3E /* Spaceground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceground.swift; sourceTree = "<group>"; };
 		AFDE46E329F8A17500401509 /* GhostEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostEnums.swift; sourceTree = "<group>"; };
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
-		AFDE46E929F911A800401509 /* Ghosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ghosts.swift; sourceTree = "<group>"; };
-		AFDE46F129F91E2400401509 /* HalcyonDreadknought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalcyonDreadknought.swift; sourceTree = "<group>"; };
+		AFDE46E929F911A800401509 /* FactionSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSystem.swift; sourceTree = "<group>"; };
+		AFDE46F129F91E2400401509 /* Dreadknought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dreadknought.swift; sourceTree = "<group>"; };
 		AFF42A8529E6689800B6C603 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +86,7 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
+				AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */,
 				AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */,
 				AF07021C29E120D300667F9B /* Assets.xcassets */,
 				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
@@ -161,9 +166,10 @@
 		AFDE46EE29F9128E00401509 /* Ghosts */ = {
 			isa = PBXGroup;
 			children = (
-				AFDE46E929F911A800401509 /* Ghosts.swift */,
-				AFDE46F129F91E2400401509 /* HalcyonDreadknought.swift */,
-				AF67FBB029F78C0B007CE669 /* AssaultDrone.swift */,
+				AFDE46E929F911A800401509 /* FactionSystem.swift */,
+				AFDE46F129F91E2400401509 /* Dreadknought.swift */,
+				AF67FBB029F78C0B007CE669 /* Drone.swift */,
+				AF778F0729F9F44700F299E5 /* Raider.swift */,
 				AFDE46E329F8A17500401509 /* GhostEnums.swift */,
 			);
 			path = Ghosts;
@@ -284,12 +290,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */,
+				AFD6936C29FEB48D003FC2DE /* Temp Space VM.swift in Sources */,
 				AF6388DA29DF77940086C90F /* Space.swift in Sources */,
 				AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */,
+				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
 				AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
-				AFDE46EA29F911A800401509 /* Ghosts.swift in Sources */,
+				AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */,
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
@@ -299,9 +307,9 @@
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
-				AF67FBB129F78C0B007CE669 /* AssaultDrone.swift in Sources */,
+				AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
-				AFDE46F229F91E2400401509 /* HalcyonDreadknought.swift in Sources */,
+				AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

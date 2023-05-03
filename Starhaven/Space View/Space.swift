@@ -50,27 +50,30 @@ import SwiftUI
             }
         }
         @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
-            let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
-            let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
-            if let color = laserNode.childNodes.first?.particleSystems?.first?.particleColor {
-                switch node?.faction {
-                case .Wraith:
-                    if color == .green {
-                        if Float.random(in: 0...1) > 0.95 {
-                            node?.timer.invalidate()
-                            self.death(node: laserNode, enemyNode: enemyNode)
+            DispatchQueue.main.async {
+                let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
+                let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
+                let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
+                if let color = laserNode.childNodes.first?.particleSystems?.first?.particleColor {
+                    switch node?.faction {
+                    case .Wraith:
+                        if color == .green {
+                            if Float.random(in: 0...1) > 0.99 {
+                                print("wraith death")
+                                node?.timer.invalidate()
+                                self.death(node: laserNode, enemyNode: enemyNode)
+                            }
                         }
-                    }
-                case .Phantom:
-                    if color == .red {
-                        if Float.random(in: 0...1) > 0.95 {
-                            node?.timer.invalidate()
-                            self.death(node: laserNode, enemyNode: enemyNode)
+                    case .Phantom:
+                        if color == .red {
+                            if Float.random(in: 0...1) > 0.99 {
+                                node?.timer.invalidate()
+                                self.death(node: laserNode, enemyNode: enemyNode)
+                            }
                         }
+                    default:
+                        return
                     }
-                default:
-                    return
                 }
             }
         }

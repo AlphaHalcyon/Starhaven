@@ -128,6 +128,7 @@ class AssaultDrone: ObservableObject {
         let laserForce = CGFloat(abs(throttle) + 1) * 5000 * laserMass
         laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
         if let rootNode = containerNode.parent {
+            print("adding laser")
             rootNode.addChildNode(laser.laserNode)
         }
     }

@@ -35,17 +35,17 @@ class Laser {
         DispatchQueue.main.async {
             self.laserNode.addChildNode(emitterNode)
             if let target = target { self.laserNode.look(at: target.position) }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 self.laserNode.removeFromParentNode()
             })
         }
     }
     func createLaser(color: UIColor) -> SCNParticleSystem {
         let laser = SCNParticleSystem()
-        laser.birthRate = 1000
+        laser.birthRate = 5000
         laser.particleLifeSpan = 0.05
         laser.spreadingAngle = 0
-        laser.particleSize = 1
+        laser.particleSize = 5
         laser.particleColor = color
         return laser
     }
