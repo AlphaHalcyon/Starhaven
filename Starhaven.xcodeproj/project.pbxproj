@@ -19,6 +19,7 @@
 		AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* Drone.swift */; };
 		AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */; };
 		AF778F0829F9F44700F299E5 /* Raider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF778F0729F9F44700F299E5 /* Raider.swift */; };
+		AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
@@ -51,6 +52,7 @@
 		AF67FBB029F78C0B007CE669 /* Drone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drone.swift; sourceTree = "<group>"; };
 		AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AF778F0729F9F44700F299E5 /* Raider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raider.swift; sourceTree = "<group>"; };
+		AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMissile.swift; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
+				AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */,
 				AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */,
 				AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */,
 				AF07021C29E120D300667F9B /* Assets.xcassets */,
@@ -311,6 +314,7 @@
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
 				AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,
+				AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

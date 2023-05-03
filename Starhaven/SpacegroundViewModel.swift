@@ -102,6 +102,7 @@ import CoreImage
             let system: Ecosystem = Ecosystem(spacegroundViewModel: self)
             self.scene.rootNode.addChildNode(system.centralNode)
             self.ecosystems.append(system)
+            system.centralNode.simdOrientation = self.currentRotation
         }
     }
     public func removeEcosystem(system: Ecosystem) {

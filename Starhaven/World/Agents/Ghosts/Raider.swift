@@ -72,7 +72,11 @@ import simd
                 if Float.random(in: 0...1) > 0.95 {
                     DispatchQueue.main.async { self.fireLaser(color: self.faction == .Wraith ? .red : .green) }
                 }
-                self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x, self.shipNode.worldPosition.y, self.shipNode.worldPosition.z + (Bool.random() == true ? normalizedDirection.z * speed/4 : -normalizedDirection.z * speed/4))
+                if Float.random(in: 0...1) > 0.999 {
+                    DispatchQueue.main.async {
+                        self.fireMissile(target: self.currentTarget, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
+                    }
+                }
             }
         }
     }
@@ -94,12 +98,10 @@ import simd
     }
 
     // WEAPONS MECHANICS
-    func fireMissile(target: SCNNode? = nil) {
-        print("fire!")
-        let missile = Missile(target: target)
-        
+    func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
+        let missile = GhostMissile(target: target, particleSystemColor: particleSystemColor)
         // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 0), to: containerNode.parent)
+        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 5 * scale), to: containerNode.parent)
         
         missile.missileNode.position = worldPosition
         missile.missileNode.orientation = shipNode.presentation.orientation
@@ -107,7 +109,8 @@ import simd
         let missileMass = missile.missileNode.physicsBody?.mass ?? 1
         let missileForce = CGFloat(throttle + 1) * 60 * missileMass
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        containerNode.parent!.addChildNode(missile.missileNode)
+        self.spacegroundViewModel.scene.rootNode.addChildNode(missile.missileNode)
+        
     }
     func fireLaser(target: SCNNode? = nil, color: UIColor) {
         let laser = Laser(color: color)

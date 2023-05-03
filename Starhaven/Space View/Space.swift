@@ -57,16 +57,16 @@ import SwiftUI
                 if let color = laserNode.childNodes.first?.particleSystems?.first?.particleColor {
                     switch node?.faction {
                     case .Wraith:
-                        if color == .green {
-                            if Float.random(in: 0...1) > 0.99 {
+                        if color == .green || color == .cyan  {
+                            if Float.random(in: 0...1) > 0.70 {
                                 print("wraith death")
                                 node?.timer.invalidate()
                                 self.death(node: laserNode, enemyNode: enemyNode)
                             }
                         }
                     case .Phantom:
-                        if color == .red {
-                            if Float.random(in: 0...1) > 0.99 {
+                        if color == .red || color == .systemPink {
+                            if Float.random(in: 0...1) > 0.70 {
                                 node?.timer.invalidate()
                                 self.death(node: laserNode, enemyNode: enemyNode)
                             }
@@ -81,8 +81,13 @@ import SwiftUI
             // Determine which node is the missile and which is the enemy ship
             let missileNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.missile ? contact.nodeA : contact.nodeB
             let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
+            
             // Find the corresponding missile object and call the handleCollision function
             if let missile = view.spaceViewModel.missiles.first(where: { $0.getMissileNode() == missileNode }) {
+                print(missile.particleSystem.particleColor)
+                if missile.particleSystem.particleColor != .red {
+                    return
+                }
                 print("nice!")
                 DispatchQueue.main.async { missile.detonate() }
             }

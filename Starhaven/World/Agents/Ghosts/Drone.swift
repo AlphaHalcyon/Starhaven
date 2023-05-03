@@ -101,7 +101,7 @@ class AssaultDrone: ObservableObject {
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil) {
         print("fire!")
-        let missile = Missile(target: target)
+        let missile = Missile(target: target, particleSystemColor: .red)
         
         // Convert shipNode's local position to world position
         let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 0), to: containerNode.parent)

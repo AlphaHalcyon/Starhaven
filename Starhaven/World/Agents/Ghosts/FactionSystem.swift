@@ -30,7 +30,7 @@ import SceneKit
             }
         }
     }
-    private let droneLimit = 8
+    private let droneLimit = 10
     func createDrones() {
         for droneNum in 0...self.droneLimit {
             let raider: Raider = Raider(spacegroundViewModel: self.spacegroundViewModel, faction: self.faction)
@@ -39,7 +39,7 @@ import SceneKit
             let raiderNode = raider.createShip(scale: CGFloat.random(in: 15...65))
             self.spacegroundViewModel.view.prepare(raiderNode)
             DispatchQueue.main.async {
-                raiderNode.position = SCNVector3(x: offsetX, y: Float.random(in:0...10 * Float(self.droneLimit/5) * self.scale), z: offsetZ)
+                raiderNode.position = SCNVector3(x: offsetX, y: Float.random(in:0...11 * Float(self.droneLimit/5) * self.scale), z: offsetZ)
                 self.spacegroundViewModel.scene.rootNode.addChildNode(raiderNode)
                 self.spacegroundViewModel.ghosts.append(raider)
             }

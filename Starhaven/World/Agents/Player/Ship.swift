@@ -22,7 +22,7 @@ import SceneKit
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil) -> Missile {
         print("fire!")
-        let missile = Missile(target: target)
+        let missile = Missile(target: target, particleSystemColor: .red)
         // Convert shipNode's local position to world position
         let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, -5), to: containerNode.parent)
         
