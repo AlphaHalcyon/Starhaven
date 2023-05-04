@@ -20,8 +20,25 @@ struct Spaceground: View {
     var body: some View {
         ZStack {
             self.space
-            HUDView()
-                .environmentObject(spacecraftViewModel)
+            if self.spacecraftViewModel.loadingSceneView {
+                self.loadScreen
+            }
+            else {
+                HUDView().environmentObject(spacecraftViewModel)
+            }
+        }.onChange(of: self.spacecraftViewModel.loadingSceneView, perform: { val in
+            self.spacecraftViewModel.startWorldTimer()
+        })
+    }
+    var loadScreen: some View {
+        ZStack {
+            Image("sky").resizable().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center)
+            VStack {
+                Spacer()
+                Image("Launch").resizable().scaledToFit()
+                Spacer()
+            }
+            Text("HVN").font(.custom("Avenir Next Regular", size: 136))
         }
     }
     var space: some View {

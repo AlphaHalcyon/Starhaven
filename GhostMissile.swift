@@ -1,15 +1,15 @@
 //
-//  Missile.swift
+//  GhostMissile.swift
 //  Starhaven
 //
-//  Created by JxR on 4/12/23.
+//  Created by JxR on 5/3/23.
 //
 
 import Foundation
 import SceneKit
 import SwiftUI
 
-class Missile {
+class GhostMissile {
     var missileNode: SCNNode
     var target: SCNNode?
     var particleSystem: SCNParticleSystem
@@ -24,20 +24,21 @@ class Missile {
         // Adjust the physicsBody
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         physicsBody.angularVelocityFactor = SCNVector3(0, 0, 0) // Prevent rotation after being fired
-        physicsBody.categoryBitMask = CollisionCategory.missile
+        physicsBody.categoryBitMask = CollisionCategory.laser
         physicsBody.collisionBitMask = CollisionCategory.enemyShip
         physicsBody.contactTestBitMask = CollisionCategory.enemyShip
         self.missileNode.physicsBody = physicsBody
         // Create red particle system
         self.particleSystem = SCNParticleSystem()
         self.particleSystem.particleColor = particleSystemColor
-        self.particleSystem.particleSize = 0.2
+        self.particleSystem.particleSize = 10
         self.particleSystem.birthRate = 5000
         self.particleSystem.emissionDuration = 1
-        self.particleSystem.particleLifeSpan = 0.25
+        self.particleSystem.particleLifeSpan = 0.23
         self.particleSystem.spreadingAngle = 180
         self.particleSystem.emitterShape = missileGeometry
         self.particleSystem.emissionDurationVariation = self.particleSystem.emissionDuration
+        
         // Attach red particle system to the tail of the missile
         let emitterNode = SCNNode()
         emitterNode.position = SCNVector3(0, -1, 0)

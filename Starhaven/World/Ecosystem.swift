@@ -12,50 +12,56 @@ import SceneKit
 @MainActor class Ecosystem: ObservableObject  {
     @Published var spacegroundViewModel: SpacegroundViewModel
     @Published var centralNode: SCNNode = SCNNode()
-    @Published var centralBlackHoles: [BlackHole] = []
-    @Published var satellites: [Any] = []
-    @Published var wraiths: [AssaultDrone] = []
-    @Published var phantoms: [AssaultDrone] = []
+    @Published var peripheralBlackHoles: [BlackHole] = []
     @Published var debris: [SCNNode] = []
     @Published var id: UUID = UUID()
     init(spacegroundViewModel: SpacegroundViewModel) {
         self.spacegroundViewModel = spacegroundViewModel
+        self.createEcosystem()
     }
     // LAYOUT central BH and array its satellites and debris fields at random but reasonably
-    func fastenNodeToEcosystem(node: SCNNode, position: SCNVector3) {
-        node.position = position
-        self.centralNode.addChildNode(node)
-    }
-    // CREATE central BH and its satellites and debris fields
     private var centralBlackHoleRadius = CGFloat.random(in: 750...1250)
     private var centralBlackHoleRingCount = Int.random(in: 16...24)
-    func createCentralBlackHole() -> BlackHole {
-        let blackHole = self.createBlackHole(radius: centralBlackHoleRadius, ringCount: centralBlackHoleRingCount)
+    @MainActor func createEcosystem() {
         DispatchQueue.main.async {
-            self.spacegroundViewModel.blackHoles.append(blackHole)
+            print("CALL")
+            let holes = self.createPeripheralBlackHoles(num: 5)
+            let wraithSystem = self.addFactionSystem(faction: .Wraith)
+            let phantomSystem = self.addFactionSystem(faction: .Phantom)
+            var objects: [SCNNode] = holes; objects.append(wraithSystem); objects.append(phantomSystem)
+            self.spacegroundViewModel.view.prepare(objects) { success in
+                if success {
+                    print("success!")
+                    for object in objects {
+                        DispatchQueue.main.async {
+                            self.centralNode.addChildNode(object)
+                        }
+                    }
+                }
+            }
         }
-        return blackHole
     }
-    func createPeripheralBlackHoles(num: Int) -> [BlackHole] {
-        var blackHoles: [BlackHole] = []
+    @MainActor func createPeripheralBlackHoles(num: Int) -> [SCNNode] {
+        var blackHoles: [SCNNode] = []
         for _ in 0...num {
+            print("bh\(num)")
             let radius = CGFloat.random(in: 100...250)
             let ringCount = Int.random(in: 8...24)
-            blackHoles.append(self.createBlackHole(radius: radius, ringCount: ringCount))
+            let blackHole = BlackHole(scene: self.spacegroundViewModel.scene, view: self.spacegroundViewModel.view, radius: radius, camera: self.spacegroundViewModel.cameraNode, ringCount: ringCount, vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 3, shipNode: self.spacegroundViewModel.ship.shipNode)
+            let position: SCNVector3 = SCNVector3(CGFloat.random(in: -10_000...10_000), CGFloat.random(in: -5_000...5_000), CGFloat.random(in: -10_000...10_000))
+            blackHoles.append(blackHole.containerNode)
+            blackHole.blackHoleNode.position = position
+            DispatchQueue.main.async {
+                self.spacegroundViewModel.blackHoles.append(blackHole)
+            }
         }
         return blackHoles
     }
-    func createBlackHole(radius: CGFloat, ringCount: Int) -> BlackHole {
-        return BlackHole(scene: self.spacegroundViewModel.scene, view: self.spacegroundViewModel.view, radius: radius, camera: self.spacegroundViewModel.cameraNode, ringCount: ringCount, vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 3, shipNode: self.spacegroundViewModel.ship.shipNode)
-    }
     
     // GHOST CREATION
-    func createGhosts(scnView: SCNView) {
-        for _ in 0...25 {
-            let ghost = AssaultDrone(spacegroundViewModel: spacegroundViewModel)
-            let enemyShipNode = ghost.createShip(scale: CGFloat.random(in: 20.0...80.0))
-            enemyShipNode.position = SCNVector3(Int.random(in: -5000...5000), Int.random(in: 1000...5000), Int.random(in: -5000...5000))
-            scnView.scene?.rootNode.addChildNode(ghost.containerNode)
-        }
+    func addFactionSystem(faction: Faction) -> SCNNode {
+        let factionSystem = FactionSystem(spacegroundViewModel: self.spacegroundViewModel, faction: faction)
+        factionSystem.centralNode.position = faction == .Wraith ? SCNVector3(x: -5000, y: 0, z: 0) : SCNVector3(x: 5000, y: 0, z: 0)
+        return factionSystem.centralNode
     }
 }

@@ -41,6 +41,7 @@ class BlackHole: ObservableObject {
         //self.addMultipleAccretionDisks(count: 10)
         //self.addParticleRingJets(count: 10, cameraNode: camera)
         self.containerNode.addChildNode(blackHoleNode)
+        self.view.prepare(self.containerNode)
     }
     func addBlackHoleNode(radius: CGFloat) {
         let sphere = SCNSphere(radius: radius)
@@ -153,7 +154,6 @@ class BlackHole: ObservableObject {
         let z = self.blackHoleNode.position.z
         accretionDiskNode.position = SCNVector3(x, self.blackHoleNode.position.y, z)
         accretionDiskNode.opacity = CGFloat.random(in: 0.85...1.0)
-        self.view.prepare(accretionDiskNode)
         self.addRotationToAccretionDisk(accretionDiskNode)
         self.blackHoleNode.addChildNode(accretionDiskNode)
     }
