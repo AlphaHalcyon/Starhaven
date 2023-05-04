@@ -35,7 +35,7 @@ class Laser {
         DispatchQueue.main.async {
             self.laserNode.addChildNode(emitterNode)
             if let target = target { self.laserNode.look(at: target.position) }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.3, execute: {
                 self.laserNode.removeFromParentNode()
             })
         }
@@ -45,7 +45,7 @@ class Laser {
         laser.birthRate = 5000
         laser.particleLifeSpan = 0.05
         laser.spreadingAngle = 0
-        laser.particleSize = 5
+        laser.particleSize = 4.5
         laser.particleColor = color
         return laser
     }

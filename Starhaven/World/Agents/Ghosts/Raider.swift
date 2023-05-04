@@ -69,7 +69,7 @@ import simd
                     speed *= Float.random(in: 0.5...1.05)
                     self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
                 }
-                if Float.random(in: 0...1) > 0.95 {
+                if Float.random(in: 0...1) > 0.98 {
                     DispatchQueue.main.async { self.fireLaser(color: self.faction == .Wraith ? .red : .green) }
                 }
                 if Float.random(in: 0...1) > 0.999 {
@@ -107,7 +107,7 @@ import simd
         missile.missileNode.orientation = shipNode.presentation.orientation
         let direction = shipNode.presentation.worldFront
         let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        let missileForce = CGFloat(throttle + 1) * 60 * missileMass
+        let missileForce = CGFloat(throttle + 1) * 100 * missileMass
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         self.spacegroundViewModel.scene.rootNode.addChildNode(missile.missileNode)
         
@@ -122,7 +122,7 @@ import simd
         laser.laserNode.eulerAngles.x += Float.pi / 2
         let direction = shipNode.presentation.worldFront
         let laserMass = laser.laserNode.physicsBody?.mass ?? 1
-        let laserForce = CGFloat(abs(throttle) + 1) * 5250 * laserMass
+        let laserForce = CGFloat(abs(throttle) + 1) * 6000 * laserMass
         laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
         self.spacegroundViewModel.scene.rootNode.addChildNode(laser.laserNode)
     }
