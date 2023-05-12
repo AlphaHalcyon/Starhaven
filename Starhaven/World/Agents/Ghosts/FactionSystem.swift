@@ -18,7 +18,7 @@ import SceneKit
     init(spacegroundViewModel: SpacegroundViewModel, faction: Faction) {
         self.spacegroundViewModel = spacegroundViewModel
         self.faction = faction
-        self.createCentralHalcyon()
+       // self.createCentralHalcyon()
         self.createDrones()
     }
     func createCentralHalcyon() {
@@ -26,22 +26,23 @@ import SceneKit
         if let halcyon = self.centralHalcyon {
             print("ghost")
             DispatchQueue.main.async {
-                //self.centralNode.addChildNode(halcyon.createShip(scale: 1))
+                self.centralNode.addChildNode(halcyon.createShip(scale: 2))
             }
         }
     }
-    private let droneLimit = 15
+    private let droneLimit = 30
     func createDrones() {
         for droneNum in 0...self.droneLimit {
             let raider: Raider = Raider(spacegroundViewModel: self.spacegroundViewModel, faction: self.faction)
             let offsetX: Float = 10 * Float(self.droneLimit) * self.scale * (self.faction == .Phantom ? -1 : 1)
-            let offsetZ: Float = 10 * Float(droneNum) * self.scale * (self.faction == .Phantom ? -1 : 1)
-            let raiderNode = raider.createShip(scale: CGFloat.random(in: 20...100))
-            self.spacegroundViewModel.view.prepare(raiderNode)
-            DispatchQueue.main.async {
-                raiderNode.position = SCNVector3(x: offsetX, y: Float.random(in:0...11 * Float(self.droneLimit/5) * self.scale), z: offsetZ)
-                self.spacegroundViewModel.scene.rootNode.addChildNode(raiderNode)
-                self.spacegroundViewModel.ghosts.append(raider)
+            let offsetZ: Float = 15 * Float(droneNum) * self.scale * (self.faction == .Phantom ? -1 : 1)
+            let raiderNode = raider.createShip(scale: CGFloat.random(in: 20...80))
+            self.spacegroundViewModel.view.prepare([raiderNode]) { sucess in
+                DispatchQueue.main.async {
+                    raiderNode.position = SCNVector3(x: offsetX, y: Float.random(in:0...2 * Float(self.droneLimit) * self.scale), z: offsetZ)
+                    self.spacegroundViewModel.scene.rootNode.addChildNode(raiderNode)
+                    self.spacegroundViewModel.ghosts.append(raider)
+                }
             }
         }
     }

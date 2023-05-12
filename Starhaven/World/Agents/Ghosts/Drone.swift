@@ -99,20 +99,8 @@ class AssaultDrone: ObservableObject {
     }
 
     // WEAPONS MECHANICS
-    func fireMissile(target: SCNNode? = nil) {
+    @MainActor public func fireMissile(target: SCNNode? = nil) {
         print("fire!")
-        let missile = Missile(target: target, particleSystemColor: .red)
-        
-        // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, 0), to: containerNode.parent)
-        
-        missile.missileNode.position = worldPosition
-        missile.missileNode.orientation = shipNode.presentation.orientation
-        let direction = shipNode.presentation.worldFront
-        let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        let missileForce = CGFloat(throttle + 1) * 60 * missileMass
-        missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        containerNode.parent!.addChildNode(missile.missileNode)
     }
     func fireLaser(target: SCNNode? = nil, color: UIColor) {
         let laser = Laser(color: color)

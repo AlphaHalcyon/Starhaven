@@ -61,6 +61,15 @@ extension SCNMatrix4 {
 }
 
 extension SCNVector3 {
+    func distance(to vector: SCNVector3) -> CGFloat {
+        let dx = self.x - vector.x
+        let dy = self.y - vector.y
+        let dz = self.z - vector.z
+        return CGFloat(sqrt(dx * dx + dy * dy + dz * dz))
+    }
+    static func != (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
+            return !SCNVector3EqualToVector3(lhs, rhs)
+        }
     func length() -> Float {
         return sqrtf(x * x + y * y + z * z)
     }

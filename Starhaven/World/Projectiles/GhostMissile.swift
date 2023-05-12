@@ -32,9 +32,9 @@ class GhostMissile {
         self.particleSystem = SCNParticleSystem()
         self.particleSystem.particleColor = particleSystemColor
         self.particleSystem.particleSize = 10
-        self.particleSystem.birthRate = 5000
+        self.particleSystem.birthRate = 7500
         self.particleSystem.emissionDuration = 1
-        self.particleSystem.particleLifeSpan = 0.23
+        self.particleSystem.particleLifeSpan = 0.125
         self.particleSystem.spreadingAngle = 180
         self.particleSystem.emitterShape = missileGeometry
         self.particleSystem.emissionDurationVariation = self.particleSystem.emissionDuration
@@ -60,16 +60,12 @@ class GhostMissile {
     func updateTracking() {
         if let target = self.target {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-                self.timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true) { [weak self] _ in
-                    if let self = self {
-                        self.trackTarget(target: target)
-                    }
-                }
+                self.trackTarget()
             })
         } else { return }
     }
-    func trackTarget(target: SCNNode) {
-        DispatchQueue.global().async {
+    func trackTarget() {
+        if let target = self.target {
             let direction = target.position - self.missileNode.position
             _ = direction.normalized()
             // Predict the future position of the target

@@ -16,19 +16,26 @@ struct ContentView: View {
     }
 }
 struct Spaceground: View {
-    @StateObject var spacecraftViewModel = SpacegroundViewModel()
+    @StateObject var spacecraftViewModel = SpacegroundViewModel(view: SCNView(), cameraNode: SCNNode())
     var body: some View {
-        ZStack {
-            self.space
-            if self.spacecraftViewModel.loadingSceneView {
-                self.loadScreen
-            }
-            else {
-                HUDView().environmentObject(spacecraftViewModel)
-            }
-        }.onChange(of: self.spacecraftViewModel.loadingSceneView, perform: { val in
-            self.spacecraftViewModel.startWorldTimer()
-        })
+        if self.spacecraftViewModel.gameOver {
+            Text("GAME OVER! SCORE: \(self.spacecraftViewModel.points)")
+                .multilineTextAlignment(.center).font(.custom("Avenir Next Regular", size: 50))
+            
+        }
+        else {
+            ZStack {
+                self.space
+                if self.spacecraftViewModel.loadingSceneView {
+                    self.loadScreen
+                }
+                else {
+                    HUDView().environmentObject(spacecraftViewModel)
+                }
+            }.onChange(of: self.spacecraftViewModel.loadingSceneView, perform: { val in
+                self.spacecraftViewModel.startWorldTimer()
+            })
+        }
     }
     var loadScreen: some View {
         ZStack {
@@ -38,7 +45,7 @@ struct Spaceground: View {
                 Image("Launch").resizable().scaledToFit()
                 Spacer()
             }
-            Text("HVN").font(.custom("Avenir Next Regular", size: 136))
+            Text("HVN").font(.custom("Avenir Next Regular", size: 136)).foregroundColor(.white)
         }
     }
     var space: some View {
