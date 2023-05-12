@@ -11,7 +11,7 @@ import Swift
 import Metal
 import simd
 
-class BlackHole: ObservableObject {
+@MainActor class BlackHole: ObservableObject {
     @Published var containerNode: SCNNode = SCNNode()
     @Published var blackHoleNode: SCNNode = SCNNode()
     @Published var scene: SCNScene
@@ -52,21 +52,25 @@ class BlackHole: ObservableObject {
         //let particleSystem = createGravitationalLensingParticleSystem(radius: self.radius)
         //self.blackHoleNode.addParticleSystem(particleSystem)
         self.rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 2, z: 0, duration: self.period == 0 ? 2  * Double.random(in: 0.5...1.15) : Double(self.period)))
-        if let action = self.rotationAction { self.blackHoleNode.runAction(action) }
-        self.blackHoleNode.isHidden = false
+        DispatchQueue.main.async {
+            if let action = self.rotationAction { self.blackHoleNode.runAction(action) }
+            self.blackHoleNode.isHidden = false
+        }
     }
     func updateSpinningState() {
-        let distanceThreshold: Float = 1000 // Set the distance threshold
-        let distance = simd_distance(shipNode.simdPosition, blackHoleNode.simdPosition)
+        DispatchQueue.main.async {
+            let distanceThreshold: Float = 1000 // Set the distance threshold
+            let distance = simd_distance(self.shipNode.simdPosition, self.blackHoleNode.simdPosition)
 
-        if distance <= distanceThreshold {
-            if blackHoleNode.action(forKey: "spinning") == nil {
-                if let action = rotationAction {
-                    blackHoleNode.runAction(action, forKey: "spinning")
+            if distance <= distanceThreshold {
+                if self.blackHoleNode.action(forKey: "spinning") == nil {
+                    if let action = self.rotationAction {
+                        self.blackHoleNode.runAction(action, forKey: "spinning")
+                    }
                 }
+            } else {
+                self.blackHoleNode.removeAction(forKey: "spinning")
             }
-        } else {
-            blackHoleNode.removeAction(forKey: "spinning")
         }
     }
 
@@ -94,54 +98,6 @@ class BlackHole: ObservableObject {
         self.addAccretionRing(cameraNode: cameraNode, i: count, mods: mod, material: material)
         //self.addFishEyeTorus(parentNode: self.blackHoleNode, cameraNode: cameraNode, i: count + 1)
     }
-    func addFishEyeTorus(parentNode: SCNNode, cameraNode: SCNNode, i: Int) {
-        // Calculate the radius of the fisheye torus
-        let scaleConstant: Float = Float(self.radius * 0.2)
-        let scaleFactor: Float = scaleConstant * Float(i)
-        let ringRadius = Float(self.radius) + Float(self.radius) + scaleFactor
-        let pipeRadius = CGFloat(scaleConstant)
-        
-        // Create a custom torus geometry
-        let torus = CustomTorus(radius: CGFloat(ringRadius), ringRadius: pipeRadius, radialSegments: 25, ringSegments: 35)
-        
-        // Define the fisheye lensing shader code
-        
-        // Create a new material and apply the fisheye shader to it
-        let fisheyeMaterial = SCNMaterial()
-        fisheyeMaterial.shaderModifiers = [
-            SCNShaderModifierEntryPoint.fragment: """
-                vec2 coord = gl_FragCoord.xy * u_inverseResolution.xy;
-                vec2 texCoord = 2.0 * coord - 1.0;
-                float r = length(texCoord);
-                float theta = atan2(texCoord.y, texCoord.x);
-                r = pow(r, 0.5);
-                texCoord.x = r * cos(theta);
-                texCoord.y = r * sin(theta);
-                coord = texCoord / 2.0 + 0.5;
-                _output.color.rgb = texture2D(u_diffuseTexture, coord).rgb;
-                """
-        ]
-        
-        // Set the transparency of the material
-        fisheyeMaterial.transparency = 0.5
-        
-        // Assign the material to the custom torus geometry
-        torus.geometry?.firstMaterial = fisheyeMaterial
-        
-        // Create a new node for the fisheye torus and add it to the parent node
-        let fishEyeTorusNode = SCNNode(geometry: torus.geometry)
-        
-        // Create a new parent node for the fisheye torus and apply the billboard constraint to it
-        let fishEyeTorusParentNode = SCNNode()
-        setBillboardConstraint(for: fishEyeTorusParentNode)
-        parentNode.addChildNode(fishEyeTorusParentNode)
-        
-        // Add the fisheye torus node as a child of the parent node
-        fishEyeTorusParentNode.addChildNode(fishEyeTorusNode)
-        setRotation(for: fishEyeTorusNode, relativeTo: blackHoleNode)
-
-        rotateAroundBlackHoleCenter(fishEyeTorusNode, isWhite: false, count: i)
-    }
     func addAccretionRing(cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String], material: SCNMaterial) {
         let scaleConstant: Float = Float(self.radius * 0.1)
         let scaleFactor: Float = scaleConstant * Float(i)
@@ -154,8 +110,9 @@ class BlackHole: ObservableObject {
         let z = self.blackHoleNode.position.z
         accretionDiskNode.position = SCNVector3(x, self.blackHoleNode.position.y, z)
         accretionDiskNode.opacity = CGFloat.random(in: 0.85...1.0)
-        self.addRotationToAccretionDisk(accretionDiskNode)
-        self.blackHoleNode.addChildNode(accretionDiskNode)
+        self.view.prepare([accretionDiskNode]) { success in
+            self.blackHoleNode.addChildNode(accretionDiskNode)
+        }
     }
     func addLensingRing(parentNode: SCNNode, cameraNode: SCNNode, isWhite: Bool = false, i: Int, mods: [SCNShaderModifierEntryPoint: String]) {
         let scaleConstant: Float = Float(self.radius * 0.1)
@@ -230,15 +187,19 @@ class BlackHole: ObservableObject {
         node.eulerAngles = SCNVector3(angleX, angleY, 0)
     }
     func rotateAroundBlackHoleCenter(_ node: SCNNode, isWhite: Bool, count: Int) {
-        let rotationAxis = SCNVector3(x: 0, y: 0, z: 1)
-        let durationMultiplier = 10 * Double.random(in: 0.75...2)
-        let rotation = SCNAction.repeatForever(SCNAction.rotate(by: -CGFloat.pi * 1, around: rotationAxis, duration: Double(durationMultiplier)/Double(count)))
-        node.runAction(rotation)
+        DispatchQueue.main.async {
+            let rotationAxis = SCNVector3(x: 0, y: 0, z: 1)
+            let durationMultiplier = 10 * Double.random(in: 0.75...2)
+            let rotation = SCNAction.repeatForever(SCNAction.rotate(by: -CGFloat.pi * 1, around: rotationAxis, duration: Double(durationMultiplier)/Double(count)))
+            node.runAction(rotation)
+        }
     }
     // Add other black hole-related methods here
     func addRotationToAccretionDisk(_ accretionDiskNode: SCNNode) {
-        let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 3, z: 0, duration: 1  * Double.random(in: 1.05...1.15)))
-        accretionDiskNode.runAction(rotationAction)
+        DispatchQueue.main.async {
+            let rotationAction = SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: CGFloat.pi * 3, z: 0, duration: 1  * Double.random(in: 1.05...1.15)))
+            accretionDiskNode.runAction(rotationAction)
+        }
     }
     func gravitationalLensingShaderModifiers(currentRing: Int, totalRings: Int) -> [SCNShaderModifierEntryPoint: String] {
         let randFloat: Float = Float.random(in: 0.0...1)

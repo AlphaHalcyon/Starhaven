@@ -19,12 +19,18 @@ import SceneKit
     @Published var fireParticleSystem: SCNParticleSystem = SCNParticleSystem()
     @Published var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
     @Published var containerNode: SCNNode = SCNNode()
+    @Published var view: SCNView
+    @Published var cameraNode: SCNNode
+    init(view: SCNView, cameraNode: SCNNode) {
+        self.view = view
+        self.cameraNode = cameraNode
+    }
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil) -> Missile {
         print("fire!")
-        let missile = Missile(target: target, particleSystemColor: .red)
+        let missile = Missile(target: target, particleSystemColor: .red, viewModel: SpacegroundViewModel(view: SCNView(), cameraNode: SCNNode()))
         // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -10, -5), to: containerNode.parent)
+        let worldPosition = shipNode.convertPosition(SCNVector3(0, -15, 5), to: containerNode.parent)
         
         missile.missileNode.position = worldPosition
         missile.missileNode.orientation = shipNode.presentation.orientation

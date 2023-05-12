@@ -10,12 +10,18 @@
 		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
+		AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */; };
+		AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D1DA52A0A006600A8F2C7 /* Planet.swift */; };
+		AF4F696B2A0DBFD3007376EA /* HVNDarkseid.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */; };
+		AF5B368F2A0AA9660075581E /* Custom Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5B368E2A0AA9650075581E /* Custom Slider.swift */; };
 		AF6388DA29DF77940086C90F /* Space.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388D929DF77940086C90F /* Space.swift */; };
 		AF6388DC29DF77B80086C90F /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DB29DF77B80086C90F /* HUD.swift */; };
 		AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */; };
 		AF6388E029DF78430086C90F /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DF29DF78430086C90F /* Ship.swift */; };
 		AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */; };
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
+		AF63D43A2A08D68F007D8A40 /* snatchHiss.wav in Resources */ = {isa = PBXBuildFile; fileRef = AF63D4392A08D68F007D8A40 /* snatchHiss.wav */; };
+		AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */ = {isa = PBXBuildFile; fileRef = AF63D43B2A08D6EC007D8A40 /* snap.wav */; };
 		AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* Drone.swift */; };
 		AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */; };
 		AF778F0829F9F44700F299E5 /* Raider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF778F0729F9F44700F299E5 /* Raider.swift */; };
@@ -43,12 +49,18 @@
 		AF07021C29E120D300667F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
+		AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVN.mp3; path = ../../Music/Logic/Bounces/HVN.mp3; sourceTree = "<group>"; };
+		AF3D1DA52A0A006600A8F2C7 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
+		AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVNDarkseid.mp3; path = ../../Music/Logic/Bounces/HVNDarkseid.mp3; sourceTree = "<group>"; };
+		AF5B368E2A0AA9650075581E /* Custom Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Slider.swift"; sourceTree = "<group>"; };
 		AF6388D929DF77940086C90F /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
 		AF6388DB29DF77B80086C90F /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
 		AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelocityBuffer.swift; sourceTree = "<group>"; };
 		AF6388DF29DF78430086C90F /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacegroundViewModel.swift; sourceTree = "<group>"; };
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
+		AF63D4392A08D68F007D8A40 /* snatchHiss.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = snatchHiss.wav; path = "../Winter Sample Kit/Percussion/snatchHiss.wav"; sourceTree = "<group>"; };
+		AF63D43B2A08D6EC007D8A40 /* snap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = snap.wav; path = "../Winter Sample Kit/Snare/snap.wav"; sourceTree = "<group>"; };
 		AF67FBB029F78C0B007CE669 /* Drone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drone.swift; sourceTree = "<group>"; };
 		AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AF778F0729F9F44700F299E5 /* Raider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raider.swift; sourceTree = "<group>"; };
@@ -88,10 +100,14 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
-				AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */,
+				AF3D1DA52A0A006600A8F2C7 /* Planet.swift */,
 				AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */,
 				AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */,
 				AF07021C29E120D300667F9B /* Assets.xcassets */,
+				AF63D4392A08D68F007D8A40 /* snatchHiss.wav */,
+				AF63D43B2A08D6EC007D8A40 /* snap.wav */,
+				AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */,
+				AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */,
 				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFD4C04D29CFA48200A127BB /* Products */,
@@ -141,6 +157,7 @@
 		AFDE46EB29F911F600401509 /* Projectiles */ = {
 			isa = PBXGroup;
 			children = (
+				AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */,
 				AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */,
 				AFF42A8529E6689800B6C603 /* Missile.swift */,
 				AFAAB44A29F468D3007D5A2F /* Laser.swift */,
@@ -152,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				AF6388DB29DF77B80086C90F /* HUD.swift */,
+				AF5B368E2A0AA9650075581E /* Custom Slider.swift */,
 				AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */,
 			);
 			path = "Heads-Up Display";
@@ -276,11 +294,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */,
+				AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */,
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
 				AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */,
 				AF07021E29E120D300667F9B /* Assets.xcassets in Resources */,
 				AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */,
+				AF63D43A2A08D68F007D8A40 /* snatchHiss.wav in Resources */,
+				AF4F696B2A0DBFD3007376EA /* HVNDarkseid.mp3 in Resources */,
 				AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,6 +317,8 @@
 				AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */,
 				AFD6936C29FEB48D003FC2DE /* Temp Space VM.swift in Sources */,
 				AF6388DA29DF77940086C90F /* Space.swift in Sources */,
+				AF5B368F2A0AA9660075581E /* Custom Slider.swift in Sources */,
+				AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */,
 				AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */,
 				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
 				AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */,

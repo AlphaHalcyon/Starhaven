@@ -10,15 +10,16 @@ import SwiftUI
 import SceneKit
 import simd
 import CoreImage
+import AVFoundation
 
-@MainActor class SpacegroundViewModel: ObservableObject {
+@MainActor class SpacegroundViewModel: NSObject, ObservableObject, SCNSceneRendererDelegate  {
     // View and Scene
-    @Published var view: SCNView = SCNView()
+    @Published var view: SCNView
     @Published var scene: SCNScene = SCNScene()
-    @Published var cameraNode: SCNNode!
-
+    @Published var cameraNode: SCNNode
+    @Published var gameOver: Bool = false
     // Player Ship and Navigation
-    @Published var ship = Ship()
+    @Published var ship: Ship
     @Published var currentRotation = simd_quatf(angle: .pi, axis: simd_float3(x: 0, y: 1, z: 0))
     @Published var rotationDeltaX: Float = 0
     @Published var rotationDeltaY: Float = 0
@@ -29,14 +30,15 @@ import CoreImage
     @Published var isInverted: Bool = false
     // Nav. control extensions
     @Published var previousTranslation: CGSize = CGSize.zero
-    @Published var longPressTimer: Timer = Timer()
+    @Published var longPressTimer: Bool = false
     @Published var averageRotationVelocity: SIMD2<Float> = SIMD2<Float>(0, 0)
-    @Published var rotationVelocityBufferX: VelocityBuffer
-    @Published var rotationVelocityBufferY: VelocityBuffer
+    @Published var rotationVelocityBufferX: VelocityBuffer = VelocityBuffer(bufferCapacity: 2)
+    @Published var rotationVelocityBufferY: VelocityBuffer = VelocityBuffer(bufferCapacity: 2)
     // Weapon systems
     @Published var missiles: [Missile] = []
     @Published var weaponType: String = "Missile"
-    
+    @Published var inMissileView: Bool = false
+    @Published var cameraMissile: Missile?
     // Black Holes
     @Published var blackHoles: [BlackHole] = []
     @Published var closestBlackHole: BlackHole?
@@ -58,56 +60,134 @@ import CoreImage
     
     // Loading Sequence
     @Published var loadingSceneView: Bool = true
-    init() {
-        rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 2)
-        rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 2)
+    
+    // Audio
+    @Published var audioPlayer: AVAudioPlayer = AVAudioPlayer()
+    @Published var musicPlayer: AVAudioPlayer = AVAudioPlayer()
+    init(view: SCNView, cameraNode: SCNNode) {
+        // Initialize all properties
+        self.view = view
+        self.cameraNode = cameraNode
+        self.ship = Ship(view: view, cameraNode: cameraNode)
+        rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 5)
+        rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 5)
+
+        // Call super.init()
+        super.init()
+
+        // Now you can call methods or use closures that reference self
         self.setupCamera()
+        self.view.prepare([self.cameraNode]) { [weak self] success in
+            guard let self = self else { return }
+            self.scene.rootNode.addChildNode(self.cameraNode)
+        }
+        self.audioPlayer.volume = 0.24
+        self.musicPlayer.volume = 0.25
     }
+
+    // This method will be called once per frame
+   func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+       DispatchQueue.main.async {
+           if !self.inMissileView {
+               DispatchQueue.main.async {
+                   self.updateShipPosition()
+               }
+           } else {
+               if let missile = self.cameraMissile {
+                   DispatchQueue.main.async {
+                       self.updateCameraMissile(node: missile.missileNode)
+                   }
+               }
+           }
+           Task {
+               for ghost in self.ghosts {
+                   DispatchQueue.main.async {
+                       ghost.updateAI()
+                   }
+               }
+           }
+       }
+   }
     @MainActor public func makeSpaceView() -> SCNView {
         let scnView = SCNView()
         scnView.scene = self.scene
+        scnView.rendersContinuously = true
         self.createShip(scnView: scnView)
         self.updateShipPosition()
         self.createEcosystem()
         self.createSkybox(scnView: scnView)
-        scnView.prepare([self.scene]) { success in
-            DispatchQueue.main.async {
-                self.ship.containerNode.position = SCNVector3(0, 3000, -8000)
-                self.loadingSceneView = false
-            }
+        scnView.delegate = self
+        scnView.prepare(self.scene)
+        DispatchQueue.main.async {
+            self.view = scnView
         }
         return scnView
+    }
+    public func createPlanet(name: String) {
+        let planet = Planet(image: UIImage(imageLiteralResourceName: name), radius: 50_000, view: self.view)
+        planet.addToScene(scene: self.scene)
     }
     @MainActor public func createShip(scnView: SCNView) {
         DispatchQueue.main.async {
             self.ship.shipNode = self.ship.createShip()
             self.ship.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-            self.scene.rootNode.addChildNode(self.cameraNode)
-            self.ship.containerNode.position = SCNVector3(0, 0, -50_000)
             self.ship.shipNode.simdOrientation = self.currentRotation
+            self.ship.containerNode.position = SCNVector3(0, 8000, -80_000)
             self.scene.rootNode.addChildNode(self.ship.containerNode)
         }
+    }
+    // WEAPONS MECHANICS
+    func fireMissile(target: SCNNode? = nil) -> Missile {
+        print("fire!")
+        let missile = Missile(target: target, particleSystemColor: .red, viewModel: self)
+        // Convert shipNode's local position to world position
+        let worldPosition = self.ship.shipNode.convertPosition(SCNVector3(0, -15, 5), to: self.ship.containerNode.parent)
+        
+        missile.missileNode.position = worldPosition
+        missile.missileNode.orientation = self.ship.shipNode.presentation.orientation
+        missile.missileNode.eulerAngles.x += Float.pi / 2
+        let direction = self.ship.shipNode.presentation.worldFront
+        let missileMass = missile.missileNode.physicsBody?.mass ?? 1
+        let missileForce = CGFloat(abs(self.ship.throttle) + 1) * 2 * missileMass
+        missile.missileNode.physicsBody?.velocity = self.ship.shipNode.physicsBody!.velocity
+        missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+        self.view.prepare([missile.missileNode]) { success in
+            self.scene.rootNode.addChildNode(missile.missileNode)
+            if self.cameraMissile == nil {
+                self.cameraMissile = missile
+                self.inMissileView = true
+            }
+        }
+        return missile
     }
     @MainActor public func startWorldTimer() {
         // WORLD CONTROLLER TIMER <- move things in here
         Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
             DispatchQueue.main.async {
-                self.updateShipPosition()
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.enemyControlTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-                DispatchQueue.main.async {
+                if !self.inMissileView {
+                    DispatchQueue.main.async {
+                        self.updateShipPosition()
+                    }
+                } else {
+                    if let missile = self.cameraMissile {
+                        DispatchQueue.main.async {
+                            self.updateCameraMissile(node: missile.missileNode)
+                        }
+                    }
+                }
+                Task {
                     for ghost in self.ghosts {
-                        ghost.updateAI()
+                        DispatchQueue.main.async {
+                            ghost.updateAI()
+                        }
                     }
                 }
             }
         }
     }
-    @MainActor public func createEcosystem() {
+    @MainActor public func createEcosystem(offset: CGFloat = 0) {
         DispatchQueue.main.async {
-            let system: Ecosystem = Ecosystem(spacegroundViewModel: self)
+            let system: Ecosystem = Ecosystem(spacegroundViewModel: self, offset: offset)
             self.scene.rootNode.addChildNode(system.centralNode)
             self.ecosystems.append(system)
         }
@@ -121,6 +201,7 @@ import CoreImage
     func createSkybox(scnView: SCNView) {
         scnView.allowsCameraControl = false
         scnView.autoenablesDefaultLighting = true
+        scnView.pointOfView?.light = SCNLight()
         scnView.backgroundColor = UIColor.black
         scnView.scene?.background.contents = [
             UIImage(named: "sky"),
@@ -130,7 +211,7 @@ import CoreImage
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        scnView.scene?.background.intensity = 1
+        scnView.scene?.background.intensity = 0.25
     }
 
     // PILOT NAV
@@ -142,8 +223,8 @@ import CoreImage
         }
     }
     /// FLIGHT
-    let dampingFactor: Float = 0.80
-    func applyRotation() {
+    let dampingFactor: Float = 0.70
+    @MainActor func applyRotation() {
         if isRotationActive {
             // Apply damping to the rotation velocity
             averageRotationVelocity *= dampingFactor
@@ -154,109 +235,102 @@ import CoreImage
 
             let totalRotation = simd_mul(rotationY, rotationX)
             currentRotation = simd_mul(totalRotation, currentRotation)
-            ship.shipNode.simdOrientation = currentRotation
-
-            // Stop the rotation when the velocity is below a certain threshold
-            if length(averageRotationVelocity) < 0.00001 {
-                isRotationActive = false
-                averageRotationVelocity = .zero
-            }
-        }
-    }
-    func startContinuousRotation() {
-        // Invalidate any existing timer
-        longPressTimer.invalidate()
-
-        // Create a new timer that calls applyRotation continuously
-        longPressTimer = Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-            Task { await self.applyRotation() }
-        }
-    }
-    func updateShipOrientation() {
-        let worldUp = SIMD3<Float>(0, 1, 0)
-        let shipUp = ship.shipNode.presentation.simdWorldUp
-
-        // Calculate the dot product of the ship's up vector and the world's up vector
-        let dotProduct = simd_dot(shipUp, worldUp)
-
-        if dotProduct < 0 {
+            self.ship.shipNode.simdOrientation = self.currentRotation
             DispatchQueue.main.async {
-                self.isInverted = true
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.isInverted = false
-            }
-        }
-        let shipQuaternion = ship.shipNode.presentation.orientation
-        let eulerAngles = quaternionToEulerAngles(shipQuaternion)
-
-        DispatchQueue.main.async {
-            self.ship.yaw = CGFloat(eulerAngles.y * 180 / Float.pi)
-            self.ship.pitch = CGFloat(eulerAngles.x * 180 / Float.pi)
-            self.ship.roll = CGFloat(eulerAngles.z * 180 / Float.pi)
-        }
-    }
-    func updateShipPosition() {
-        self.applyRotation() // CONTINUE UPDATING ROTATION
-
-        self.ship.shipNode.simdPosition += self.ship.shipNode.simdWorldFront * self.ship.throttle
-        // Find the closest black hole and its distance
-        var closestDistance: Float = .greatestFiniteMagnitude
-        var closestContainerDistance: Float = .greatestFiniteMagnitude
-        DispatchQueue.main.async {
-            self.closestBlackHole = nil
-        }
-        for blackHole in self.blackHoles {
-            let distance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, self.ship.shipNode.simdWorldPosition)
-            let containerDistance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, self.ship.containerNode.simdWorldPosition)
-            if distance < closestDistance {
-                self.closestBlackHole = blackHole
-                closestDistance = distance
-                closestContainerDistance = containerDistance
-                self.blackHoles.forEach { hole in
-                    DispatchQueue.main.async { hole.updateSpinningState() }
+                // Stop the rotation when the velocity is below a certain threshold
+                if length(self.averageRotationVelocity) < 0.01 {
+                    self.longPressTimer = false
+                    self.isRotationActive = false
+                    self.averageRotationVelocity = .zero
                 }
             }
         }
-        let minFov: Float = 120 // minimum field of view
-        let maxFov: Float = 150 // maximum field of view
-        let maxDistance: Float = 7500 // maximum distance at which the field of view starts to increase
+    }
+    @MainActor public func startContinuousRotation() {
+        DispatchQueue.main.async {
+            // Invalidate any existing timer
+            self.longPressTimer = true
+        }
+    }
+    @MainActor public func updateCameraMissile(node: SCNNode) {
+        DispatchQueue.main.async {
+            let distance: Float = 25.0
+            let newOrientation = node.simdOrientation
+            self.cameraNode.simdOrientation = newOrientation
+            let cameraPosition = node.presentation.simdPosition - (node.simdWorldFront * distance)
+            let mixFactor: Float = 0.1
+            let mixedX = simd_mix(self.cameraNode.simdPosition.x, cameraPosition.x, mixFactor)
+            let mixedY = simd_mix(self.cameraNode.simdPosition.y, cameraPosition.y, mixFactor)
+            let mixedZ = simd_mix(self.cameraNode.simdPosition.z, cameraPosition.z, mixFactor)
+            self.cameraNode.simdPosition = SIMD3<Float>(mixedX, mixedY, mixedZ)
 
-        if closestDistance < maxDistance {
-            let ratio = (maxDistance - closestDistance) / maxDistance
-            self.cameraNode.camera!.fieldOfView = CGFloat(minFov + (maxFov - minFov) * ratio)
-        } else {
-            self.cameraNode.camera!.fieldOfView = CGFloat(minFov)
+            // Update the look-at constraint target
+            self.cameraNode.constraints = [self.createLookAtConstraintForNode(node: node)]
         }
-        // Check if the ship is in contact with the closest black hole (use a threshold value)
-        let contactThreshold: Float = self.closestBlackHole == nil ? 0 : Float(self.closestBlackHole!.radius * 1.25 + 5)
-        if closestDistance < contactThreshold || closestContainerDistance < contactThreshold {
-            self.incrementScore(killsOrBlackHoles: 1)
-            // Remove black hole from scene and view model
-            self.closestBlackHole?.blackHoleNode.removeFromParentNode()
-            if let index = self.blackHoles.firstIndex(where: { $0 === self.closestBlackHole }) {
-                self.blackHoles.remove(at: index)
-            }
-            print("Contact with a black hole at \(self.ship.throttle * 10.0) km/s! Points: +\(self.points)")
-        }
-        let distance: Float = 15.0 // Define the desired distance between the camera and the spaceship
+    }
+
+    @MainActor public func updateShipPosition() {
+        self.applyRotation() // CONTINUE UPDATING ROTATION
+        self.ship.shipNode.simdPosition += self.ship.shipNode.simdWorldFront * self.ship.throttle
+        let distance: Float = 25.0 // Define the desired distance between the camera and the spaceship
         let cameraPosition = self.ship.shipNode.simdPosition - (self.ship.shipNode.simdWorldFront * distance)
         self.cameraNode.simdPosition = cameraPosition
         self.cameraNode.simdOrientation = self.ship.shipNode.simdOrientation
         // Update the look-at constraint target
         self.cameraNode.constraints = [self.createLookAtConstraint()]
-        self.updateShipOrientation()
+        DispatchQueue.main.async {
+            // Find the closest black hole and its distance
+            var closestDistance: Float = .greatestFiniteMagnitude
+            var closestContainerDistance: Float = .greatestFiniteMagnitude
+            self.closestBlackHole = nil
+            for blackHole in self.blackHoles {
+                let distance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, self.ship.shipNode.simdWorldPosition)
+                let containerDistance = simd_distance(blackHole.blackHoleNode.simdWorldPosition, self.ship.containerNode.simdWorldPosition)
+                if distance < closestDistance {
+                    self.closestBlackHole = blackHole
+                    closestDistance = distance
+                    closestContainerDistance = containerDistance
+                    self.blackHoles.forEach { hole in
+                        DispatchQueue.main.async { hole.updateSpinningState() }
+                    }
+                }
+            }
+            let minFov: Float = 120 // minimum field of view
+            let maxFov: Float = 140 // maximum field of view
+            let maxDistance: Float = 8000 // maximum distance at which the field of view starts to increase
+
+            if closestDistance < maxDistance {
+                let ratio = (maxDistance - closestDistance) / maxDistance
+                self.cameraNode.camera!.fieldOfView = CGFloat(minFov + (maxFov - minFov) * ratio)
+            } else {
+                self.cameraNode.camera!.fieldOfView = CGFloat(minFov)
+            }
+            // Check if the ship is in contact with the closest black hole (use a threshold value)
+            let contactThreshold: Float = self.closestBlackHole == nil ? 0 : Float(self.closestBlackHole!.radius * 1.25 + 5)
+            if closestDistance < contactThreshold || closestContainerDistance < contactThreshold {
+                self.playSound(name: "snap")
+                self.incrementScore(killsOrBlackHoles: 1)
+                // Remove black hole from scene and view model
+                self.closestBlackHole?.blackHoleNode.removeFromParentNode()
+                if let index = self.blackHoles.firstIndex(where: { $0 === self.closestBlackHole }) {
+                    self.blackHoles.remove(at: index)
+                }
+                print("Contact with a black hole at \(self.ship.throttle * 10.0) km/s! Points: +\(self.points)")
+                if self.blackHoles.isEmpty {
+                    self.endGame()
+                }
+            }
+        }
         
     }
-    func throttle(value: Float) {
+    @MainActor public func throttle(value: Float) {
         self.ship.throttle = value
         print(ship.throttle)
     }
-    func dragChanged(value: DragGesture.Value) {
+    @MainActor func dragChanged(value: DragGesture.Value) {
         let translation = value.translation
-        let deltaX = Float(translation.width - previousTranslation.width) * 0.006
-        let deltaY = Float(translation.height - previousTranslation.height) * 0.0075
+        let deltaX = Float(translation.width - previousTranslation.width) * 0.007
+        let deltaY = Float(translation.height - previousTranslation.height) * 0.007
 
         // Add the deltaX and deltaY to their respective buffers
         rotationVelocityBufferX.addVelocity(CGFloat(deltaX))
@@ -274,26 +348,30 @@ import CoreImage
     }
     func dragEnded() {
         previousTranslation = CGSize.zero
-        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 5)
-        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 5)
+        self.rotationVelocityBufferX = VelocityBuffer(bufferCapacity: 4)
+        self.rotationVelocityBufferY = VelocityBuffer(bufferCapacity: 4)
         startContinuousRotation()
     }
     func createLookAtConstraint() -> SCNLookAtConstraint {
         let lookAtConstraint = SCNLookAtConstraint(target: ship.shipNode)
-        lookAtConstraint.influenceFactor = 0.5
+        lookAtConstraint.influenceFactor = 1
+        return lookAtConstraint
+    }
+    func createLookAtConstraintForNode(node: SCNNode) -> SCNLookAtConstraint {
+        let lookAtConstraint = SCNLookAtConstraint(target: node)
         return lookAtConstraint
     }
     func setupCamera() {
         // Create a camera
         let camera = SCNCamera()
-        camera.zFar = 100000
+        camera.zFar = 1_000_000
         camera.zNear = 1
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera
         
         // Position the camera node relative to the spacecraft
-        self.cameraNode.position = SCNVector3(x: 0, y: 5, z: 15)
+        self.cameraNode.position = SCNVector3(x: 0, y: 5, z: 25)
         self.cameraNode.camera?.fieldOfView = 120
 
         // Add a look-at constraint to the camera node
@@ -339,6 +417,9 @@ import CoreImage
         return SCNVector3(x, y, z)
     }
     // GAME METRICS AND WORLD STATE
+    func endGame() {
+        self.gameOver = true
+    }
     func incrementScore(killsOrBlackHoles: Int) {
         switch killsOrBlackHoles {
         case 1:
@@ -349,6 +430,34 @@ import CoreImage
             self.showKillIncrement = true
         default:
             self.points += 0
+        }
+    }
+    
+    // AUDIO AND MUSIC
+    func playSound(name: String) {
+        DispatchQueue.main.async {
+            let url = Bundle.main.url(forResource: name, withExtension: "wav")
+            do {
+                self.audioPlayer = try AVAudioPlayer(contentsOf: url!)
+                if !self.audioPlayer.isPlaying {
+                    self.audioPlayer.play()
+                }
+            } catch {
+                print("Error playing sound")
+            }
+        }
+    }
+    @MainActor public func playMusic() {
+        DispatchQueue.main.async {
+            let url = Bundle.main.url(forResource: "HVNDarkseid", withExtension: "mp3")
+            do {
+                self.musicPlayer = try AVAudioPlayer(contentsOf: url!)
+                if !self.musicPlayer.isPlaying {
+                    self.musicPlayer.play()
+                }
+            } catch {
+                print("Error playing sound")
+            }
         }
     }
 }

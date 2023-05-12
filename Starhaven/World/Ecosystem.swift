@@ -15,7 +15,9 @@ import SceneKit
     @Published var peripheralBlackHoles: [BlackHole] = []
     @Published var debris: [SCNNode] = []
     @Published var id: UUID = UUID()
-    init(spacegroundViewModel: SpacegroundViewModel) {
+    @Published var offset: CGFloat
+    init(spacegroundViewModel: SpacegroundViewModel, offset: CGFloat) {
+        self.offset = offset
         self.spacegroundViewModel = spacegroundViewModel
         self.createEcosystem()
     }
@@ -23,45 +25,48 @@ import SceneKit
     private var centralBlackHoleRadius = CGFloat.random(in: 750...1250)
     private var centralBlackHoleRingCount = Int.random(in: 16...24)
     @MainActor func createEcosystem() {
+        self.createPeripheralBlackHoles(num: 5)
+        let wraithSystem = self.addFactionSystem(faction: .Wraith)
+        let phantomSystem = self.addFactionSystem(faction: .Phantom)
         DispatchQueue.main.async {
-            print("CALL")
-            let holes = self.createPeripheralBlackHoles(num: 5)
-            let wraithSystem = self.addFactionSystem(faction: .Wraith)
-            let phantomSystem = self.addFactionSystem(faction: .Phantom)
-            var objects: [SCNNode] = holes; objects.append(wraithSystem); objects.append(phantomSystem)
-            self.spacegroundViewModel.view.prepare(objects) { success in
-                if success {
-                    print("success!")
-                    for object in objects {
-                        DispatchQueue.main.async {
-                            self.centralNode.addChildNode(object)
-                        }
-                    }
-                }
-            }
+            self.spacegroundViewModel.scene.rootNode.addChildNode(wraithSystem)
+            self.spacegroundViewModel.scene.rootNode.addChildNode(phantomSystem)
         }
     }
-    @MainActor func createPeripheralBlackHoles(num: Int) -> [SCNNode] {
+    @MainActor func createPeripheralBlackHoles(num: Int) {
         var blackHoles: [SCNNode] = []
-        for _ in 0...num {
-            print("bh\(num)")
-            let radius = CGFloat.random(in: 100...250)
-            let ringCount = Int.random(in: 8...24)
-            let blackHole = BlackHole(scene: self.spacegroundViewModel.scene, view: self.spacegroundViewModel.view, radius: radius, camera: self.spacegroundViewModel.cameraNode, ringCount: ringCount, vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 3, shipNode: self.spacegroundViewModel.ship.shipNode)
-            let position: SCNVector3 = SCNVector3(CGFloat.random(in: -10_000...10_000), CGFloat.random(in: -5_000...5_000), CGFloat.random(in: -10_000...10_000))
-            blackHoles.append(blackHole.containerNode)
-            blackHole.blackHoleNode.position = position
-            DispatchQueue.main.async {
-                self.spacegroundViewModel.blackHoles.append(blackHole)
+        let minDistance: CGFloat = 10_000 // Set the minimum distance between black holes
+        var attempts = 0
+        for _ in 0..<num {
+            while attempts < 100 { // Limit the number of attempts to prevent an infinite loop
+                attempts += 1
+                let radius = CGFloat.random(in: 200...2_000)
+                let ringCount = Int.random(in: 5...16)
+                let blackHole = BlackHole(scene: self.spacegroundViewModel.scene, view: self.spacegroundViewModel.view, radius: radius, camera: self.spacegroundViewModel.cameraNode, ringCount: ringCount, vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 1.5, shipNode: self.spacegroundViewModel.ship.shipNode)
+                let position: SCNVector3 = SCNVector3(CGFloat.random(in: -55_000...55_000) + self.offset, CGFloat.random(in: 0...25_000) + self.offset, CGFloat.random(in: 20_000...150_000) + self.offset)
+                let isTooClose = blackHoles.contains { existingBlackHole in
+                    let distance = existingBlackHole.position.distance(to: position)
+                    return distance < minDistance
+                }
+                if !isTooClose {
+                    blackHoles.append(blackHole.containerNode)
+                    blackHole.blackHoleNode.position = position
+                    self.spacegroundViewModel.view.prepare(blackHole.blackHoleNode)
+                    DispatchQueue.main.async {
+                        self.spacegroundViewModel.blackHoles.append(blackHole)
+                        self.spacegroundViewModel.scene.rootNode.addChildNode(blackHole.blackHoleNode)
+                    }
+                    break
+                }
             }
+            attempts = 0
         }
-        return blackHoles
     }
     
     // GHOST CREATION
     func addFactionSystem(faction: Faction) -> SCNNode {
         let factionSystem = FactionSystem(spacegroundViewModel: self.spacegroundViewModel, faction: faction)
-        factionSystem.centralNode.position = faction == .Wraith ? SCNVector3(x: -5000, y: 0, z: 0) : SCNVector3(x: 5000, y: 0, z: 0)
+        factionSystem.centralNode.position = faction == .Wraith ? SCNVector3(x: -5000, y: 0, z: 0) : SCNVector3(x: 5000, y: 0, z: 1000)
         return factionSystem.centralNode
     }
 }
