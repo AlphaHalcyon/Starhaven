@@ -134,6 +134,12 @@ import SwiftUI
                     // Remove the missile node from the scene after a delay
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
                         self.missileNode.removeFromParentNode()
+                        if let cameraMissile = self.viewModel.cameraMissile {
+                            if cameraMissile.missileNode == self.missileNode {
+                                self.viewModel.inMissileView = false
+                                self.viewModel.cameraMissile = nil
+                            }
+                        }
                     }
                 }
             }

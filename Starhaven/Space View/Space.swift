@@ -109,6 +109,8 @@ import AVFoundation
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
                 DispatchQueue.main.async { self.createExplosion(at: enemyNode.position) }
                 enemyNode.removeFromParentNode()
+                self.view.spaceViewModel.cameraMissile = nil
+                self.view.spaceViewModel.inMissileView = false
             }
             // Add logic for updating the score or other game state variables
             // For example, you could call a function in the SpacegroundViewModel to increase the score:
