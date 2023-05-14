@@ -54,7 +54,7 @@ import AVFoundation
         }
         @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
             if self.view.spaceViewModel.loadingSceneView {
-                self.view.spaceViewModel.ship.containerNode.position = SCNVector3(0, 8_000, -20_000)
+                self.view.spaceViewModel.ship.containerNode.position = SCNVector3(0, 8_000, -22_000)
                 self.view.spaceViewModel.loadingSceneView = false
                 DispatchQueue.main.async {
                     self.view.spaceViewModel.playMusic()

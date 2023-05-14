@@ -153,37 +153,14 @@ import AVFoundation
         missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         self.view.prepare([missile.missileNode]) { success in
             self.scene.rootNode.addChildNode(missile.missileNode)
-            if self.cameraMissile == nil {
-                self.cameraMissile = missile
-                self.inMissileView = true
+            if Bool.random() {
+                if self.cameraMissile == nil {
+                    self.cameraMissile = missile
+                    self.inMissileView = true
+                }
             }
         }
         return missile
-    }
-    @MainActor public func startWorldTimer() {
-        // WORLD CONTROLLER TIMER <- move things in here
-        Timer.scheduledTimer(withTimeInterval: 1 / 60.0, repeats: true) { _ in
-            DispatchQueue.main.async {
-                if !self.inMissileView {
-                    DispatchQueue.main.async {
-                        self.updateShipPosition()
-                    }
-                } else {
-                    if let missile = self.cameraMissile {
-                        DispatchQueue.main.async {
-                            self.updateCameraMissile(node: missile.missileNode)
-                        }
-                    }
-                }
-                Task {
-                    for ghost in self.ghosts {
-                        DispatchQueue.main.async {
-                            ghost.updateAI()
-                        }
-                    }
-                }
-            }
-        }
     }
     @MainActor public func createEcosystem(offset: CGFloat = 0) {
         DispatchQueue.main.async {

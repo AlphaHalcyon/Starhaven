@@ -55,9 +55,12 @@ import SwiftUI
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 self.timer.invalidate()
                 self.missileNode.removeFromParentNode()
-                self.viewModel.inMissileView = false
-                self.viewModel.cameraMissile = nil
-                
+                if let node = self.viewModel.cameraMissile?.missileNode {
+                    if node == self.missileNode {
+                        self.viewModel.cameraMissile = nil
+                        self.viewModel.inMissileView = false
+                    }
+                }
             }
         }
     }
