@@ -29,14 +29,34 @@ struct HUDView: View {
     var infoHUD: some View {
         VStack {
             HStack {
-                Text("Speed: \(spacecraftViewModel.ship.throttle * 10, specifier: "%.2f") km/s")
-                    .foregroundColor(.blue)
+                self.speedStack
                 Spacer()
-                Text("Points: \(spacecraftViewModel.points)")
-                    .foregroundColor(.red)
+                self.gearStack
+                Spacer()
+                self.pointStack
             }
-            .font(.custom("Avenir Next Regular", size: 20)).padding()
+            .font(.custom("Avenir Next Regular", size: 25)).padding().foregroundColor(.red)
             Spacer()
+        }
+    }
+    var pointStack: some View {
+        VStack { Text("POINTS"); Text("\(spacecraftViewModel.points)") }
+    }
+    var speedStack: some View {
+        VStack { Text("SPEED"); Text("\(Int(spacecraftViewModel.ship.throttle * 10)) km/s") }
+    }
+    var gearStack: some View {
+        VStack {
+            Text("GEAR")
+            HStack {
+                Text("1").foregroundColor(self.gear==1 ? .white : .red)
+                Text("2").foregroundColor(self.gear==2 ? .white : .red)
+                Text("3").foregroundColor(self.gear==3 ? .white : .red)
+            }
+        }.onTapGesture {
+            if self.gear == 3 {
+                self.gear = 1
+            } else { self.gear += 1 }
         }
     }
     var mainHUD: some View {

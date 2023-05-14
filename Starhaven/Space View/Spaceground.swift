@@ -21,7 +21,6 @@ struct Spaceground: View {
         if self.spacecraftViewModel.gameOver {
             Text("GAME OVER! SCORE: \(self.spacecraftViewModel.points)")
                 .multilineTextAlignment(.center).font(.custom("Avenir Next Regular", size: 50))
-            
         }
         else {
             ZStack {
@@ -32,9 +31,7 @@ struct Spaceground: View {
                 else {
                     HUDView().environmentObject(spacecraftViewModel)
                 }
-            }.onChange(of: self.spacecraftViewModel.loadingSceneView, perform: { val in
-                self.spacecraftViewModel.startWorldTimer()
-            })
+            }
         }
     }
     var loadScreen: some View {

@@ -54,7 +54,7 @@ import AVFoundation
         }
         @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
             if self.view.spaceViewModel.loadingSceneView {
-                self.view.spaceViewModel.ship.containerNode.position = SCNVector3(0, 8_000, -20_000)
+                self.view.spaceViewModel.ship.containerNode.position = SCNVector3(0, 8_000, -22_000)
                 self.view.spaceViewModel.loadingSceneView = false
                 DispatchQueue.main.async {
                     self.view.spaceViewModel.playMusic()
@@ -109,6 +109,8 @@ import AVFoundation
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
                 DispatchQueue.main.async { self.createExplosion(at: enemyNode.position) }
                 enemyNode.removeFromParentNode()
+                self.view.spaceViewModel.cameraMissile = nil
+                self.view.spaceViewModel.inMissileView = false
             }
             // Add logic for updating the score or other game state variables
             // For example, you could call a function in the SpacegroundViewModel to increase the score:
