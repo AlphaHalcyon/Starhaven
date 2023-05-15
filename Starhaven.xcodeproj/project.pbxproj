@@ -30,13 +30,13 @@
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
 		AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */ = {isa = PBXBuildFile; fileRef = AFC43CD929D7CF200080E891 /* Privacy Policy.txt */; };
+		AFC92EDB2A12B8BE0042697B /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */; };
 		AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */; };
 		AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05329CFA48400A127BB /* Assets.xcassets */; };
 		AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05629CFA48400A127BB /* Preview Assets.xcassets */; };
 		AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05D29CFA49500A127BB /* BlackHole.swift */; };
 		AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06329CFAAFC00A127BB /* Extensions.swift */; };
 		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
-		AFD6936C29FEB48D003FC2DE /* Temp Space VM.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */; };
 		AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* Spaceground.swift */; };
 		AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* GhostEnums.swift */; };
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
@@ -68,6 +68,7 @@
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
+		AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		AFD4C04C29CFA48200A127BB /* Starhaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Starhaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarhavenApp.swift; sourceTree = "<group>"; };
 		AFD4C05329CFA48400A127BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,7 +77,6 @@
 		AFD4C06329CFAAFC00A127BB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AFD4C06529CFAF5100A127BB /* CustomTorus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTorus.swift; sourceTree = "<group>"; };
 		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
-		AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Temp Space VM.swift"; sourceTree = "<group>"; };
 		AFDBFDD929DD2775006DEB3E /* Spaceground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceground.swift; sourceTree = "<group>"; };
 		AFDE46E329F8A17500401509 /* GhostEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostEnums.swift; sourceTree = "<group>"; };
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
@@ -100,8 +100,6 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
-				AF3D1DA52A0A006600A8F2C7 /* Planet.swift */,
-				AFD6936B29FEB48D003FC2DE /* Temp Space VM.swift */,
 				AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */,
 				AF07021C29E120D300667F9B /* Assets.xcassets */,
 				AF63D4392A08D68F007D8A40 /* snatchHiss.wav */,
@@ -191,6 +189,7 @@
 				AFDE46F129F91E2400401509 /* Dreadknought.swift */,
 				AF67FBB029F78C0B007CE669 /* Drone.swift */,
 				AF778F0729F9F44700F299E5 /* Raider.swift */,
+				AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */,
 				AFDE46E329F8A17500401509 /* GhostEnums.swift */,
 			);
 			path = Ghosts;
@@ -220,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				AF6388E629DFC9610086C90F /* Star.swift */,
+				AF3D1DA52A0A006600A8F2C7 /* Planet.swift */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
 				AFD4C06529CFAF5100A127BB /* CustomTorus.swift */,
 			);
@@ -315,11 +315,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */,
-				AFD6936C29FEB48D003FC2DE /* Temp Space VM.swift in Sources */,
 				AF6388DA29DF77940086C90F /* Space.swift in Sources */,
 				AF5B368F2A0AA9660075581E /* Custom Slider.swift in Sources */,
 				AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */,
 				AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */,
+				AFC92EDB2A12B8BE0042697B /* HomeScreen.swift in Sources */,
 				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
 				AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
@@ -476,8 +476,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -512,8 +512,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
