@@ -59,66 +59,50 @@ import SceneKit
         laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
         containerNode.parent!.addChildNode(laser.laserNode)
     }
-    // CREATION
-    func createShip() -> SCNNode {
-        let node = SCNNode()
-        node.geometry = SCNGeometry()
-        // Create the main body of the spaceship
-        let body = SCNCylinder(radius: 1.0, height: 4.0)
-        body.firstMaterial?.diffuse.contents = UIColor.gray
-        let bodyNode = SCNNode(geometry: body)
-        bodyNode.rotation = SCNVector4(1, 0, 0, Float.pi / 2)
-        node.addChildNode(bodyNode)
-
-        // Create the rocket boosters
-        let booster1 = SCNCylinder(radius: 0.4, height: 2.0)
-        booster1.firstMaterial?.diffuse.contents = UIColor.darkGray
-        let booster1Node = SCNNode(geometry: booster1)
-        booster1Node.position = SCNVector3(-1.2, -1.0, 0)
-        booster1Node.rotation = SCNVector4(1, 0, 0, Float.pi / 2)
-        node.addChildNode(booster1Node)
-
-        let booster2 = SCNCylinder(radius: 0.4, height: 2.0)
-        booster2.firstMaterial?.diffuse.contents = UIColor.darkGray
-        let booster2Node = SCNNode(geometry: booster2)
-        booster2Node.position = SCNVector3(1.2, -1.0, 0)
-        booster2Node.rotation = SCNVector4(1, 0, 0, Float.pi / 2)
-        node.addChildNode(booster2Node)
-
-        // Create the wings
-        let wing1 = SCNBox(width: 2.0, height: 0.1, length: 5, chamferRadius: 0)
-        wing1.firstMaterial?.diffuse.contents = UIColor.lightGray
-        let wing1Node = SCNNode(geometry: wing1)
-        wing1Node.position = SCNVector3(-3, 1, 0)
-        node.addChildNode(wing1Node)
-
-        let wing2 = SCNBox(width: 2.0, height: 0.1, length: 5, chamferRadius: 0)
-        wing2.firstMaterial?.diffuse.contents = UIColor.lightGray
-        let wing2Node = SCNNode(geometry: wing2)
-        wing2Node.position = SCNVector3(3, 1, 0)
-        node.addChildNode(wing2Node)
-
-        // Create missile tubes under the wings
-        let missileTube1 = SCNCylinder(radius: 0.5, height: 3.5)
-        missileTube1.firstMaterial?.diffuse.contents = UIColor.darkGray
-        let missileTube1Node = SCNNode(geometry: missileTube1)
-        missileTube1Node.position = SCNVector3(-1.5, 1.0, -1.2)
-        missileTube1Node.rotation = SCNVector4(1, 0, 0, Float.pi / 2)
-        node.addChildNode(missileTube1Node)
-
-        let missileTube2 = SCNCylinder(radius: 0.5, height: 3.5)
-        missileTube2.firstMaterial?.diffuse.contents = UIColor.darkGray
-        let missileTube2Node = SCNNode(geometry: missileTube2)
-        missileTube2Node.position = SCNVector3(1.5, 1.0, -1.2)
-        missileTube2Node.rotation = SCNVector4(1, 0, 0, Float.pi / 2)
-        node.addChildNode(missileTube2Node)
-        node.eulerAngles.x = 25
-        node.position = SCNVector3(0, -10, 0)
-        let containerNode = SCNNode()
-        containerNode.geometry = SCNGeometry()
-        containerNode.addChildNode(node)
-        self.shipNode = node
-        self.containerNode = containerNode
-        return containerNode
+    func createShip(scale: CGFloat = 0.1) -> SCNNode {
+        // Load the spaceship model
+        // Usage:
+        if let modelNode = loadOBJModel(named: "Raider") {
+            modelNode.scale = SCNVector3(scale, scale, scale)
+            modelNode.position = SCNVector3(0, -15, 0)
+            modelNode.eulerAngles.x = -.pi/12
+            self.shipNode = modelNode
+            let containerNode = SCNNode()
+            containerNode.geometry = SCNGeometry()
+            containerNode.addChildNode(modelNode)
+            self.containerNode = containerNode
+            return containerNode
+        }
+        else {
+            print("failed")
+            return SCNNode()
+        }
+    }
+    func loadOBJModel(named name: String) -> SCNNode? {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "obj") else { return nil }
+        let asset = MDLAsset(url: url)
+        guard let object = asset.object(at: 0) as? MDLMesh else { return nil }
+        let node = SCNNode(mdlObject: object)
+        return self.applyHullMaterials(to: node)
+    }
+    func applyHullMaterials(to node: SCNNode) -> SCNNode {
+        // Create a material for the hull
+        let hullMaterial = SCNMaterial()
+        hullMaterial.diffuse.contents = UIColor.darkGray
+        hullMaterial.lightingModel = .physicallyBased
+        hullMaterial.metalness.contents = 1.0
+        hullMaterial.roughness.contents = 0.2
+        
+        // Create a material for the handprint
+        //let handprintMaterial = SCNMaterial()
+        //handprintMaterial.diffuse.contents = UIImage(named: "handprint.png")
+        
+        // Create a material for the white lines
+        let linesMaterial = SCNMaterial()
+        linesMaterial.diffuse.contents = UIColor.white
+        
+        // Apply the materials to the geometry of the node
+        node.geometry?.materials = [hullMaterial, linesMaterial]
+        return node
     }
 }

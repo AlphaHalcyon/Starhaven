@@ -18,7 +18,7 @@ import SceneKit
     init(spacegroundViewModel: SpacegroundViewModel, faction: Faction) {
         self.spacegroundViewModel = spacegroundViewModel
         self.faction = faction
-       // self.createCentralHalcyon()
+        self.createCentralHalcyon()
         self.createDrones()
     }
     func createCentralHalcyon() {
@@ -26,7 +26,12 @@ import SceneKit
         if let halcyon = self.centralHalcyon {
             print("ghost")
             DispatchQueue.main.async {
-                self.centralNode.addChildNode(halcyon.createShip(scale: 2))
+                let dreadknought = halcyon.createShip(scale: 2)
+                let offsetX: Float = 15 * Float(self.droneLimit) * self.scale * (self.faction == .Phantom ? -1 : 1)
+                dreadknought.position = SCNVector3(x: offsetX, y: 0, z: 0)
+                self.spacegroundViewModel.view.prepare([dreadknought]) { success in
+                    self.centralNode.addChildNode(dreadknought)
+                }
             }
         }
     }
@@ -36,7 +41,7 @@ import SceneKit
             let raider: Raider = Raider(spacegroundViewModel: self.spacegroundViewModel, faction: self.faction)
             let offsetX: Float = 10 * Float(self.droneLimit) * self.scale * (self.faction == .Phantom ? -1 : 1)
             let offsetZ: Float = 15 * Float(droneNum) * self.scale * (self.faction == .Phantom ? -1 : 1)
-            let raiderNode = raider.createShip(scale: CGFloat.random(in: 20...80))
+            let raiderNode = raider.createShip(scale: CGFloat.random(in: 2...4))
             self.spacegroundViewModel.view.prepare([raiderNode]) { sucess in
                 DispatchQueue.main.async {
                     raiderNode.position = SCNVector3(x: offsetX, y: Float.random(in:0...2 * Float(self.droneLimit) * self.scale), z: offsetZ)
