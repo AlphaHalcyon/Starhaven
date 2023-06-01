@@ -68,10 +68,10 @@ class Raider: ObservableObject {
                     speed *= Float.random(in: 0.5...1.05)
                     self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
                 }
-                if Float.random(in: 0...1) > 0.9995 {
+                if Float.random(in: 0...1) > 0.9993 {
                     DispatchQueue.main.async { self.fireLaser(color: self.faction == .Wraith ? .red : .green) }
                 }
-                if Float.random(in: 0...1) > 0.999 {
+                if Float.random(in: 0...1) > 0.995 {
                     DispatchQueue.main.async {
                         self.fireMissile(target: self.currentTarget, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
                     }
