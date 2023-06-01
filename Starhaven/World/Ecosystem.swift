@@ -16,6 +16,7 @@ import SceneKit
     @Published var debris: [SCNNode] = []
     @Published var id: UUID = UUID()
     @Published var offset: CGFloat
+    private let blackHoleCount: Int = 0
     init(spacegroundViewModel: SpacegroundViewModel, offset: CGFloat) {
         self.offset = offset
         self.spacegroundViewModel = spacegroundViewModel

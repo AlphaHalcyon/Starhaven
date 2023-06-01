@@ -20,7 +20,7 @@ import SwiftUI
         self.viewModel = viewModel
         self.target = target
         // Create missile geometry and node
-        let missileGeometry = SCNCylinder(radius: 1.5, height: 10)
+        let missileGeometry = SCNCylinder(radius: 2, height: 8)
         missileGeometry.firstMaterial?.diffuse.contents = UIColor.darkGray
         self.missileNode = SCNNode(geometry: missileGeometry)
         // Adjust the physicsBody
@@ -32,8 +32,8 @@ import SwiftUI
         // Create red particle system
         self.particleSystem = SCNParticleSystem()
         self.particleSystem.particleColor = particleSystemColor
-        self.particleSystem.particleSize = 0.10
-        self.particleSystem.birthRate = 500000
+        self.particleSystem.particleSize = 0.075
+        self.particleSystem.birthRate = 500_000
         self.particleSystem.emissionDuration = 1
         self.particleSystem.particleLifeSpan = 0.1
         self.particleSystem.spreadingAngle = 180
@@ -49,9 +49,7 @@ import SwiftUI
             self.missileNode.physicsBody?.isAffectedByGravity = false
             self.missileNode.physicsBody?.friction = 0
             self.missileNode.physicsBody?.damping = 0
-            if self.target != nil {
-                self.updateTracking()
-            }
+            self.updateTracking()
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 self.timer.invalidate()
                 self.missileNode.removeFromParentNode()
@@ -64,7 +62,8 @@ import SwiftUI
             }
         }
     }
-    @MainActor func updateTracking() {
+    func updateTracking() {
+        print(self.target)
         if let target = self.target {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true) { [weak self] _ in
@@ -75,9 +74,13 @@ import SwiftUI
                     }
                 }
             })
-        } else { return }
+        } else {
+            print("yup")
+            self.missileNode.simdOrientation = self.viewModel.ship.shipNode.simdOrientation
+            self.missileNode.physicsBody?.applyForce(self.viewModel.ship.shipNode.worldFront * 5_000, asImpulse: true)
+        }
     }
-    @MainActor public func trackTarget() {
+    public func trackTarget() {
         if let target = self.target {
             let distanceToTarget: Float = (self.missileNode.presentation.position - target.presentation.position).length()
             let trackingThreshold: Float = 500.0  // Distance at which the missile stops adjusting its course

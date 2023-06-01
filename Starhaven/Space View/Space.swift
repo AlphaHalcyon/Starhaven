@@ -52,15 +52,15 @@ import AVFoundation
                 self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
             }
         }
-        @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
-            if self.view.spaceViewModel.loadingSceneView {
-                self.view.spaceViewModel.ship.containerNode.position = SCNVector3(0, 8_000, -22_000)
-                self.view.spaceViewModel.loadingSceneView = false
-                DispatchQueue.main.async {
-                    self.view.spaceViewModel.playMusic()
-                }
-            }
+        func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
             DispatchQueue.main.async {
+                if self.view.spaceViewModel.loadingSceneView {
+                    self.view.spaceViewModel.ship.containerNode.position = SCNVector3(-5000, 8_000, -20_000)
+                    self.view.spaceViewModel.loadingSceneView = false
+                    DispatchQueue.main.async {
+                        self.view.spaceViewModel.playMusic()
+                    }
+                }
                 let laserNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
                 let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
                 let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
@@ -70,19 +70,13 @@ import AVFoundation
                         if color == .green || color == .cyan  {
                             if Float.random(in: 0...1) > 0.70 {
                                 print("wraith death")
-                                DispatchQueue.main.async {
-                                    node?.timer.invalidate()
-                                    self.death(node: laserNode, enemyNode: enemyNode)
-                                }
+                                self.death(node: laserNode, enemyNode: enemyNode)
                             }
                         }
                     case .Phantom:
                         if color == .red || color == .systemPink {
                             if Float.random(in: 0...1) > 0.70 {
-                                DispatchQueue.main.async {
-                                    node?.timer.invalidate()
-                                    self.death(node: laserNode, enemyNode: enemyNode)
-                                }
+                                self.death(node: laserNode, enemyNode: enemyNode)
                             }
                         }
                     default:
@@ -91,36 +85,32 @@ import AVFoundation
                 }
             }
         }
-        @MainActor func handleMissileEnemyCollision(contact: SCNPhysicsContact) {
-            // Determine which node is the missile and which is the enemy ship
-            let missileNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.missile ? contact.nodeA : contact.nodeB
-            let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            
-            // Find the corresponding missile object and call the handleCollision function
-            if let missile = view.spaceViewModel.missiles.first(where: { $0.getMissileNode() == missileNode }) {
-                print(missile.particleSystem.particleColor)
-                if missile.particleSystem.particleColor != .red {
-                    return
+        func handleMissileEnemyCollision(contact: SCNPhysicsContact) {
+            DispatchQueue.main.async {
+                // Determine which node is the missile and which is the enemy ship
+                let missileNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.missile ? contact.nodeA : contact.nodeB
+                let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
+                
+                // Find the corresponding missile object and call the handleCollision function
+                if let missile = self.view.spaceViewModel.missiles.first(where: { $0.getMissileNode() == missileNode }) {
+                    print(missile.particleSystem.particleColor)
+                    if missile.particleSystem.particleColor != .red {
+                        return
+                    }
+                    print("nice!")
+                    self.view.spaceViewModel.playSound(name: "snatchHiss")
+                    missile.detonate()
                 }
-                print("nice!")
-                self.view.spaceViewModel.playSound(name: "snatchHiss")
-                DispatchQueue.main.async { missile.detonate() }
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.20) {
-                DispatchQueue.main.async { self.createExplosion(at: enemyNode.position) }
+                self.createExplosion(at: enemyNode.position)
                 enemyNode.removeFromParentNode()
                 self.view.spaceViewModel.cameraMissile = nil
                 self.view.spaceViewModel.inMissileView = false
-            }
-            // Add logic for updating the score or other game state variables
-            // For example, you could call a function in the SpacegroundViewModel to increase the score:
-            DispatchQueue.main.async {
-                 self.view.spaceViewModel.incrementScore(killsOrBlackHoles: 2)
-            }
-            // Remove the missile and enemy ship from the scene
-            DispatchQueue.main.async {
+                // Add logic for updating the score or other game state variables
+                // For example, you could call a function in the SpacegroundViewModel to increase the score:
+                self.view.spaceViewModel.incrementScore(killsOrBlackHoles: 2)
+            
+                // Remove the missile and enemy ship from the scene
                 let node = self.view.spaceViewModel.ghosts.first(where: { $0.shipNode == enemyNode })
-                node?.timer.invalidate()
                 self.view.spaceViewModel.ghosts = self.view.spaceViewModel.ghosts.filter { $0.shipNode != enemyNode }
             }
         }
@@ -170,7 +160,7 @@ import AVFoundation
                 }
             }
         }
-        @MainActor func setupPhysics() {
+        func setupPhysics() {
             DispatchQueue.main.async {
                 self.view.spaceViewModel.scene.physicsWorld.contactDelegate = self
             }
