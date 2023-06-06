@@ -9,13 +9,13 @@ import Foundation
 import SceneKit
 import SwiftUI
 
-@MainActor class Missile {
-    @Published var missileNode: SCNNode
-    @Published var target: SCNNode?
-    @Published var particleSystem: SCNParticleSystem
-    @Published var explosionNode: SCNNode = SCNNode()
-    @Published var timer: Timer = Timer()
-    @Published var viewModel: SpacegroundViewModel
+class Missile {
+    var missileNode: SCNNode
+    var target: SCNNode?
+    var particleSystem: SCNParticleSystem
+    var explosionNode: SCNNode = SCNNode()
+    var timer: Timer = Timer()
+    var viewModel: SpacegroundViewModel
     init(target: SCNNode? = nil, particleSystemColor: UIColor, viewModel: SpacegroundViewModel) {
         self.viewModel = viewModel
         self.target = target
@@ -66,7 +66,7 @@ import SwiftUI
         print(self.target)
         if let target = self.target {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
-                self.timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true) { [weak self] _ in
+                self.timer = Timer.scheduledTimer(withTimeInterval: 1/30, repeats: true) { [weak self] _ in
                     if let self = self {
                         DispatchQueue.main.async {
                             self.trackTarget()
@@ -76,8 +76,10 @@ import SwiftUI
             })
         } else {
             print("yup")
-            self.missileNode.simdOrientation = self.viewModel.ship.shipNode.simdOrientation
-            self.missileNode.physicsBody?.applyForce(self.viewModel.ship.shipNode.worldFront * 5_000, asImpulse: true)
+            DispatchQueue.main.async {
+                self.missileNode.simdOrientation = self.viewModel.ship.shipNode.simdOrientation
+                self.missileNode.physicsBody?.applyForce(self.viewModel.ship.shipNode.worldFront * 5_000, asImpulse: true)
+            }
         }
     }
     public func trackTarget() {

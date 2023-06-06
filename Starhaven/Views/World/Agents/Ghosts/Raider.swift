@@ -71,7 +71,7 @@ class Raider: ObservableObject {
                 if Float.random(in: 0...1) > 0.9993 {
                     DispatchQueue.main.async { self.fireLaser(color: self.faction == .Wraith ? .red : .green) }
                 }
-                if Float.random(in: 0...1) > 0.995 {
+                if Float.random(in: 0...1) > 0.9992 {
                     DispatchQueue.main.async {
                         self.fireMissile(target: self.currentTarget, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
                     }
@@ -80,9 +80,9 @@ class Raider: ObservableObject {
         }
     }
     func selectNewTarget() {
-        DispatchQueue.main.async {
+        Task {
             // Filter out the current ship from the list of available targets
-            let availableTargets = self.spacegroundViewModel.ghosts.filter { $0.shipNode != self.shipNode && $0.faction != self.faction }
+            let availableTargets = await self.spacegroundViewModel.ghosts.filter { $0.shipNode != self.shipNode && $0.faction != self.faction }
             
             // Select a new target from the list of available targets
             if let newTarget = availableTargets.randomElement() {
@@ -90,7 +90,7 @@ class Raider: ObservableObject {
                 //print("target acquired!")
             } else {
                 // No targets available
-                self.currentTarget = self.spacegroundViewModel.ship.shipNode
+                self.currentTarget = await self.spacegroundViewModel.ship.shipNode
                 print("no one left to kill :(")
             }
         }
@@ -98,22 +98,21 @@ class Raider: ObservableObject {
 
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
-        DispatchQueue.main.async {
+        Task {
             let missile = GhostMissile(target: target, particleSystemColor: particleSystemColor)
-            // Convert shipNode's local position to world position
-            let worldPosition = self.shipNode.convertPosition(SCNVector3(0, -10, 5 * self.scale), to: self.containerNode.parent)
-            
-            missile.missileNode.position = worldPosition
-            missile.missileNode.orientation = self.shipNode.presentation.orientation
-            let direction = self.shipNode.presentation.worldFront
-            let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-            let missileForce = CGFloat(self.throttle + 1) * 125 * missileMass
-            missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-            self.spacegroundViewModel.view.prepare([missile.missileNode]) { success in
+            await self.spacegroundViewModel.view.prepare([missile.missileNode]) { success in
                 self.spacegroundViewModel.scene.rootNode.addChildNode(missile.missileNode)
+                // Convert shipNode's local position to world position
+                let worldPosition = self.shipNode.convertPosition(SCNVector3(0, -10, 5 * self.scale), to: self.containerNode.parent)
+                
+                missile.missileNode.position = worldPosition
+                missile.missileNode.orientation = self.shipNode.presentation.orientation
+                let direction = self.shipNode.presentation.worldFront
+                let missileMass = missile.missileNode.physicsBody?.mass ?? 1
+                let missileForce = CGFloat(self.throttle + 1) * 125 * missileMass
+                missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
             }
         }
-        
     }
     func fireLaser(target: SCNNode? = nil, color: UIColor) {
         DispatchQueue.main.async {
@@ -168,7 +167,7 @@ class Raider: ObservableObject {
         let hullMaterial = SCNMaterial()
         hullMaterial.diffuse.contents = UIColor.darkGray
         hullMaterial.lightingModel = .physicallyBased
-        hullMaterial.metalness.contents = 1.0
+        hullMaterial.metalness.contents = 0.8
         hullMaterial.roughness.contents = 0.2
         
         // Create a material for the handprint

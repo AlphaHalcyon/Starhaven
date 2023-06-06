@@ -21,10 +21,15 @@ struct HUDView: View {
             self.scoreUpdates
             VStack {
                 Spacer()
-                ReticleView()
+                self.reticle
                 Spacer()
             }
         }
+    }
+    var reticle: some View {
+        Crosshair()
+            .stroke(self.spacecraftViewModel.closestEnemy == nil ? Color.white : Color.red, lineWidth: 1)
+            .frame(width: 20, height: 20).opacity(0.98)
     }
     var infoHUD: some View {
         VStack {
@@ -77,7 +82,7 @@ struct HUDView: View {
     var fireButton: some View {
         Button(action: {
             DispatchQueue.main.async {
-                self.spacecraftViewModel.fireMissile()
+                self.spacecraftViewModel.fireMissile(target: self.spacecraftViewModel.closestEnemy)
                 self.spacecraftViewModel.fireCooldown = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                     self.spacecraftViewModel.fireCooldown = false
@@ -129,15 +134,6 @@ struct HUDView: View {
         }
     }
 
-}
-struct ReticleView: View {
-    var body: some View {
-        ZStack {
-            Crosshair()
-                .stroke(Color.red, lineWidth: 1)
-                .frame(width: 20, height: 20).opacity(0.98)
-        }
-    }
 }
 
 struct Crosshair: Shape {

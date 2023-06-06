@@ -30,17 +30,19 @@
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
 		AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */; };
 		AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DB2A25A4C4009C998B /* Raider.obj */; };
-		AFBB77DE2A25A4F0009C998B /* nave_orion.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DD2A25A4F0009C998B /* nave_orion.mtl */; };
+		AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DD2A25A4F0009C998B /* Raider.mtl */; };
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
 		AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */ = {isa = PBXBuildFile; fileRef = AFC43CD929D7CF200080E891 /* Privacy Policy.txt */; };
 		AFC92EDB2A12B8BE0042697B /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */; };
-		AFC92EE02A12D9A90042697B /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = AFC92EDF2A12D9A90042697B /* Audio */; };
 		AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */; };
 		AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05329CFA48400A127BB /* Assets.xcassets */; };
 		AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFD4C05629CFA48400A127BB /* Preview Assets.xcassets */; };
 		AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C05D29CFA49500A127BB /* BlackHole.swift */; };
 		AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06329CFAAFC00A127BB /* Extensions.swift */; };
 		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
+		AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */; };
+		AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */; };
+		AFD7EEBD2A2C88FD00A92162 /* dh10.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBB2A2C88FD00A92162 /* dh10.obj */; };
 		AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* Spaceground.swift */; };
 		AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* GhostEnums.swift */; };
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
@@ -73,10 +75,9 @@
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
 		AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = HeavyBattleship.obj; sourceTree = "<group>"; };
 		AFBB77DB2A25A4C4009C998B /* Raider.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.obj; path = ../../../Downloads/Raider.obj; sourceTree = "<group>"; };
-		AFBB77DD2A25A4F0009C998B /* nave_orion.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = nave_orion.mtl; path = ../../../Downloads/nave_orion.mtl; sourceTree = "<group>"; };
+		AFBB77DD2A25A4F0009C998B /* Raider.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.mtl; path = ../../../Downloads/Raider.mtl; sourceTree = "<group>"; };
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
 		AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
-		AFC92EDF2A12D9A90042697B /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Audio; sourceTree = "<group>"; };
 		AFD4C04C29CFA48200A127BB /* Starhaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Starhaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarhavenApp.swift; sourceTree = "<group>"; };
 		AFD4C05329CFA48400A127BB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -85,6 +86,9 @@
 		AFD4C06329CFAAFC00A127BB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AFD4C06529CFAF5100A127BB /* CustomTorus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTorus.swift; sourceTree = "<group>"; };
 		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroCutscene.swift; sourceTree = "<group>"; };
+		AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.mtl; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.mtl; sourceTree = "<group>"; };
+		AFD7EEBB2A2C88FD00A92162 /* dh10.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.obj; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.obj; sourceTree = "<group>"; };
 		AFDBFDD929DD2775006DEB3E /* Spaceground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceground.swift; sourceTree = "<group>"; };
 		AFDE46E329F8A17500401509 /* GhostEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostEnums.swift; sourceTree = "<group>"; };
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
@@ -108,15 +112,14 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
+				AFD4C04E29CFA48200A127BB /* Starhaven */,
+				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */,
 				AF07021C29E120D300667F9B /* Assets.xcassets */,
-				AFC92EDF2A12D9A90042697B /* Audio */,
 				AF63D4392A08D68F007D8A40 /* snatchHiss.wav */,
 				AF63D43B2A08D6EC007D8A40 /* snap.wav */,
 				AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */,
 				AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */,
-				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
-				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFD4C04D29CFA48200A127BB /* Products */,
 				AFD4C06929CFFB4E00A127BB /* Frameworks */,
 			);
@@ -133,15 +136,15 @@
 		AFD4C04E29CFA48200A127BB /* Starhaven */ = {
 			isa = PBXGroup;
 			children = (
-				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
-				AFF42A8829E773FD00B6C603 /* Space View */,
-				AFDE46F029F9133B00401509 /* World */,
-				AFDE46EC29F9121500401509 /* Heads-Up Display */,
+				AFD7EEBE2A2E891D00A92162 /* ViewModel */,
+				AFD7EEBF2A2E892500A92162 /* Views */,
 				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
 				AFD4C05329CFA48400A127BB /* Assets.xcassets */,
 				AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */,
 				AFBB77DB2A25A4C4009C998B /* Raider.obj */,
-				AFBB77DD2A25A4F0009C998B /* nave_orion.mtl */,
+				AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */,
+				AFD7EEBB2A2C88FD00A92162 /* dh10.obj */,
+				AFBB77DD2A25A4F0009C998B /* Raider.mtl */,
 				AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */,
 				AFD4C05529CFA48400A127BB /* Preview Content */,
 			);
@@ -162,6 +165,25 @@
 				AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AFD7EEBE2A2E891D00A92162 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		AFD7EEBF2A2E892500A92162 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AFDE46F029F9133B00401509 /* World */,
+				AFDE46EC29F9121500401509 /* Heads-Up Display */,
+				AFF42A8829E773FD00B6C603 /* Space View */,
+				AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		AFDE46EB29F911F600401509 /* Projectiles */ = {
@@ -307,18 +329,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */,
-				AFC92EE02A12D9A90042697B /* Audio in Resources */,
 				AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */,
 				AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */,
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
+				AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */,
 				AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */,
 				AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */,
 				AF07021E29E120D300667F9B /* Assets.xcassets in Resources */,
 				AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */,
 				AF63D43A2A08D68F007D8A40 /* snatchHiss.wav in Resources */,
-				AFBB77DE2A25A4F0009C998B /* nave_orion.mtl in Resources */,
+				AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */,
 				AF4F696B2A0DBFD3007376EA /* HVNDarkseid.mp3 in Resources */,
+				AFD7EEBD2A2C88FD00A92162 /* dh10.obj in Resources */,
 				AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +367,7 @@
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
+				AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */,
 				AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
