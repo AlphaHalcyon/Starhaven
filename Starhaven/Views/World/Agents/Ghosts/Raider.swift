@@ -34,7 +34,7 @@ class Raider: ObservableObject {
         self.selectNewTarget()
     }
     // GHOST MOVEMENTS
-    @MainActor func updateAI() {
+    func updateAI() {
         DispatchQueue.main.async {
             // Check if the current target is still valid
             if self.ghostGhount != self.spacegroundViewModel.ghosts.count {
@@ -60,7 +60,7 @@ class Raider: ObservableObject {
                 let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
                 
                 // Set a minimum distance between the enemy and player ships
-                let minDistance: Float = 15_000
+                let minDistance: Float = 20_000
                 var speed: Float = 10
                 
                 // If the enemy ship is closer than the minimum distance, move it away from the player
@@ -68,10 +68,10 @@ class Raider: ObservableObject {
                     speed *= Float.random(in: 0.5...1.05)
                     self.shipNode.worldPosition = SCNVector3(self.shipNode.worldPosition.x + normalizedDirection.x * speed, self.shipNode.worldPosition.y + normalizedDirection.y * speed, self.shipNode.worldPosition.z + normalizedDirection.z * speed)
                 }
-                if Float.random(in: 0...1) > 0.9993 {
+                if Float.random(in: 0...1) > 0.9995 {
                     DispatchQueue.main.async { self.fireLaser(color: self.faction == .Wraith ? .red : .green) }
                 }
-                if Float.random(in: 0...1) > 0.9992 {
+                if Float.random(in: 0...1) > 0.9993 {
                     DispatchQueue.main.async {
                         self.fireMissile(target: self.currentTarget, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
                     }
@@ -98,20 +98,18 @@ class Raider: ObservableObject {
 
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
-        Task {
-            let missile = GhostMissile(target: target, particleSystemColor: particleSystemColor)
-            await self.spacegroundViewModel.view.prepare([missile.missileNode]) { success in
-                self.spacegroundViewModel.scene.rootNode.addChildNode(missile.missileNode)
-                // Convert shipNode's local position to world position
-                let worldPosition = self.shipNode.convertPosition(SCNVector3(0, -10, 5 * self.scale), to: self.containerNode.parent)
-                
-                missile.missileNode.position = worldPosition
-                missile.missileNode.orientation = self.shipNode.presentation.orientation
-                let direction = self.shipNode.presentation.worldFront
-                let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-                let missileForce = CGFloat(self.throttle + 1) * 125 * missileMass
-                missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-            }
+        let missile = GhostMissile(target: target, particleSystemColor: particleSystemColor)
+        self.spacegroundViewModel.view.prepare([missile.missileNode]) { success in
+            self.spacegroundViewModel.scene.rootNode.addChildNode(missile.missileNode)
+            // Convert shipNode's local position to world position
+            let worldPosition = self.shipNode.convertPosition(SCNVector3(0, -10, 5 * self.scale), to: self.containerNode.parent)
+            
+            missile.missileNode.position = worldPosition
+            missile.missileNode.orientation = self.shipNode.presentation.orientation
+            let direction = self.shipNode.presentation.worldFront
+            let missileMass = missile.missileNode.physicsBody?.mass ?? 1
+            let missileForce = CGFloat(self.throttle + 1) * 125 * missileMass
+            missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         }
     }
     func fireLaser(target: SCNNode? = nil, color: UIColor) {
@@ -125,7 +123,7 @@ class Raider: ObservableObject {
             laser.laserNode.eulerAngles.x += Float.pi / 2
             let direction = self.shipNode.presentation.worldFront
             let laserMass = laser.laserNode.physicsBody?.mass ?? 1
-            let laserForce = CGFloat(abs(self.throttle) + 1) * 10_000 * laserMass
+            let laserForce = CGFloat(abs(self.throttle) + 1) * 12_000 * laserMass
             laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
             self.spacegroundViewModel.view.prepare([laser.laserNode]) { success in
                 self.spacegroundViewModel.scene.rootNode.addChildNode(laser.laserNode)
@@ -167,8 +165,8 @@ class Raider: ObservableObject {
         let hullMaterial = SCNMaterial()
         hullMaterial.diffuse.contents = UIColor.darkGray
         hullMaterial.lightingModel = .physicallyBased
-        hullMaterial.metalness.contents = 0.8
-        hullMaterial.roughness.contents = 0.2
+        hullMaterial.metalness.contents = 1
+        hullMaterial.roughness.contents = 1
         
         // Create a material for the handprint
         //let handprintMaterial = SCNMaterial()

@@ -31,6 +31,11 @@ struct HUDView: View {
             .stroke(self.spacecraftViewModel.closestEnemy == nil ? Color.white : Color.red, lineWidth: 1)
             .frame(width: 20, height: 20).opacity(0.98)
     }
+    var dynamicCamera: some View {
+        VStack {
+            Image(systemName: "camera").resizable().scaledToFit().frame(width: 100)
+        }
+    }
     var infoHUD: some View {
         VStack {
             HStack {
@@ -57,9 +62,10 @@ struct HUDView: View {
                 Text("1").foregroundColor(self.gear==1 ? .white : .red)
                 Text("2").foregroundColor(self.gear==2 ? .white : .red)
                 Text("3").foregroundColor(self.gear==3 ? .white : .red)
+                Text("4").foregroundColor(self.gear==3 ? .white : .red)
             }
         }.onTapGesture {
-            if self.gear == 3 {
+            if self.gear == 4 {
                 self.gear = 1
             } else { self.gear += 1 }
         }
@@ -68,7 +74,7 @@ struct HUDView: View {
         HStack {
             VStack {
                 Spacer()
-                CustomSlider(value: self.$spacecraftViewModel.ship.throttle, range: -100 * Float(self.gear)...100 * Float(self.gear), onChange: { val in
+                CustomSlider(value: self.$spacecraftViewModel.ship.throttle, range: -125 * Float(self.gear)...125 * Float(self.gear), onChange: { val in
                     // changes here
                 })
             }
@@ -84,7 +90,7 @@ struct HUDView: View {
             DispatchQueue.main.async {
                 self.spacecraftViewModel.fireMissile(target: self.spacecraftViewModel.closestEnemy)
                 self.spacecraftViewModel.fireCooldown = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {
                     self.spacecraftViewModel.fireCooldown = false
                 }
             }
@@ -108,7 +114,7 @@ struct HUDView: View {
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showKillIncrement)
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                             spacecraftViewModel.showKillIncrement = false
                         }
                     }
@@ -125,11 +131,12 @@ struct HUDView: View {
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showScoreIncrement)
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                             spacecraftViewModel.showScoreIncrement = false
                         }
                     }
             }
+            Spacer()
             Spacer()
         }
     }

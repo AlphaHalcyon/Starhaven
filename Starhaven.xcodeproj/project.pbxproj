@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
+		AF0C5C522A2F3CD600D6D008 /* she never loved u bro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
 		AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */; };
@@ -53,6 +54,7 @@
 
 /* Begin PBXFileReference section */
 		AF07021C29E120D300667F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "she never loved u bro.mp3"; path = "../../she never loved u bro.mp3"; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
 		AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVN.mp3; path = ../../Music/Logic/Bounces/HVN.mp3; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				AF63D4392A08D68F007D8A40 /* snatchHiss.wav */,
 				AF63D43B2A08D6EC007D8A40 /* snap.wav */,
 				AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */,
+				AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */,
 				AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */,
 				AFD4C04D29CFA48200A127BB /* Products */,
 				AFD4C06929CFFB4E00A127BB /* Frameworks */,
@@ -337,6 +340,7 @@
 				AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */,
 				AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */,
 				AF07021E29E120D300667F9B /* Assets.xcassets in Resources */,
+				AF0C5C522A2F3CD600D6D008 /* she never loved u bro.mp3 in Resources */,
 				AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */,
 				AF63D43A2A08D68F007D8A40 /* snatchHiss.wav in Resources */,
 				AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */,
@@ -523,7 +527,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -559,7 +563,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

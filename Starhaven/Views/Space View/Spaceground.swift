@@ -52,9 +52,6 @@ struct Spaceground: View {
                     .onEnded { _ in
                         if !self.spacecraftViewModel.view.allowsCameraControl {
                             spacecraftViewModel.isPressed.toggle()
-                            if spacecraftViewModel.isPressed {
-                                spacecraftViewModel.startContinuousRotation()
-                            }
                         }
                     }
             )
