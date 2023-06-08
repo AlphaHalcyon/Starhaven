@@ -99,7 +99,7 @@ class AssaultDrone: ObservableObject {
     }
 
     // WEAPONS MECHANICS
-    @MainActor public func fireMissile(target: SCNNode? = nil) {
+    public func fireMissile(target: SCNNode? = nil) {
         print("fire!")
     }
     func fireLaser(target: SCNNode? = nil, color: UIColor) {

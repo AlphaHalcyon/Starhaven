@@ -11,7 +11,7 @@ import Swift
 import Metal
 import simd
 
-@MainActor class BlackHole: ObservableObject {
+class BlackHole: ObservableObject {
     @Published var containerNode: SCNNode = SCNNode()
     @Published var blackHoleNode: SCNNode = SCNNode()
     @Published var scene: SCNScene

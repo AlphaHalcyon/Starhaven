@@ -89,9 +89,8 @@ import SceneKit
         // Create a material for the hull
         let hullMaterial = SCNMaterial()
         hullMaterial.diffuse.contents = UIColor.darkGray
-        hullMaterial.lightingModel = .physicallyBased
         hullMaterial.metalness.contents = 1.0
-        hullMaterial.roughness.contents = 0.2
+        hullMaterial.roughness.contents = 1
         
         // Create a material for the handprint
         //let handprintMaterial = SCNMaterial()

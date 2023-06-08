@@ -25,7 +25,7 @@ struct Space: UIViewRepresentable {
     func updateUIView(_ uiView: SCNView, context: Context) {
         
     }
-    @MainActor class Coordinator: NSObject, SCNPhysicsContactDelegate {
+    class Coordinator: NSObject, SCNPhysicsContactDelegate {
         var view: Space
 
         init(_ view: Space) {
