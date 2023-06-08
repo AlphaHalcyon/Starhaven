@@ -42,7 +42,7 @@ class Laser {
     }
     func createLaser(color: UIColor) -> SCNParticleSystem {
         let laser = SCNParticleSystem()
-        laser.birthRate = 3500
+        laser.birthRate = 15_000
         laser.particleLifeSpan = 0.05
         laser.spreadingAngle = 0
         laser.particleSize = 5

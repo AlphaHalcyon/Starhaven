@@ -29,6 +29,7 @@
 		AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
+		AFB0EA462A318C8500313974 /* ISR.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AFB0EA452A318C8500313974 /* ISR.mp3 */; };
 		AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */; };
 		AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DB2A25A4C4009C998B /* Raider.obj */; };
 		AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DD2A25A4F0009C998B /* Raider.mtl */; };
@@ -75,6 +76,7 @@
 		AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMissile.swift; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
+		AFB0EA452A318C8500313974 /* ISR.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = ISR.mp3; path = ../../ISR.mp3; sourceTree = "<group>"; };
 		AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = HeavyBattleship.obj; sourceTree = "<group>"; };
 		AFBB77DB2A25A4C4009C998B /* Raider.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.obj; path = ../../../Downloads/Raider.obj; sourceTree = "<group>"; };
 		AFBB77DD2A25A4F0009C998B /* Raider.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.mtl; path = ../../../Downloads/Raider.mtl; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				AF63D4392A08D68F007D8A40 /* snatchHiss.wav */,
 				AF63D43B2A08D6EC007D8A40 /* snap.wav */,
 				AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */,
+				AFB0EA452A318C8500313974 /* ISR.mp3 */,
 				AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */,
 				AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */,
 				AFD4C04D29CFA48200A127BB /* Products */,
@@ -334,6 +337,7 @@
 				AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */,
 				AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */,
 				AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */,
+				AFB0EA462A318C8500313974 /* ISR.mp3 in Resources */,
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
 				AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */,
@@ -527,7 +531,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -563,7 +567,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

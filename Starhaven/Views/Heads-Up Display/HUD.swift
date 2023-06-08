@@ -62,7 +62,7 @@ struct HUDView: View {
                 Text("1").foregroundColor(self.gear==1 ? .white : .red)
                 Text("2").foregroundColor(self.gear==2 ? .white : .red)
                 Text("3").foregroundColor(self.gear==3 ? .white : .red)
-                Text("4").foregroundColor(self.gear==3 ? .white : .red)
+                Text("4").foregroundColor(self.gear==4 ? .white : .red)
             }
         }.onTapGesture {
             if self.gear == 4 {

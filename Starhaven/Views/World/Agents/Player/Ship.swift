@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SceneKit
 
-class Ship: ObservableObject {
+@MainActor class Ship: ObservableObject {
     @Published var shipNode: SCNNode = SCNNode()
     @Published var pitch: CGFloat = 0
     @Published var yaw: CGFloat = 0

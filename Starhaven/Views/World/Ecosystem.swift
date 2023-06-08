@@ -27,7 +27,7 @@ class Ecosystem: ObservableObject  {
     // LAYOUT central BH and array its satellites and debris fields at random but reasonably
     private var centralBlackHoleRadius = CGFloat.random(in: 750...1250)
     private var centralBlackHoleRingCount = Int.random(in: 16...24)
-    func createEcosystem() {
+    @MainActor func createEcosystem() {
         self.createPeripheralBlackHoles(num: 10)
         let wraithSystem = self.addFactionSystem(faction: .Wraith)
         let phantomSystem = self.addFactionSystem(faction: .Phantom)
@@ -36,9 +36,9 @@ class Ecosystem: ObservableObject  {
             self.spacegroundViewModel.scene.rootNode.addChildNode(phantomSystem)
         }
     }
-    func createPeripheralBlackHoles(num: Int) {
+    @MainActor func createPeripheralBlackHoles(num: Int) {
         var blackHoles: [SCNNode] = []
-        let minDistance: CGFloat = 40_000 // Set the minimum distance between black holes
+        let minDistance: CGFloat = 50_000 // Set the minimum distance between black holes
         var attempts = 0
         for _ in 0..<num {
             while attempts < 55 { // Limit the number of attempts to prevent an infinite loop
@@ -67,7 +67,7 @@ class Ecosystem: ObservableObject  {
     }
     
     // GHOST CREATION
-    func addFactionSystem(faction: Faction) -> SCNNode {
+    @MainActor func addFactionSystem(faction: Faction) -> SCNNode {
         let factionSystem = FactionSystem(spacegroundViewModel: self.spacegroundViewModel, faction: faction)
         return factionSystem.centralNode
     }
