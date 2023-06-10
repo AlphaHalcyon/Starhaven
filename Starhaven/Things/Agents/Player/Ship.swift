@@ -9,18 +9,18 @@ import Foundation
 import SwiftUI
 import SceneKit
 
-@MainActor class Ship: ObservableObject {
-    @Published var shipNode: SCNNode = SCNNode()
-    @Published var pitch: CGFloat = 0
-    @Published var yaw: CGFloat = 0
-    @Published var roll: CGFloat = 0
-    @Published var throttle: Float = 0
-    @Published var rearEmitterNode = SCNNode()
-    @Published var fireParticleSystem: SCNParticleSystem = SCNParticleSystem()
-    @Published var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
-    @Published var containerNode: SCNNode = SCNNode()
-    @Published var view: SCNView
-    @Published var cameraNode: SCNNode
+@MainActor class Ship {
+    var shipNode: SCNNode = SCNNode()
+    var pitch: CGFloat = 0
+    var yaw: CGFloat = 0
+    var roll: CGFloat = 0
+    var throttle: Float = 0
+    var rearEmitterNode = SCNNode()
+    var fireParticleSystem: SCNParticleSystem = SCNParticleSystem()
+    var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
+    var containerNode: SCNNode = SCNNode()
+    var view: SCNView
+    var cameraNode: SCNNode
     init(view: SCNView, cameraNode: SCNNode) {
         self.view = view
         self.cameraNode = cameraNode
@@ -67,9 +67,11 @@ import SceneKit
             modelNode.position = SCNVector3(0, -15, 0)
             modelNode.eulerAngles.x = -.pi/12
             self.shipNode = modelNode
+            //self.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+            self.shipNode.geometry?.firstMaterial?.lightingModel = .physicallyBased
             let containerNode = SCNNode()
             containerNode.geometry = SCNGeometry()
-            containerNode.addChildNode(modelNode)
+            //containerNode.addChildNode(modelNode)
             self.containerNode = containerNode
             return containerNode
         }

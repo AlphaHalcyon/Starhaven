@@ -10,8 +10,8 @@ import SceneKit
 import GLKit
 import simd
 
-@MainActor class Raider: ObservableObject {
-    var spacegroundViewModel: SpacegroundViewModel
+@MainActor class Raider {
+    unowned var spacegroundViewModel: SpacegroundViewModel
     var shipNode: SCNNode = SCNNode()
     var throttle: Float = 0
     var rearEmitterNode = SCNNode()

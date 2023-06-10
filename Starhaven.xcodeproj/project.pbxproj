@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
 		AF0C5C522A2F3CD600D6D008 /* she never loved u bro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */; };
+		AF12B9A72A33BADA0068D352 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A62A33BADA0068D352 /* SceneManager.swift */; };
+		AF12B9A92A33DFFF0068D352 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A82A33DFFF0068D352 /* PhysicsManager.swift */; };
+		AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9AA2A344D380068D352 /* ParticleManager.swift */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
 		AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */; };
@@ -56,6 +59,9 @@
 /* Begin PBXFileReference section */
 		AF07021C29E120D300667F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "she never loved u bro.mp3"; path = "../../she never loved u bro.mp3"; sourceTree = "<group>"; };
+		AF12B9A62A33BADA0068D352 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
+		AF12B9A82A33DFFF0068D352 /* PhysicsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsManager.swift; sourceTree = "<group>"; };
+		AF12B9AA2A344D380068D352 /* ParticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleManager.swift; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
 		AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVN.mp3; path = ../../Music/Logic/Bounces/HVN.mp3; sourceTree = "<group>"; };
@@ -142,8 +148,9 @@
 		AFD4C04E29CFA48200A127BB /* Starhaven */ = {
 			isa = PBXGroup;
 			children = (
+				AFF42A8829E773FD00B6C603 /* Views */,
 				AFD7EEBE2A2E891D00A92162 /* ViewModel */,
-				AFD7EEBF2A2E892500A92162 /* Views */,
+				AFD7EEBF2A2E892500A92162 /* Things */,
 				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
 				AFD4C05329CFA48400A127BB /* Assets.xcassets */,
 				AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */,
@@ -177,19 +184,23 @@
 			isa = PBXGroup;
 			children = (
 				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
+				AF12B9A62A33BADA0068D352 /* SceneManager.swift */,
+				AF12B9AA2A344D380068D352 /* ParticleManager.swift */,
+				AF12B9A82A33DFFF0068D352 /* PhysicsManager.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		AFD7EEBF2A2E892500A92162 /* Views */ = {
+		AFD7EEBF2A2E892500A92162 /* Things */ = {
 			isa = PBXGroup;
 			children = (
-				AFDE46F029F9133B00401509 /* World */,
-				AFDE46EC29F9121500401509 /* Heads-Up Display */,
-				AFF42A8829E773FD00B6C603 /* Space View */,
+				AFDE46E729F908CA00401509 /* Ecosystem.swift */,
+				AFDE46ED29F9125800401509 /* Agents */,
+				AFDE46EB29F911F600401509 /* Projectiles */,
+				AFF42A8729E773D000B6C603 /* Celestial Objects */,
 				AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */,
 			);
-			path = Views;
+			path = Things;
 			sourceTree = "<group>";
 		};
 		AFDE46EB29F911F600401509 /* Projectiles */ = {
@@ -244,17 +255,6 @@
 			path = Player;
 			sourceTree = "<group>";
 		};
-		AFDE46F029F9133B00401509 /* World */ = {
-			isa = PBXGroup;
-			children = (
-				AFDE46E729F908CA00401509 /* Ecosystem.swift */,
-				AFDE46ED29F9125800401509 /* Agents */,
-				AFDE46EB29F911F600401509 /* Projectiles */,
-				AFF42A8729E773D000B6C603 /* Celestial Objects */,
-			);
-			path = World;
-			sourceTree = "<group>";
-		};
 		AFF42A8729E773D000B6C603 /* Celestial Objects */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,14 +266,15 @@
 			path = "Celestial Objects";
 			sourceTree = "<group>";
 		};
-		AFF42A8829E773FD00B6C603 /* Space View */ = {
+		AFF42A8829E773FD00B6C603 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AFDE46EC29F9121500401509 /* Heads-Up Display */,
 				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
 				AFDBFDD929DD2775006DEB3E /* Spaceground.swift */,
 				AF6388D929DF77940086C90F /* Space.swift */,
 			);
-			path = "Space View";
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -374,9 +375,12 @@
 				AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */,
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
+				AF12B9A72A33BADA0068D352 /* SceneManager.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
 				AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */,
 				AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */,
+				AF12B9A92A33DFFF0068D352 /* PhysicsManager.swift in Sources */,
+				AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
