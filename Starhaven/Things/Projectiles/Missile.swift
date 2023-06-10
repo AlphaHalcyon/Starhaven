@@ -29,7 +29,7 @@ import SwiftUI
         physicsBody.collisionBitMask = CollisionCategory.enemyShip
         physicsBody.contactTestBitMask = CollisionCategory.enemyShip
         // Create red particle system
-        self.particleSystem = ParticleManager.createMissileTrail(color: .cyan)
+        self.particleSystem = ParticleManager.createShipMissileTrail(color: .cyan)
         // Attach red particle system to the tail of the missile
         let emitterNode = SCNNode()
         emitterNode.position = SCNVector3(0, 0, -25)
@@ -55,7 +55,7 @@ import SwiftUI
     public func trackTarget() {
         if let target = self.target {
             // Predict the future position of the target
-            let predictionTime: TimeInterval = 1
+            let predictionTime: TimeInterval = 2
             let targetVelocity = target.physicsBody?.velocity ?? SCNVector3Zero
             let predictedTargetPosition = target.presentation.position + (targetVelocity * Float(predictionTime))
             // Update missile's velocity
@@ -84,7 +84,6 @@ import SwiftUI
         self.detonate() // boom
     }
     func detonate() {
-        let coronaGeo = SCNSphere(radius: 50)
         // Add the particle system to the warhead
         let implodeAction = SCNAction.scale(to: 10, duration: 0.20)
         let implodeActionStep = SCNAction.scale(to: 5, duration: 1)

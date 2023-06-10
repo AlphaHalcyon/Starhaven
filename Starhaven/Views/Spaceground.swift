@@ -49,9 +49,16 @@ struct Spaceground: View {
         Space()
             .gesture(
                 LongPressGesture(minimumDuration: 0.0001)
-                    .onEnded { _ in
-                        if !self.spacecraftViewModel.longPressTimer && !self.spacecraftViewModel.view.allowsCameraControl {
-                                spacecraftViewModel.isPressed.toggle()
+                    .onChanged { value in
+                        if value {
+                            if !self.spacecraftViewModel.view.allowsCameraControl {
+                                self.spacecraftViewModel.isPressed = true
+                                self.spacecraftViewModel.isDragging = true
+                            }
+                        } else {
+                            if !self.spacecraftViewModel.view.allowsCameraControl {
+                                self.spacecraftViewModel.isPressed = false
+                            }
                         }
                     }
             )
@@ -59,11 +66,15 @@ struct Spaceground: View {
                 DragGesture(minimumDistance: 0.0001)
                     .onChanged { value in
                         if !self.spacecraftViewModel.view.allowsCameraControl {
-                            spacecraftViewModel.dragChanged(value: value) }
+                            self.spacecraftViewModel.dragChanged(value: value)
+                        }
                     }
                     .onEnded { _ in
-                        if !self.spacecraftViewModel.view.allowsCameraControl { spacecraftViewModel.dragEnded() }
+                        if !self.spacecraftViewModel.view.allowsCameraControl {
+                            spacecraftViewModel.dragEnded()
+                        }
                     }
-            ).environmentObject(spacecraftViewModel)
+            )
+            .environmentObject(spacecraftViewModel)
     }
 }

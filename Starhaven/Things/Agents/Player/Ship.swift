@@ -25,24 +25,6 @@ import SceneKit
         self.view = view
         self.cameraNode = cameraNode
     }
-    // WEAPONS MECHANICS
-    func fireMissile(target: SCNNode? = nil) -> Missile {
-        print("fire!")
-        let missile = Missile(target: target, particleSystemColor: .red, viewModel: SpacegroundViewModel(view: SCNView(), cameraNode: SCNNode()))
-        // Convert shipNode's local position to world position
-        let worldPosition = shipNode.convertPosition(SCNVector3(0, -15, 5), to: containerNode.parent)
-        
-        missile.missileNode.position = worldPosition
-        missile.missileNode.orientation = shipNode.presentation.orientation
-        missile.missileNode.eulerAngles.x += Float.pi / 2
-        let direction = shipNode.presentation.worldFront
-        let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        let missileForce = CGFloat(abs(throttle) + 1) * 2 * missileMass
-        missile.missileNode.physicsBody?.velocity = self.shipNode.physicsBody!.velocity
-        missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        containerNode.parent!.addChildNode(missile.missileNode)
-        return missile
-    }
     func fireLaser(target: SCNNode? = nil) {
         print("fire laser!")
         let laser = Laser(target: target, color: .purple)
@@ -63,12 +45,12 @@ import SceneKit
         // Load the spaceship model
         // Usage:
         if let modelNode = loadOBJModel(named: "Raider") {
-            modelNode.scale = SCNVector3(scale, scale, scale)
-            modelNode.position = SCNVector3(0, -15, 0)
-            modelNode.eulerAngles.x = -.pi/12
-            self.shipNode = modelNode
-            //self.shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-            self.shipNode.geometry?.firstMaterial?.lightingModel = .physicallyBased
+            //modelNode.scale = SCNVector3(scale, scale, scale)
+            //modelNode.position = SCNVector3(0, -15, 0)
+            //modelNode.eulerAngles.x = -.pi/12
+            //self.shipNode = modelNode
+            //self.shipNode.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
+            //self.shipNode.geometry?.firstMaterial?.lightingModel = .physicallyBased
             let containerNode = SCNNode()
             containerNode.geometry = SCNGeometry()
             //containerNode.addChildNode(modelNode)

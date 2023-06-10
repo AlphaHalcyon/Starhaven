@@ -84,10 +84,10 @@ import simd
                                 self.shipNode.worldPosition.z + normalizedDirection.z * speed
                             )
                         }
-                        if Float.random(in: 0...1) > 0.995 {
+                        if Float.random(in: 0...1) > 0.998 {
                             self.fireLaser(color: self.faction == .Wraith ? .red : .green)
                         }
-                        if Float.random(in: 0...1) > 0.999 {
+                        if Float.random(in: 0...1) > 0.9985 {
                             self.fireMissile(target: self.currentTarget, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
                         }
                     }
@@ -110,13 +110,13 @@ import simd
     }
     func getEvasionOffset() -> SCNVector3 {
         // Define the scale of the sinusoidal evasion
-        let evasionScale: Float = 5.0
-
+        let evasionScale: Float = 15.0
+        let sign: Float = self.faction == .Wraith ? -1.0 : 1.0
         // Combine multiple sinusoids for a more organic evasion pattern
         let evasionSpiralOffset = SCNVector3(
-            evasionScale * sin(Float(self.currentTime)),
-            evasionScale * sin(Float(self.currentTime) / 2),
-            evasionScale * cos(Float(self.currentTime) / 3)
+            evasionScale * sin(Float(self.currentTime)) * sign,
+            evasionScale * sin(Float(self.currentTime) / 2) * sign,
+            evasionScale * cos(Float(self.currentTime) / 3 * sign)
         )
 
         return evasionSpiralOffset
@@ -151,7 +151,7 @@ import simd
             let missileMass = missile.missileNode.physicsBody?.mass ?? 1
             missile.missileNode.orientation = self.shipNode.presentation.orientation
             missile.missileNode.eulerAngles.x += Float.pi / 2
-            let missileForce = CGFloat(self.throttle + 1) * 10_000 * missileMass
+            let missileForce = CGFloat(self.throttle + 1) * 12_000 * missileMass
             missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
             self.spacegroundViewModel.view.prepare([missile.missileNode]) { success in
                 DispatchQueue.main.async {
@@ -171,7 +171,7 @@ import simd
             laser.laserNode.eulerAngles.x += Float.pi / 2
             let direction = self.shipNode.presentation.worldFront
             let laserMass = laser.laserNode.physicsBody?.mass ?? 1
-            let laserForce = CGFloat(abs(self.throttle) + 1) * 12_000 * laserMass
+            let laserForce = CGFloat(abs(self.throttle) + 1) * 11_000 * laserMass
             laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
             self.spacegroundViewModel.view.prepare([laser.laserNode]) { success in
                 self.spacegroundViewModel.scene.rootNode.addChildNode(laser.laserNode)

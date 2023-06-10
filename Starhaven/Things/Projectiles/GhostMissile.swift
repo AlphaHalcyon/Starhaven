@@ -15,13 +15,20 @@ import SwiftUI
     var particleSystem: SCNParticleSystem = SCNParticleSystem()
     var explosionNode: SCNNode = SCNNode()
     var timer: Timer = Timer()
-    var viewModel: SpacegroundViewModel
+    unowned var viewModel: SpacegroundViewModel
+    static let missileGeometry: SCNNode = {
+        guard let url = Bundle.main.url(forResource: "dh10", withExtension: "obj") else { return SCNNode() }
+        let asset = MDLAsset(url: url)
+        guard let object = asset.object(at: 0) as? MDLMesh else { return SCNNode() }
+        let node = SCNNode(mdlObject: object)
+        return node
+    }()
     init(target: SCNNode? = nil, particleSystemColor: UIColor, viewModel: SpacegroundViewModel) {
         self.target = target
         self.viewModel = viewModel
         // Create missile geometry and node
         // Load the missile model
-        self.missileNode = loadOBJModel(named: "dh10") ?? SCNNode()
+        self.missileNode = GhostMissile.missileGeometry.clone()
         self.missileNode.scale = SCNVector3(15, 15, 15)
         // Adjust the physicsBody
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
@@ -34,19 +41,16 @@ import SwiftUI
         self.particleSystem = ParticleManager.createMissileTrail(color: particleSystemColor)
 
         // Attach red particle system to the tail of the missile
-        let emitterNode = SCNNode()
-        emitterNode.position = SCNVector3(0, 0, -25)
-        emitterNode.addParticleSystem(self.particleSystem)
+        self.missileNode.addParticleSystem(self.particleSystem)
         DispatchQueue.main.async {
-            self.missileNode.addChildNode(emitterNode)
             self.missileNode.physicsBody?.isAffectedByGravity = false
             self.missileNode.physicsBody?.friction = 0
             self.missileNode.physicsBody?.damping = 0
             if let target = self.target {
                 self.missileNode.look(at: target.presentation.position)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                self.missileNode.removeFromParentNode()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                self.detonate()
             }
         }
     }
@@ -57,28 +61,11 @@ import SwiftUI
         self.missileNode.constraints = [lookAtConstraint]
     }
     func detonate() {
-        DispatchQueue.global().async {
-            let coronaGeo = SCNSphere(radius: 75)
-            
-            // Missile trail particle system
-            let fireParticleSystem = ParticleManager.createMissileExplosion()
-
-            // Add the particle system to the warhead
-            let implodeAction = SCNAction.scale(to: 8, duration: 0.5)
-            let implodeActionStep = SCNAction.scale(to: 5, duration: 1)
-            let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
-            let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
-            DispatchQueue.main.async {
-                self.explosionNode.addParticleSystem(fireParticleSystem)
-                self.viewModel.view.prepare([self.explosionNode]) { success in
-                    self.missileNode.addChildNode(self.explosionNode)
-                    self.explosionNode.runAction(SCNAction.repeat(pulseSequence, count: 1))
-                    // Remove the missile node from the scene after a delay
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        self.missileNode.removeFromParentNode()
-                    }
-                }
-            }
+        self.missileNode.physicsBody?.velocity = SCNVector3(0,0,0)
+        let pos = self.missileNode.presentation.worldPosition
+        self.viewModel.createExplosion(at: pos)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.missileNode.removeFromParentNode()
         }
     }
     // In the Missile class, add the following function:

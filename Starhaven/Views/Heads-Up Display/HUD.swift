@@ -74,7 +74,7 @@ struct HUDView: View {
         HStack {
             VStack {
                 Spacer()
-                CustomSlider(value: self.$spacecraftViewModel.ship.throttle, range: -125 * Float(self.gear)...125 * Float(self.gear), onChange: { val in
+                CustomSlider(value: self.$spacecraftViewModel.ship.throttle, range: -200 * Float(self.gear)...200 * Float(self.gear), onChange: { val in
                     // changes here
                 })
             }
