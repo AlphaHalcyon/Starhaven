@@ -12,27 +12,52 @@ import GLKit
 import simd
 import SceneKit.ModelIO
 class Dreadknought: ObservableObject {
-    @Published var spacegroundViewModel: SpacegroundViewModel
-    @Published var shipNode: SCNNode = SCNNode()
-    @Published var rearEmitterNode = SCNNode()
-    @Published var fireParticleSystem: SCNParticleSystem = SCNParticleSystem()
-    @Published var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
-    @Published var containerNode: SCNNode = SCNNode()
-    @Published var currentTime: TimeInterval = 0.0
-    @Published var timer: Timer = Timer()
-    @Published var faction: Faction
-    @Published var scale: CGFloat = 0
-    
+    var spacegroundViewModel: SpacegroundViewModel
+    var shipNode: SCNNode = SCNNode()
+    var rearEmitterNode = SCNNode()
+    var fireParticleSystem: SCNParticleSystem = SCNParticleSystem()
+    var waterParticleSystem: SCNParticleSystem = SCNParticleSystem()
+    var containerNode: SCNNode = SCNNode()
+    var currentTime: TimeInterval = 0.0
+    var timer: Timer = Timer()
+    var faction: Faction
+    var scale: CGFloat = 0
+    var reactorCoreNode: SCNNode = SCNNode()
     // INIT
     init(spacegroundViewModel: SpacegroundViewModel, faction: Faction = .Wraith) {
         self.spacegroundViewModel = spacegroundViewModel
         self.faction = faction
+    }
+    func createReactorCore(parentNode: SCNNode) {
+        // Create reactor core geometry and material
+        let coreGeometry = SCNSphere(radius: 100.0) // Modify radius as needed
+        let coreMaterial = SCNMaterial()
+        coreMaterial.diffuse.contents = UIColor.red
+        coreGeometry.materials = [coreMaterial]
+
+        // Create reactor core node
+        self.reactorCoreNode = SCNNode(geometry: coreGeometry)
+        self.reactorCoreNode.name = "ReactorCore"
+
+        // Position core at the center of the ship
+        self.reactorCoreNode.position = SCNVector3(0, 0, 0) // Adjust position as needed
+
+        // Create physics body for collision detection
+        let physicsShape = SCNPhysicsShape(geometry: coreGeometry, options: nil)
+        let physicsBody = SCNPhysicsBody(type: .static, shape: physicsShape)
+        physicsBody.isAffectedByGravity = false
+        physicsBody.categoryBitMask = 1 << 1 // Define category for collision detection
+        self.reactorCoreNode.physicsBody = physicsBody
+
+        // Add reactor core node to ship node
+        parentNode.addChildNode(self.reactorCoreNode)
     }
     func createShip(scale: CGFloat = 0.1) -> SCNNode {
         // Load the spaceship model
         // Usage:
         if let modelNode = loadOBJModel(named: "HeavyBattleship") {
             modelNode.scale = SCNVector3(scale, scale, scale)
+            self.createReactorCore(parentNode: modelNode)
             return modelNode
         }
         else {

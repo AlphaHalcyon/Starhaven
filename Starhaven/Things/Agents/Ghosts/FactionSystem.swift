@@ -27,7 +27,7 @@ import SceneKit
             print("ghost")
             let dreadknought = halcyon.createShip(scale: 3)
             let offsetX: Float = 30 * Float(self.droneLimit) * self.scale * (self.faction == .Phantom ? -1 : 1)
-            dreadknought.position = SCNVector3(x: offsetX - 15_000, y: 0, z: 200)
+            dreadknought.position = SCNVector3(x: offsetX, y: 0, z: 200)
             self.spacegroundViewModel.view.prepare([dreadknought]) { success in
                 self.spacegroundViewModel.scene.rootNode.addChildNode(dreadknought)
             }
@@ -42,8 +42,8 @@ import SceneKit
             let raiderNode = raider.createShip(scale: CGFloat.random(in: 4...5))
             self.spacegroundViewModel.view.prepare([raiderNode]) { sucess in
                 raiderNode.position = SCNVector3(x: offsetX + Float.random(in:-200...200), y: Float.random(in:-2000...2000), z: offsetZ)
+                self.spacegroundViewModel.scene.rootNode.addChildNode(raiderNode)
                 DispatchQueue.main.async {
-                    self.spacegroundViewModel.scene.rootNode.addChildNode(raiderNode)
                     self.spacegroundViewModel.ghosts.append(raider)
                 }
             }

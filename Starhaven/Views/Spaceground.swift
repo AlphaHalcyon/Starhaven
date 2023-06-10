@@ -50,8 +50,8 @@ struct Spaceground: View {
             .gesture(
                 LongPressGesture(minimumDuration: 0.0001)
                     .onEnded { _ in
-                        if !self.spacecraftViewModel.view.allowsCameraControl {
-                            spacecraftViewModel.isPressed.toggle()
+                        if !self.spacecraftViewModel.longPressTimer && !self.spacecraftViewModel.view.allowsCameraControl {
+                                spacecraftViewModel.isPressed.toggle()
                         }
                     }
             )

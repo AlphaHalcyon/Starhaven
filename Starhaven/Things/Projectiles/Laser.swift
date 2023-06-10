@@ -12,9 +12,11 @@ import SceneKit
 class Laser {
     var laserNode: SCNNode
     var target: SCNNode?
-    var laserParticleSystem: SCNParticleSystem = SCNParticleSystem()
+    var laserParticleSystem: SCNParticleSystem
+    
     init(target: SCNNode? = nil, color: UIColor) {
         self.target = target
+        self.laserParticleSystem = color == .red ? ParticleManager.laserWraithParticleSystem : ParticleManager.laserPhantomParticleSystem
         let laserGeometry = SCNCylinder(radius: 0.1, height: 1)
         laserGeometry.firstMaterial?.diffuse.contents = UIColor.red
         self.laserNode = SCNNode(geometry: laserGeometry)
@@ -25,7 +27,7 @@ class Laser {
         physicsBody.collisionBitMask = CollisionCategory.enemyShip
         physicsBody.contactTestBitMask = CollisionCategory.enemyShip
         self.laserNode.physicsBody = physicsBody      // Create laser particle system
-        self.laserParticleSystem = self.createLaser(color: color)
+        self.laserParticleSystem.particleColor = color
         self.laserParticleSystem.emitterShape = laserGeometry
         // Attach laser particle system to the tail of the laser
         let emitterNode = SCNNode()

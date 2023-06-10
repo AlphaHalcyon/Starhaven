@@ -100,7 +100,6 @@ import AVFoundation
         self.audioPlayer.volume = 0.24
         self.musicPlayer.volume = 0.25
     }
-
     // This method will be called once per frame
     @MainActor func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         
@@ -542,47 +541,27 @@ import AVFoundation
         }
     }
     @MainActor func createExplosion(at position: SCNVector3) {
-        let coronaGeo = SCNSphere(radius: 200)
-        
-        // Create the particle system programmatically
-        let fireParticleSystem = SCNParticleSystem()
-        fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
-        fireParticleSystem.birthRate = 400_000
-        fireParticleSystem.particleSize = 1
-        fireParticleSystem.particleIntensity = 1
-        fireParticleSystem.particleLifeSpan = 0.4
-        fireParticleSystem.spreadingAngle = 180
-        fireParticleSystem.particleAngularVelocity = 90
-        fireParticleSystem.emitterShape = coronaGeo
-        // Make the particle system surface-based
-        fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
-        
-        // Create an SCNNode to hold the particle system
         let explosionNode = SCNNode()
-        
-        // Set the position of the explosion
         explosionNode.position = position
+        explosionNode.addParticleSystem(ParticleManager.explosionParticleSystem)
         
-        // Add the explosion particle system to the node
-        explosionNode.addParticleSystem(fireParticleSystem)
-        // Configure and run the scale actions
         let implodeAction = SCNAction.scale(to: 5, duration: 0.40)
         let implodeActionStep = SCNAction.scale(to: 2.5, duration: 1)
         let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
         let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
-        self.view.prepare([explosionNode]) { succcess in
+        
+        self.view.prepare([explosionNode]) { success in
             DispatchQueue.main.async {
-                // Add the explosion node to the scene
                 self.scene.rootNode.addChildNode(explosionNode)
                 explosionNode.runAction(SCNAction.repeat(pulseSequence, count: 1))
 
-                // Remove the explosion node after some time (e.g., 2 seconds)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     explosionNode.removeFromParentNode()
                 }
             }
         }
     }
+
     func setupPhysics() {
         self.scene.physicsWorld.contactDelegate = self
     }
