@@ -15,8 +15,9 @@ struct ContentView: View {
         Spaceground()
     }
 }
-struct Spaceground: View {
+@MainActor struct Spaceground: View {
     @StateObject var spacecraftViewModel = SpacegroundViewModel(view: SCNView(), cameraNode: SCNNode())
+    @State var userSelectedContinue: Bool = false
     var body: some View {
         if self.spacecraftViewModel.gameOver {
             Text("GAME OVER! SCORE: \(self.spacecraftViewModel.points)")
@@ -25,7 +26,7 @@ struct Spaceground: View {
         else {
             ZStack {
                 self.space
-                if self.spacecraftViewModel.loadingSceneView {
+                if !self.userSelectedContinue {
                     self.loadScreen
                 }
                 else {
@@ -35,29 +36,50 @@ struct Spaceground: View {
         }
     }
     var loadScreen: some View {
-        ZStack {
-            Image("sky").resizable().frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .center)
-            VStack {
-                Spacer()
-                Image("Launch").resizable().scaledToFit()
-                Spacer()
-            }
-            Text("HVN").font(.custom("Avenir Next Regular", size: 136)).foregroundColor(.white)
-        }
+        VStack(spacing: 15) {
+            Text("HVN")
+                .font(.custom("Avenir Next Regular", size: 136)).foregroundColor(self.spacecraftViewModel.loadingSceneView ? .gray : .red)
+            Spacer()
+            Text("The Office of Stellar-Naval Research has instructed you to harvest a rogue system of black holes in Messier 87's 'Starhaven' region.").multilineTextAlignment(.center).font(.body).foregroundColor(.white)
+            Text("Other factions are dueling for control of the region and its contents. They will be distracted with each other; engage them at your own risk, and earn points for destroying them.").multilineTextAlignment(.center).font(.body).foregroundColor(.white)
+            Text("Collect all the black holes in the area by flying directly into them to earn points. Your Higgs Decoupling Drive should render your ship massless and safe.").multilineTextAlignment(.center).font(.body).foregroundColor(.white)
+            Spacer()
+            Text("CONTINUE")
+                .font(.custom("Avenir Next Regular", size: 50))
+                .foregroundColor(self.spacecraftViewModel.loadingSceneView ? .gray : .red)
+                .onTapGesture {
+                    if !self.spacecraftViewModel.loadingSceneView { self.userSelectedContinue = true }
+                }.padding()
+            Spacer()
+            // PRACTICE YOUR BARREL ROLLS
+            Text("Tip: \(self.generateTip())")
+                .font(.custom("Avenir Next Italic", size: 21))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+            HStack { Spacer() }
+        }.background(.black)
+    }
+    func generateTip() -> String {
+        return "Remember to practice your barrel rolls!"
     }
     var space: some View {
         Space()
             .gesture(
-                LongPressGesture(minimumDuration: 0.0001)
+                LongPressGesture(minimumDuration: 0.001)
                     .onChanged { value in
-                        if value {
-                            if !self.spacecraftViewModel.view.allowsCameraControl {
-                                self.spacecraftViewModel.isPressed = true
-                                self.spacecraftViewModel.isDragging = true
-                            }
+                        if self.spacecraftViewModel.isDragging {
+                            self.spacecraftViewModel.isPressed = false
+                            self.spacecraftViewModel.dragEnded()
                         } else {
-                            if !self.spacecraftViewModel.view.allowsCameraControl {
-                                self.spacecraftViewModel.isPressed = false
+                            if value {
+                                if !self.spacecraftViewModel.view.allowsCameraControl {
+                                    self.spacecraftViewModel.isPressed = true
+                                    self.spacecraftViewModel.isDragging = true
+                                }
+                            } else {
+                                if !self.spacecraftViewModel.view.allowsCameraControl {
+                                    self.spacecraftViewModel.isPressed = false
+                                }
                             }
                         }
                     }

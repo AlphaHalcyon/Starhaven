@@ -30,18 +30,21 @@ import simd
     var isEngaging: Bool = false
     var barrelRollStartTime: TimeInterval = 0
     var barrelRollDuration: TimeInterval = 0
-    var barrelRollHeight: TimeInterval = 0
-    init(spacegroundViewModel: SpacegroundViewModel, faction: Faction) {
+    var modelNode: SCNNode // Add a new property to store the shared modelNode
+    init(spacegroundViewModel: SpacegroundViewModel, faction: Faction, modelNode: SCNNode) {
         self.faction = faction
         self.spacegroundViewModel = spacegroundViewModel
+        self.modelNode = modelNode // Store the passed in modelNode
+        self.createShip()
         self.selectNewTarget()
     }
+
     // GHOST MOVEMENTS
-    @MainActor public func updateAI() {
+    public func updateAI() {
         Task {
             // Check if the current target is still valid
             if self.ghostGhount != self.spacegroundViewModel.ghosts.count {
-                if self.currentTarget != nil {
+                if self.currentTarget != nil && Float.random(in: 0...1) < 0.99 {
                     if !self.spacegroundViewModel.ghosts.contains(where: { $0.shipNode == self.currentTarget! }) { self.selectNewTarget() }
                     self.ghostGhount = self.spacegroundViewModel.ghosts.count
                 }
@@ -53,43 +56,41 @@ import simd
                 let pos = self.shipNode.worldPosition
                 let targetPos = target.worldPosition
                 // Update the enemy ship's behavior based on the current target
-                DispatchQueue.global().async {
-                    // Create and apply a SCNLookAtConstraint to make the enemy ship always face the current target's position
-                    let constraint = SCNLookAtConstraint(target: target)
-                    constraint.isGimbalLockEnabled = true
-                    // Move the enemy ship towards the current target's position by a fixed amount on each frame
-                    let direction = targetPos - pos
-                    let distance = direction.length()
-                    let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
+                // Create and apply a SCNLookAtConstraint to make the enemy ship always face the current target's position
+                let constraint = SCNLookAtConstraint(target: target)
+                constraint.isGimbalLockEnabled = true
+                // Move the enemy ship towards the current target's position by a fixed amount on each frame
+                let direction = targetPos - pos
+                let distance = direction.length()
+                let normalizedDirection = SCNVector3(direction.x / distance, direction.y / distance, direction.z / distance)
+                
+                // Set a minimum distance between the enemy and player ships
+                let minDistance: Float = 35_000
+                
+                DispatchQueue.main.async {
+                    self.shipNode.constraints = [constraint]
+                    let speed: Float = 8 * Float.random(in: 0.5...1.05)
                     
-                    // Set a minimum distance between the enemy and player ships
-                    let minDistance: Float = 30_000
-                    
-                    DispatchQueue.main.async {
-                        self.shipNode.constraints = [constraint]
-                        let speed: Float = 15 * Float.random(in: 0.5...1.05)
-                        
-                        if distance < minDistance {
-                            // Complex chase
-                            let chaseOffset = self.getChaseOffset()
-                            self.shipNode.worldPosition = SCNVector3(
-                                self.shipNode.worldPosition.x + chaseOffset.x * speed,
-                                self.shipNode.worldPosition.y + chaseOffset.y * speed,
-                                self.shipNode.worldPosition.z + chaseOffset.z * speed
-                            )
-                        } else if distance > minDistance {
-                            self.shipNode.worldPosition = SCNVector3(
-                                self.shipNode.worldPosition.x + normalizedDirection.x * speed,
-                                self.shipNode.worldPosition.y + normalizedDirection.y * speed,
-                                self.shipNode.worldPosition.z + normalizedDirection.z * speed
-                            )
-                        }
-                        if Float.random(in: 0...1) > 0.998 {
-                            self.fireLaser(color: self.faction == .Wraith ? .red : .green)
-                        }
-                        if Float.random(in: 0...1) > 0.9985 {
-                            self.fireMissile(target: self.currentTarget, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
-                        }
+                    if distance < minDistance {
+                        // Complex chase
+                        let chaseOffset = self.getChaseOffset()
+                        self.shipNode.worldPosition = SCNVector3(
+                            self.shipNode.worldPosition.x + chaseOffset.x * speed,
+                            self.shipNode.worldPosition.y + chaseOffset.y * speed,
+                            self.shipNode.worldPosition.z + chaseOffset.z * speed
+                        )
+                    } else if distance > minDistance {
+                        self.shipNode.worldPosition = SCNVector3(
+                            self.shipNode.worldPosition.x + normalizedDirection.x * speed,
+                            self.shipNode.worldPosition.y + normalizedDirection.y * speed,
+                            self.shipNode.worldPosition.z + normalizedDirection.z * speed
+                        )
+                    }
+                    if Float.random(in: 0...1) > 0.998 {
+                        //self.fireLaser(color: self.faction == .Wraith ? .red : .green)
+                    }
+                    if Float.random(in: 0...1) > 0.998 {
+                        self.fireMissile(target: self.currentTarget, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
                     }
                 }
             }
@@ -97,7 +98,7 @@ import simd
     }
     func getChaseOffset() -> SCNVector3 {
         // Define the scale of the sinusoidal chase
-        let chaseScale: Float = 2.0
+        let chaseScale: Float = 0.5
 
         // Combine multiple sinusoids for a more complex chase pattern
         let chaseSpiralOffset = SCNVector3(
@@ -110,7 +111,7 @@ import simd
     }
     func getEvasionOffset() -> SCNVector3 {
         // Define the scale of the sinusoidal evasion
-        let evasionScale: Float = 15.0
+        let evasionScale: Float = 0.5
         let sign: Float = self.faction == .Wraith ? -1.0 : 1.0
         // Combine multiple sinusoids for a more organic evasion pattern
         let evasionSpiralOffset = SCNVector3(
@@ -140,7 +141,7 @@ import simd
     }
 
     // WEAPONS MECHANICS
-    @MainActor func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
+    func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
         Task {
             let missile = GhostMissile(target: target, particleSystemColor: particleSystemColor, viewModel: self.spacegroundViewModel)
             // Convert shipNode's local position to world position
@@ -151,7 +152,7 @@ import simd
             let missileMass = missile.missileNode.physicsBody?.mass ?? 1
             missile.missileNode.orientation = self.shipNode.presentation.orientation
             missile.missileNode.eulerAngles.x += Float.pi / 2
-            let missileForce = CGFloat(self.throttle + 1) * 12_000 * missileMass
+            let missileForce = CGFloat(self.throttle + 1) * 12_500 * missileMass
             missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
             self.spacegroundViewModel.view.prepare([missile.missileNode]) { success in
                 DispatchQueue.main.async {
@@ -171,61 +172,25 @@ import simd
             laser.laserNode.eulerAngles.x += Float.pi / 2
             let direction = self.shipNode.presentation.worldFront
             let laserMass = laser.laserNode.physicsBody?.mass ?? 1
-            let laserForce = CGFloat(abs(self.throttle) + 1) * 11_000 * laserMass
+            let laserForce = CGFloat(abs(self.throttle) + 1) * 14_000 * laserMass
             laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
             self.spacegroundViewModel.view.prepare([laser.laserNode]) { success in
                 self.spacegroundViewModel.scene.rootNode.addChildNode(laser.laserNode)
             }
         }
     }
-
-    func createShip(scale: CGFloat = 0.1) -> SCNNode {
-        // Load the spaceship model
-        // Usage:
-        if let modelNode = loadOBJModel(named: "Raider") {
-            modelNode.scale = SCNVector3(scale, scale, scale)
-            self.shipNode = modelNode
-            // Create the physics body for the enemy ship using its geometry
-            let shape = SCNPhysicsShape(node: shipNode, options: [.keepAsCompound: true])
-            shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: shape)
-            shipNode.physicsBody?.isAffectedByGravity = false
-            // Set the category, collision, and contact test bit masks
-            self.shipNode.physicsBody?.categoryBitMask = CollisionCategory.enemyShip
-            self.shipNode.physicsBody?.collisionBitMask = CollisionCategory.missile
-            self.shipNode.physicsBody?.contactTestBitMask = CollisionCategory.laser | CollisionCategory.missile
-            shipNode.physicsBody?.collisionBitMask &= ~CollisionCategory.laser
-            return modelNode
-        }
-        else {
-            print("failed")
-            return SCNNode()
-        }
-    }
-    func loadOBJModel(named name: String) -> SCNNode? {
-        guard let url = Bundle.main.url(forResource: name, withExtension: "obj") else { return nil }
-        let asset = MDLAsset(url: url)
-        guard let object = asset.object(at: 0) as? MDLMesh else { return nil }
-        let node = SCNNode(mdlObject: object)
-        return self.applyHullMaterials(to: node)
-    }
-    func applyHullMaterials(to node: SCNNode) -> SCNNode {
-        // Create a material for the hull
-        let hullMaterial = SCNMaterial()
-        hullMaterial.diffuse.contents = UIColor.darkGray
-        hullMaterial.lightingModel = .physicallyBased
-        hullMaterial.metalness.contents = 1
-        hullMaterial.roughness.contents = 1
-        
-        // Create a material for the handprint
-        //let handprintMaterial = SCNMaterial()
-        //handprintMaterial.diffuse.contents = UIImage(named: "handprint.png")
-        
-        // Create a material for the white lines
-        let linesMaterial = SCNMaterial()
-        linesMaterial.diffuse.contents = UIColor.white
-        
-        // Apply the materials to the geometry of the node
-        node.geometry?.materials = [hullMaterial, linesMaterial]
-        return node
+    func createShip(scale: CGFloat = 5) {
+        // Use the stored modelNode property instead of loading the model again
+        self.modelNode.scale = SCNVector3(scale, scale, scale)
+        self.shipNode = self.modelNode
+        // Create the physics body for the enemy ship using its geometry
+        let shape = SCNPhysicsShape(node: shipNode, options: [.keepAsCompound: true])
+        shipNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: shape)
+        shipNode.physicsBody?.isAffectedByGravity = false
+        // Set the category, collision, and contact test bit masks
+        self.shipNode.physicsBody?.categoryBitMask = CollisionCategory.enemyShip
+        self.shipNode.physicsBody?.collisionBitMask = CollisionCategory.missile
+        self.shipNode.physicsBody?.contactTestBitMask = CollisionCategory.laser | CollisionCategory.missile
+        shipNode.physicsBody?.collisionBitMask &= ~CollisionCategory.laser
     }
 }

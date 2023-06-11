@@ -87,7 +87,7 @@ struct HUDView: View {
     }
     var fireButton: some View {
         Button(action: {
-            DispatchQueue.main.async {
+            Task {
                 self.spacecraftViewModel.fireMissile(target: self.spacecraftViewModel.closestEnemy)
                 self.spacecraftViewModel.fireCooldown = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {

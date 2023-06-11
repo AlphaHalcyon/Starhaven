@@ -11,11 +11,11 @@ import SceneKit
 class ParticleManager {
     // Explosions!
     static let explosionParticleSystem: SCNParticleSystem = {
-        let coronaGeo = SCNSphere(radius: 200)
+        let coronaGeo = SCNSphere(radius: 150)
         let fireParticleSystem = SCNParticleSystem()
-        fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
-        fireParticleSystem.birthRate = 400_000
-        fireParticleSystem.particleSize = 1
+        fireParticleSystem.particleColor = .orange
+        fireParticleSystem.birthRate = 120_000
+        fireParticleSystem.particleSize = 1.5
         fireParticleSystem.particleIntensity = 1
         fireParticleSystem.particleLifeSpan = 0.4
         fireParticleSystem.spreadingAngle = 180
@@ -28,8 +28,8 @@ class ParticleManager {
     static let createMissileExplosion: SCNParticleSystem = {
         let coronaGeo = SCNSphere(radius: 50)
         let fireParticleSystem = SCNParticleSystem()
-        fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
-        fireParticleSystem.birthRate = 100_000
+        fireParticleSystem.particleColor = .orange
+        fireParticleSystem.birthRate = 80_000
         fireParticleSystem.particleSize = 1
         fireParticleSystem.particleIntensity = 1
         fireParticleSystem.particleLifeSpan = 0.30
@@ -42,8 +42,8 @@ class ParticleManager {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
         particleSystem.particleIntensity = 1
-        particleSystem.particleSize = 1.5
-        particleSystem.birthRate = 100_000
+        particleSystem.particleSize = 2
+        particleSystem.birthRate = 50_000
         particleSystem.emissionDuration = 1
         particleSystem.particleLifeSpan = 0.1
         particleSystem.emitterShape = self.missileGeometry.geometry
@@ -51,21 +51,17 @@ class ParticleManager {
         return particleSystem
     }
     static let missileGeometry: SCNNode = {
-        guard let url = Bundle.main.url(forResource: "dh10", withExtension: "obj") else { return SCNNode() }
-        let asset = MDLAsset(url: url)
-        guard let object = asset.object(at: 0) as? MDLMesh else { return SCNNode() }
-        let node = SCNNode(mdlObject: object)
-        return node
+       return SCNNode(geometry: SCNCapsule(capRadius: 1, height: 5))
     }()
     static func createShipMissileTrail(color: UIColor) -> SCNParticleSystem {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
-        particleSystem.particleSize = 1
-        particleSystem.birthRate = 100_000
+        particleSystem.particleSize = 2
+        particleSystem.birthRate = 50_000
         particleSystem.emissionDuration = 1
         particleSystem.particleLifeSpan = 0.1
-        particleSystem.spreadingAngle = 0
-        particleSystem.blendMode = .additive
+        particleSystem.spreadingAngle = 40
+        particleSystem.emitterShape = self.missileGeometry.geometry
         return particleSystem
     }
     // Wraith Lasers
