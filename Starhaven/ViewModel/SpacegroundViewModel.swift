@@ -294,27 +294,28 @@ import AVFoundation
     
     // WEAPONS MECHANICS
     @MainActor func fireMissile(target: SCNNode? = nil) {
-        self.hitTest()
-        let missile = Missile(target: target, particleSystemColor: .red, viewModel: self)
-        // Convert shipNode's local position to world position
-        let worldPosition = self.ship.shipNode.convertPosition(SCNVector3(0, -50, 33), to: self.ship.containerNode.parent)
-        
-        missile.missileNode.position = worldPosition
-        missile.missileNode.orientation = self.ship.shipNode.presentation.orientation
-        missile.missileNode.eulerAngles.x += Float.pi / 2
-        let direction = self.ship.shipNode.presentation.worldFront
-        let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        let missileForce = CGFloat(abs(self.ship.throttle) + 1) * 5 * missileMass
-        missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        self.view.prepare([missile.missileNode]) { success in
-            self.scene.rootNode.addChildNode(missile.missileNode)
-            self.missiles.append(missile)
-            //self.cameraMissile = missile
-            //self.inMissileView = true
+        Task {
+            let missile = Missile(target: self.hitTest() ?? self.closestEnemy, particleSystemColor: .red, viewModel: self)
+            // Convert shipNode's local position to world position
+            let worldPosition = self.ship.shipNode.convertPosition(SCNVector3(0, -50, 33), to: self.ship.containerNode.parent)
+            
+            missile.missileNode.position = worldPosition
+            missile.missileNode.orientation = self.ship.shipNode.presentation.orientation
+            missile.missileNode.eulerAngles.x += Float.pi / 2
+            let direction = self.ship.shipNode.presentation.worldFront
+            let missileMass = missile.missileNode.physicsBody?.mass ?? 1
+            let missileForce = CGFloat(abs(self.ship.throttle) + 1) * 5 * missileMass
+            missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+            self.view.prepare([missile.missileNode]) { success in
+                self.scene.rootNode.addChildNode(missile.missileNode)
+                self.missiles.append(missile)
+                //self.cameraMissile = missile
+                //self.inMissileView = true
+            }
+            self.closestEnemy = nil
         }
-        self.closestEnemy = nil
     }
-    public func hitTest() {
+    @MainActor func hitTest() -> SCNNode? {
         let centerPoint = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
 
         // Perform a hit test at the center of the view
@@ -322,10 +323,7 @@ import AVFoundation
 
         // Find the first hit node that is a ship
         let closestNode = hitResults.first
-        if let closestNode = closestNode {
-            // closestNode is the SCNNode closest to the center of the screen
-            self.closestEnemy = closestNode.node
-        }
+        return closestNode?.node
     }
     
     // CAMERA RELATED
@@ -415,8 +413,8 @@ import AVFoundation
     }
     
     // AUDIO AND MUSIC
-    @MainActor func playSound(name: String) {
-        DispatchQueue.main.async {
+    func playSound(name: String) {
+        Task {
             let url = Bundle.main.url(forResource: name, withExtension: "wav")
             do {
                 self.audioPlayer = try AVAudioPlayer(contentsOf: url!)
@@ -429,8 +427,8 @@ import AVFoundation
         }
     }
     public func playMusic() {
-        DispatchQueue.main.async {
-            let url = Bundle.main.url(forResource: "HVNDarkseid", withExtension: "mp3")
+        Task {
+            let url = Bundle.main.url(forResource: "ISR", withExtension: "mp3")
             do {
                 self.musicPlayer = try AVAudioPlayer(contentsOf: url!)
                 if !self.musicPlayer.isPlaying {
@@ -444,24 +442,28 @@ import AVFoundation
     
     // CONTACT HANDLING
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-        if let contactBodyA = contact.nodeA.physicsBody, let contactBodyB = contact.nodeB.physicsBody {
-            let contactMask = contactBodyA.categoryBitMask | contactBodyB.categoryBitMask
-            switch contactMask {
-            case CollisionCategory.laser | CollisionCategory.enemyShip:
-                self.handleLaserEnemyCollision(contact: contact)
-            case CollisionCategory.missile | CollisionCategory.enemyShip:
-                self.handleMissileEnemyCollision(contact: contact)
-            default:
-                return
+        Task {
+            if let contactBodyA = contact.nodeA.physicsBody, let contactBodyB = contact.nodeB.physicsBody {
+                let contactMask = contactBodyA.categoryBitMask | contactBodyB.categoryBitMask
+                switch contactMask {
+                case CollisionCategory.laser | CollisionCategory.enemyShip:
+                    self.handleLaserEnemyCollision(contact: contact)
+                case CollisionCategory.missile | CollisionCategory.enemyShip:
+                    self.handleMissileEnemyCollision(contact: contact)
+                default:
+                    return
+                }
             }
         }
     }
     func death(node: SCNNode, enemyNode: SCNNode) {
-        DispatchQueue.main.async {
+        Task {
             self.createExplosion(at: enemyNode.position)
-            node.removeFromParentNode()
-            enemyNode.removeFromParentNode()
-            self.ghosts = self.ghosts.filter { $0.shipNode != enemyNode }
+            DispatchQueue.main.async {
+                node.removeFromParentNode()
+                enemyNode.removeFromParentNode()
+                self.ghosts = self.ghosts.filter { $0.shipNode != enemyNode }
+            }
         }
     }
     func handleLaserEnemyCollision(contact: SCNPhysicsContact) {

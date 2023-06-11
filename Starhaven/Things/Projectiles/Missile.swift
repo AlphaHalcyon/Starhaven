@@ -42,7 +42,7 @@ import SwiftUI
             self.missileNode.physicsBody?.damping = 0
             self.missileNode.simdOrientation = self.viewModel.ship.shipNode.simdOrientation
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                self.detonate()
+                self.missileNode.removeFromParentNode()
                 if let node = self.viewModel.cameraMissile?.missileNode {
                     if node == self.missileNode {
                         self.viewModel.cameraMissile = nil
@@ -60,10 +60,10 @@ import SwiftUI
             let predictedTargetPosition = target.presentation.position + (targetVelocity * Float(predictionTime))
             // Update missile's velocity
             let newDirection = (predictedTargetPosition - self.missileNode.presentation.position).normalized()
-            let missileSpeed: Float = 500  // Set the speed of the missile
+            let missileSpeed: Float = 1_000 // Set the speed of the missile
             DispatchQueue.main.async {
-                self.missileNode.physicsBody?.velocity = newDirection * missileSpeed
-                self.missileNode.look(at: newDirection)
+                self.missileNode.physicsBody?.applyForce(newDirection * missileSpeed, asImpulse: true)
+                //self.missileNode.look(at: newDirection)
             }
         }
         else {

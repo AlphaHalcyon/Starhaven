@@ -40,7 +40,7 @@ import SceneKit
             for droneNum in 0...self.droneLimit {
                 let raider: Raider = Raider(spacegroundViewModel: self.spacegroundViewModel, faction: self.faction, modelNode: modelNode.flattenedClone())
                 let offsetX: Float = Float(10 * droneLimit) * self.scale * (self.faction == .Phantom ? -1 : 1)
-                let offsetZ: Float = 32 * Float(droneNum) * self.scale
+                let offsetZ: Float = 35 * Float(droneNum) * self.scale
                 // Pass the modelNode as a parameter to the createShip function
                 self.spacegroundViewModel.view.prepare([raider.shipNode]) { success in
                     raider.shipNode.position = SCNVector3(x: offsetX + Float.random(in:-200...200), y: Float.random(in:-5000...5000), z: offsetZ)
