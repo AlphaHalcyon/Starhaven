@@ -74,7 +74,7 @@ struct HUDView: View {
         HStack {
             VStack {
                 Spacer()
-                CustomSlider(value: self.$spacecraftViewModel.ship.throttle, range: -125 * Float(self.gear)...125 * Float(self.gear), onChange: { val in
+                CustomSlider(value: self.$spacecraftViewModel.ship.throttle, range: -200 * Float(self.gear)...200 * Float(self.gear), onChange: { val in
                     // changes here
                 })
             }
@@ -87,10 +87,10 @@ struct HUDView: View {
     }
     var fireButton: some View {
         Button(action: {
-            DispatchQueue.main.async {
+            Task {
                 self.spacecraftViewModel.fireMissile(target: self.spacecraftViewModel.closestEnemy)
                 self.spacecraftViewModel.fireCooldown = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     self.spacecraftViewModel.fireCooldown = false
                 }
             }
