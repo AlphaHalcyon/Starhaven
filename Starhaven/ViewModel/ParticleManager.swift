@@ -11,11 +11,11 @@ import SceneKit
 class ParticleManager {
     // Explosions!
     static let explosionParticleSystem: SCNParticleSystem = {
-        let coronaGeo = SCNSphere(radius: 150)
+        let coronaGeo = SCNSphere(radius: 100)
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleColor = .orange
-        fireParticleSystem.birthRate = 120_000
-        fireParticleSystem.particleSize = 1.5
+        fireParticleSystem.birthRate = 100_000
+        fireParticleSystem.particleSize = 1.25
         fireParticleSystem.particleIntensity = 1
         fireParticleSystem.particleLifeSpan = 0.4
         fireParticleSystem.spreadingAngle = 180
@@ -51,7 +51,7 @@ class ParticleManager {
         return particleSystem
     }
     static let missileGeometry: SCNNode = {
-       return SCNNode(geometry: SCNCapsule(capRadius: 1, height: 5))
+       return SCNNode(geometry: SCNCapsule(capRadius: 2, height: 10))
     }()
     static func createShipMissileTrail(color: UIColor) -> SCNParticleSystem {
         let particleSystem = SCNParticleSystem()

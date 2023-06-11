@@ -58,7 +58,7 @@ class Dreadknought: ObservableObject {
         if let modelNode = loadOBJModel(named: "HeavyBattleship") {
             modelNode.scale = SCNVector3(scale, scale, scale)
             self.createReactorCore(parentNode: modelNode)
-            return modelNode
+            return modelNode.flattenedClone()
         }
         else {
             print("failed")

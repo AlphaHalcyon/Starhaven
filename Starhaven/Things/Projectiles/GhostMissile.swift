@@ -28,7 +28,7 @@ import SwiftUI
         self.viewModel = viewModel
         // Create missile geometry and node
         // Load the missile model
-        self.missileNode = ParticleManager.missileGeometry.clone()
+        self.missileNode = ParticleManager.missileGeometry.flattenedClone()
         self.missileNode.scale = SCNVector3(15, 15, 15)
         // Adjust the physicsBody
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
@@ -49,7 +49,7 @@ import SwiftUI
             if let target = self.target {
                 self.missileNode.look(at: target.presentation.position)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.25) {
                 self.detonate()
             }
         }

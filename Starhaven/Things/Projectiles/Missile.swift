@@ -15,12 +15,12 @@ import SwiftUI
     var particleSystem: SCNParticleSystem = SCNParticleSystem()
     var explosionNode: SCNNode = SCNNode()
     var timer: Timer = Timer()
-    var viewModel: SpacegroundViewModel
+    unowned var viewModel: SpacegroundViewModel
     init(target: SCNNode? = nil, particleSystemColor: UIColor, viewModel: SpacegroundViewModel) {
         self.viewModel = viewModel
         self.target = target
         // Create missile geometry and node
-        self.missileNode = loadOBJModel(named: "dh10") ?? SCNNode()
+        self.missileNode = ParticleManager.missileGeometry.clone()
         self.missileNode.scale = SCNVector3(4, 4, 4)
         // Adjust the physicsBody
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
@@ -41,7 +41,7 @@ import SwiftUI
             self.missileNode.physicsBody?.friction = 0
             self.missileNode.physicsBody?.damping = 0
             self.missileNode.simdOrientation = self.viewModel.ship.shipNode.simdOrientation
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 self.detonate()
                 if let node = self.viewModel.cameraMissile?.missileNode {
                     if node == self.missileNode {
@@ -85,10 +85,9 @@ import SwiftUI
     }
     func detonate() {
         // Add the particle system to the warhead
-        let implodeAction = SCNAction.scale(to: 10, duration: 0.20)
-        let implodeActionStep = SCNAction.scale(to: 5, duration: 1)
-        let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
-        let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
+        let implodeAction = SCNAction.scale(to: 5, duration: 0.25)
+        let implodeActionStep = SCNAction.scale(to: 0, duration: 1)
+        let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep])
         DispatchQueue.main.async {
             self.explosionNode.addParticleSystem(ParticleManager.explosionParticleSystem)
             self.missileNode.physicsBody?.velocity = SCNVector3(0,0,0)

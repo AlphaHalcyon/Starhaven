@@ -127,6 +127,7 @@ import AVFoundation
         let scnView = SCNView()
         scnView.scene = self.scene
         scnView.rendersContinuously = true
+        self.playMusic()
         self.createShip(scnView: scnView)
         self.updateShipPosition()
         self.createEcosystem()
@@ -429,7 +430,7 @@ import AVFoundation
     }
     public func playMusic() {
         DispatchQueue.main.async {
-            let url = Bundle.main.url(forResource: "ISR", withExtension: "mp3")
+            let url = Bundle.main.url(forResource: "HVNDarkseid", withExtension: "mp3")
             do {
                 self.musicPlayer = try AVAudioPlayer(contentsOf: url!)
                 if !self.musicPlayer.isPlaying {
@@ -463,87 +464,92 @@ import AVFoundation
             self.ghosts = self.ghosts.filter { $0.shipNode != enemyNode }
         }
     }
-    @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
-        if let contactBody = contact.nodeA.physicsBody {
-            let laserNode = contactBody.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
-            let enemyNode = contactBody.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            DispatchQueue.main.async {
-                if self.loadingSceneView {
-                   self.loadingSceneView = false
-                   self.playMusic()
-                   self.ship.containerNode.position = SCNVector3(0, 6_000, -14000)
-               }
-            }
-            let node = self.ghosts.first(where: { $0.shipNode == enemyNode })
-            if let color = laserNode.childNodes.first?.particleSystems?.first?.particleColor, let node = node {
-                switch node.faction {
-                case .Wraith:
-                    if color == .green || color == .cyan  {
-                        if Float.random(in: 0...1) > 0.9 {
-                            print("wraith death")
-                            self.death(node: laserNode, enemyNode: enemyNode)
+    func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
+        Task {
+            if let contactBody = contact.nodeA.physicsBody {
+                let laserNode = contactBody.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
+                let enemyNode = contactBody.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
+                DispatchQueue.main.async {
+                    if self.loadingSceneView {
+                       self.loadingSceneView = false
+                       self.ship.containerNode.position = SCNVector3(0, 6_000, -14000)
+                   }
+                }
+                let node = self.ghosts.first(where: { $0.shipNode == enemyNode })
+                if let color = laserNode.childNodes.first?.particleSystems?.first?.particleColor, let node = node {
+                    switch node.faction {
+                    case .Wraith:
+                        if color == .green || color == .cyan  {
+                            if Float.random(in: 0...1) > 0.9 {
+                                print("wraith death")
+                                self.death(node: laserNode, enemyNode: enemyNode)
+                            }
+                            else {
+                                //node.isEvading = true
+                            }
                         }
-                        else {
-                            //node.isEvading = true
-                        }
-                    }
-                case .Phantom:
-                    if color == .red || color == .systemPink {
-                        if Float.random(in: 0...1) > 0.9 {
-                            self.death(node: laserNode, enemyNode: enemyNode)
-                        }
-                        else {
-                            //node.isEvading = true
+                    case .Phantom:
+                        if color == .red || color == .systemPink {
+                            if Float.random(in: 0...1) > 0.9 {
+                                self.death(node: laserNode, enemyNode: enemyNode)
+                            }
+                            else {
+                                //node.isEvading = true
+                            }
                         }
                     }
                 }
             }
         }
     }
-    @MainActor func handleMissileEnemyCollision(contact: SCNPhysicsContact) {
-        // Determine which node is the missile and which is the enemy ship
-        let missileNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.missile ? contact.nodeA : contact.nodeB
-        let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-        
-        // Find the corresponding missile object and call the handleCollision function
-        if let missile = self.missiles.first(where: { $0.getMissileNode() == missileNode }) {
-            print(missile.particleSystem.particleColor)
-            if missile.particleSystem.particleColor != .cyan {
-                return
+    func handleMissileEnemyCollision(contact: SCNPhysicsContact) {
+        Task {
+            // Determine which node is the missile and which is the enemy ship
+            let missileNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.missile ? contact.nodeA : contact.nodeB
+            let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
+            
+            // Find the corresponding missile object and call the handleCollision function
+            if let missile = self.missiles.first(where: { $0.getMissileNode() == missileNode }) {
+                print(missile.particleSystem.particleColor)
+                if missile.particleSystem.particleColor != .cyan {
+                    return
+                }
+                self.playSound(name: "snatchHiss")
+                missile.detonate()
             }
-            self.playSound(name: "snatchHiss")
-            missile.detonate()
-        }
-        // Remove the missile and enemy ship from the scene
-        DispatchQueue.main.async {
-            self.createExplosion(at: enemyNode.position)
-            enemyNode.removeFromParentNode()
-            self.cameraMissile = nil
-            self.inMissileView = false
-            // Add logic for updating the score or other game state variables
-            // For example, you could call a function in the SpacegroundViewModel to increase the score:
-            self.incrementScore(killsOrBlackHoles: 2)
-            self.ghosts = self.ghosts.filter { $0.shipNode != enemyNode }
-            self.closestEnemy = nil
+            // Remove the missile and enemy ship from the scene
+            DispatchQueue.main.async {
+                self.createExplosion(at: enemyNode.position)
+                enemyNode.removeFromParentNode()
+                self.cameraMissile = nil
+                self.inMissileView = false
+                // Add logic for updating the score or other game state variables
+                // For example, you could call a function in the SpacegroundViewModel to increase the score:
+                self.incrementScore(killsOrBlackHoles: 2)
+                self.ghosts = self.ghosts.filter { $0.shipNode != enemyNode }
+                self.closestEnemy = nil
+            }
         }
     }
-    @MainActor func createExplosion(at position: SCNVector3) {
-        let explosionNode = SCNNode()
-        explosionNode.position = position
-        explosionNode.addParticleSystem(ParticleManager.explosionParticleSystem)
-        
-        let implodeAction = SCNAction.scale(to: 5, duration: 0.40)
-        let implodeActionStep = SCNAction.scale(to: 2.5, duration: 1)
-        let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
-        let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
-        
-        DispatchQueue.main.async {
-            self.view.prepare([explosionNode]) { success in
-                self.scene.rootNode.addChildNode(explosionNode)
-                explosionNode.runAction(SCNAction.repeat(pulseSequence, count: 1))
+    func createExplosion(at position: SCNVector3) {
+        Task {
+            let explosionNode = SCNNode()
+            explosionNode.position = position
+            explosionNode.addParticleSystem(ParticleManager.explosionParticleSystem)
+            
+            let implodeAction = SCNAction.scale(to: 5, duration: 0.40)
+            let implodeActionStep = SCNAction.scale(to: 2.5, duration: 1)
+            let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
+            let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
+            
+            DispatchQueue.main.async {
+                self.view.prepare([explosionNode]) { success in
+                    self.scene.rootNode.addChildNode(explosionNode)
+                    explosionNode.runAction(SCNAction.repeat(pulseSequence, count: 1))
 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    explosionNode.removeFromParentNode()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        explosionNode.removeFromParentNode()
+                    }
                 }
             }
         }

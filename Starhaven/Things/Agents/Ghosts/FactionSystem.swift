@@ -33,7 +33,7 @@ import SceneKit
             }
         }
     }
-    private let droneLimit = 10
+    private let droneLimit = 15
     func createDrones() {
         // Load the model once before the loop
         if let modelNode = loadOBJModel(named: "Raider") {
@@ -43,7 +43,7 @@ import SceneKit
                 let offsetZ: Float = 32 * Float(droneNum) * self.scale
                 // Pass the modelNode as a parameter to the createShip function
                 self.spacegroundViewModel.view.prepare([raider.shipNode]) { success in
-                    raider.shipNode.position = SCNVector3(x: offsetX + Float.random(in:-200...200), y: Float.random(in:-2000...2000), z: offsetZ)
+                    raider.shipNode.position = SCNVector3(x: offsetX + Float.random(in:-200...200), y: Float.random(in:-5000...5000), z: offsetZ)
                     DispatchQueue.main.async {
                         self.spacegroundViewModel.scene.rootNode.addChildNode(raider.shipNode)
                         self.spacegroundViewModel.ghosts.append(raider)
