@@ -68,17 +68,36 @@ import AVFoundation
     @Published var musicPlayer: AVAudioPlayer = AVAudioPlayer()
     
     // Settings
-    @Published var skyboxIntensity: Float = 0
-    @Published var distanceFromShip: Float = 25
+    @Published var skyboxIntensity: Double = 0
+    @Published var distanceFromShip: Float = 75
     @Published var missileLockEnabled: Bool = false
+    @Published var enable3POV: Bool = false
+    @Published var isPaused: Bool = false
+    public func pauseGame() {
+        self.isPaused.toggle()
+    }
+    public func toggleThirdPerson() {
+        self.enable3POV.toggle()
+        if self.enable3POV {
+            self.ship.shipNode = self.ship.modelNode
+            self.ship.containerNode.addChildNode(self.ship.shipNode)
+        }
+        else {
+            self.ship.shipNode.removeFromParentNode()
+        }
+    }
     public func toggleMissileLock() {
         self.missileLockEnabled.toggle()
     }
-    public func setSkyboxIntensity(intensity: Float) {
-        self.skyboxIntensity = intensity
+    public func setSkyboxIntensity(intensity: Double) {
+        self.scene.background.intensity = intensity
     }
     public func setDistanceFromShip(distance: Float) {
         self.distanceFromShip = distance
+    }
+    public func setVolume(volume: Float) {
+        self.audioPlayer.volume = volume
+        self.musicPlayer.volume = volume
     }
     init(view: SCNView, cameraNode: SCNNode) {
         // Initialize all properties
@@ -204,8 +223,7 @@ import AVFoundation
         DispatchQueue.main.async {
             self.applyRotation() // CONTINUE UPDATING ROTATION
             self.ship.shipNode.simdPosition += self.ship.shipNode.simdWorldFront * self.ship.throttle
-            let distance: Float = 15 // Define the desired distance between the camera and the spaceship
-            let cameraPosition = self.ship.shipNode.simdPosition - (self.ship.shipNode.simdWorldFront * distance)
+            let cameraPosition = self.ship.shipNode.simdPosition - (self.ship.shipNode.simdWorldFront * self.distanceFromShip)
             self.cameraNode.simdPosition = cameraPosition
             self.cameraNode.simdOrientation = self.ship.shipNode.simdOrientation
             // Update the look-at constraint target

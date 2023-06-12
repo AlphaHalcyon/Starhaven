@@ -10,8 +10,9 @@ import SceneKit
 import SwiftUI
 import simd
 
-struct HUDView: View {
-    @EnvironmentObject var spacecraftViewModel: SpacegroundViewModel
+@MainActor struct HUDView: View {
+    unowned var spaceViewModel: SpacegroundViewModel
+    @Binding var userSelectedSettings: Bool
     @State private var reticlePosition: CGPoint = CGPoint()
     @State var gear: Int = 1
     var body: some View {
@@ -28,7 +29,7 @@ struct HUDView: View {
     }
     var reticle: some View {
         Crosshair()
-            .stroke(self.spacecraftViewModel.closestEnemy == nil ? Color.white : Color.red, lineWidth: 1)
+            .stroke(self.spaceViewModel.closestEnemy == nil ? Color.white : Color.red, lineWidth: 1)
             .frame(width: 20, height: 20).opacity(0.98)
     }
     var dynamicCamera: some View {
@@ -45,15 +46,24 @@ struct HUDView: View {
                 Spacer()
                 self.pointStack
             }
-            .font(.custom("Avenir Next Regular", size: 25)).padding().foregroundColor(.red)
+            .font(.custom("Avenir Next Regular", size: 24)).padding().foregroundColor(.red)
+            HStack {
+                self.settingsButton
+            }
             Spacer()
         }
     }
+    var settingsButton: some View {
+        Image(systemName: "gear.circle.fill").resizable().scaledToFit().frame(width: UIScreen.main.bounds.width/10)
+            .onTapGesture {
+                self.userSelectedSettings = true
+            }
+    }
     var pointStack: some View {
-        VStack { Text("POINTS"); Text("\(spacecraftViewModel.points)") }
+        VStack { Text("POINTS"); Text("\(spaceViewModel.points)") }
     }
     var speedStack: some View {
-        VStack { Text("SPEED"); Text("\(Int(spacecraftViewModel.ship.throttle * 10)) km/s") }
+        VStack { Text("SPEED"); Text("\(Int(spaceViewModel.ship.throttle * 10)) km/s") }
     }
     var gearStack: some View {
         VStack {
@@ -70,12 +80,13 @@ struct HUDView: View {
             } else { self.gear += 1 }
         }
     }
+    @State var throttle: Float = 0
     var mainHUD: some View {
         HStack {
             VStack {
                 Spacer()
-                CustomSlider(value: self.$spacecraftViewModel.ship.throttle, range: -200 * Float(self.gear)...200 * Float(self.gear), onChange: { val in
-                    // changes here
+                CustomSlider(value: self.$throttle, range: -200 * Float(self.gear)...200 * Float(self.gear), onChange: { val in
+                    self.spaceViewModel.throttle(value: self.throttle)
                 })
             }
             Spacer()
@@ -88,51 +99,51 @@ struct HUDView: View {
     var fireButton: some View {
         Button(action: {
             Task {
-                self.spacecraftViewModel.fireMissile(target: self.spacecraftViewModel.closestEnemy)
-                self.spacecraftViewModel.fireCooldown = true
+                self.spaceViewModel.fireMissile(target: self.spaceViewModel.closestEnemy)
+                self.spaceViewModel.fireCooldown = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                    self.spacecraftViewModel.fireCooldown = false
+                    self.spaceViewModel.fireCooldown = false
                 }
             }
         }) {
             Image(systemName: "flame")
                 .resizable()
                 .scaledToFit()
-                .foregroundColor(self.spacecraftViewModel.fireCooldown ? .gray : .red)
+                .foregroundColor(self.spaceViewModel.fireCooldown ? .gray : .red)
                 .frame(width: UIScreen.main.bounds.width/6, height: UIScreen.main.bounds.width/6, alignment: .center)
-        }.disabled(self.spacecraftViewModel.fireCooldown)
+        }.disabled(self.spaceViewModel.fireCooldown)
         .foregroundColor(.white)
         .padding()
     }
     var scoreUpdates: some View {
         VStack {
             Spacer()
-            if spacecraftViewModel.showKillIncrement {
+            if spaceViewModel.showKillIncrement {
                 Text("+10,000")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showKillIncrement)
+                    .animation(.easeInOut(duration: 0.5), value: spaceViewModel.showKillIncrement)
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                            spacecraftViewModel.showKillIncrement = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.33) {
+                            spaceViewModel.showKillIncrement = false
                         }
                     }
                 Text("ENEMY DESTROYED")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showKillIncrement)
+                    .animation(.easeInOut(duration: 0.5), value: spaceViewModel.showKillIncrement)
             }
-            if spacecraftViewModel.showScoreIncrement {
-                Text("+\(Int(self.spacecraftViewModel.ship.throttle) * 100 * 60)")
+            if spaceViewModel.showScoreIncrement {
+                Text("+\(Int(self.spaceViewModel.ship.throttle) * 100 * 60)")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.5), value: spacecraftViewModel.showScoreIncrement)
+                    .animation(.easeInOut(duration: 0.5), value: spaceViewModel.showScoreIncrement)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                            spacecraftViewModel.showScoreIncrement = false
+                            spaceViewModel.showScoreIncrement = false
                         }
                     }
             }

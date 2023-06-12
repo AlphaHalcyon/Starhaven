@@ -41,19 +41,20 @@ import SceneKit
         laser.laserNode.physicsBody?.applyForce(direction * Float(laserForce), asImpulse: true)
         containerNode.parent!.addChildNode(laser.laserNode)
     }
+    @Published var modelNode: SCNNode = SCNNode()
     func createShip(scale: CGFloat = 0.1) -> SCNNode {
         // Load the spaceship model
         // Usage:
         if let modelNode = loadOBJModel(named: "Raider") {
-            //modelNode.scale = SCNVector3(scale, scale, scale)
-            //modelNode.position = SCNVector3(0, -15, 0)
-            //modelNode.eulerAngles.x = -.pi/12
-            //self.shipNode = modelNode
-            //self.shipNode.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
-            //self.shipNode.geometry?.firstMaterial?.lightingModel = .physicallyBased
+            modelNode.scale = SCNVector3(scale, scale, scale)
+            modelNode.position = SCNVector3(0, -15, 0)
+            modelNode.eulerAngles.x = -.pi/12
+            self.modelNode = modelNode
+            self.modelNode.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
+            self.modelNode.geometry?.firstMaterial?.lightingModel = .physicallyBased
             let containerNode = SCNNode()
             containerNode.geometry = SCNGeometry()
-            //containerNode.addChildNode(modelNode)
+            containerNode.addChildNode(modelNode)
             self.containerNode = containerNode
             return containerNode
         }

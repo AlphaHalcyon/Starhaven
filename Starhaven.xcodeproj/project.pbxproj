@@ -28,6 +28,8 @@
 		AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */ = {isa = PBXBuildFile; fileRef = AF63D43B2A08D6EC007D8A40 /* snap.wav */; };
 		AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* Drone.swift */; };
 		AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */; };
+		AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */; };
+		AF6D0AF82A35C2A4001C1DEB /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6D0AF72A35C2A4001C1DEB /* SettingsScreen.swift */; };
 		AF778F0829F9F44700F299E5 /* Raider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF778F0729F9F44700F299E5 /* Raider.swift */; };
 		AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
@@ -48,7 +50,7 @@
 		AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */; };
 		AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */; };
 		AFD7EEBD2A2C88FD00A92162 /* dh10.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBB2A2C88FD00A92162 /* dh10.obj */; };
-		AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* Spaceground.swift */; };
+		AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* ContentView.swift */; };
 		AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* GhostEnums.swift */; };
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
 		AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E929F911A800401509 /* FactionSystem.swift */; };
@@ -78,6 +80,8 @@
 		AF63D43B2A08D6EC007D8A40 /* snap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = snap.wav; path = "../Winter Sample Kit/Snare/snap.wav"; sourceTree = "<group>"; };
 		AF67FBB029F78C0B007CE669 /* Drone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drone.swift; sourceTree = "<group>"; };
 		AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
+		AF6D0AF72A35C2A4001C1DEB /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		AF778F0729F9F44700F299E5 /* Raider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raider.swift; sourceTree = "<group>"; };
 		AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMissile.swift; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
@@ -99,7 +103,7 @@
 		AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroCutscene.swift; sourceTree = "<group>"; };
 		AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.mtl; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.mtl; sourceTree = "<group>"; };
 		AFD7EEBB2A2C88FD00A92162 /* dh10.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.obj; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.obj; sourceTree = "<group>"; };
-		AFDBFDD929DD2775006DEB3E /* Spaceground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spaceground.swift; sourceTree = "<group>"; };
+		AFDBFDD929DD2775006DEB3E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AFDE46E329F8A17500401509 /* GhostEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostEnums.swift; sourceTree = "<group>"; };
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
 		AFDE46E929F911A800401509 /* FactionSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSystem.swift; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 		AFD4C04E29CFA48200A127BB /* Starhaven */ = {
 			isa = PBXGroup;
 			children = (
+				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
 				AFF42A8829E773FD00B6C603 /* Views */,
 				AFD7EEBE2A2E891D00A92162 /* ViewModel */,
 				AFD7EEBF2A2E892500A92162 /* Things */,
@@ -249,8 +254,8 @@
 		AFDE46EF29F912B100401509 /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				AF6388DF29DF78430086C90F /* Ship.swift */,
 				AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */,
+				AF6388DF29DF78430086C90F /* Ship.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -269,10 +274,11 @@
 		AFF42A8829E773FD00B6C603 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AFDE46EC29F9121500401509 /* Heads-Up Display */,
-				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
-				AFDBFDD929DD2775006DEB3E /* Spaceground.swift */,
+				AFDBFDD929DD2775006DEB3E /* ContentView.swift */,
+				AF6D0AF72A35C2A4001C1DEB /* SettingsScreen.swift */,
+				AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */,
 				AF6388D929DF77940086C90F /* Space.swift */,
+				AFDE46EC29F9121500401509 /* Heads-Up Display */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -367,6 +373,7 @@
 				AF5B368F2A0AA9660075581E /* Custom Slider.swift in Sources */,
 				AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */,
 				AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */,
+				AF6D0AF82A35C2A4001C1DEB /* SettingsScreen.swift in Sources */,
 				AFC92EDB2A12B8BE0042697B /* HomeScreen.swift in Sources */,
 				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
 				AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */,
@@ -381,7 +388,8 @@
 				AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */,
 				AF12B9A92A33DFFF0068D352 /* PhysicsManager.swift in Sources */,
 				AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */,
-				AFDBFDDA29DD2775006DEB3E /* Spaceground.swift in Sources */,
+				AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */,
+				AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
@@ -517,7 +525,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
@@ -535,7 +543,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -553,7 +561,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
@@ -571,7 +579,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
