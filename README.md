@@ -2,6 +2,7 @@
  An event horizon explorer.
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
+ ## FIXES AND UPDATES LOG
  Accessibility: Settings Screen (7/12/2023)
  
  Description: 
@@ -46,6 +47,22 @@ These changes allowed the program to share the same instance of each 3D model be
 
  These improvements should result in noticeable performance gains, particularly in high-intensity scenes with many active particle systems.
 
- Future Work:
+Optimization: Quaternion-based Rotations for Improved Ship Orientation (5/29/2023)
 
- Continued optimization is a priority and we'll be monitoring performance while searching for additional optimization opportunities. This pattern of utilizing static configurations where possible, and functions for more dynamic configurations, could potentially be applied to other shared resources within the game.
+Description:
+
+This update addresses the issue of gimbal lock that was affecting the orientation and navigation of ships in our game. It describes the successful implementation of quaternion-based rotations to solve this problem and improve the game's performance.
+
+Changes:
+
+Introduction of Quaternions: In order to overcome the issue of gimbal lock that is common with Euler angle-based rotations, we have moved to quaternion-based rotations. Quaternions, represented by SCNQuaternion in SceneKit, are complex numbers that can represent 3D rotations more efficiently and reliably.
+
+Avoiding Gimbal Lock: Quaternions operate in four dimensions, which allows for smooth and continuous rotation in 3D space. They have been employed to rotate our ships, ensuring the avoidance of gimbal lock. With this change, we have been able to ensure consistent and predictable rotation behavior for all ships, irrespective of their current orientation.
+
+Application to SceneKit: We have applied this rotation mechanism to SceneKit by modifying the orientation property of the nodes representing the ships. This property is a quaternion and by manipulating it, we were able to control the rotation of the nodes, thus achieving the desired ship orientation.
+
+User Interaction: While quaternions don't suffer from gimbal lock, converting between quaternions and Euler angles, if not handled properly, could reintroduce the problem. As our app involves user input and displays rotation in terms of Euler angles, we have ensured careful handling of these situations.
+
+Result:
+
+The use of quaternion-based rotations has led to smoother and more realistic ship movements in the game, enhancing the overall user experience. It has eliminated the possibility of unexpected orientation behavior due to gimbal lock.
