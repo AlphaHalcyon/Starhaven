@@ -2,7 +2,7 @@
  An event horizon explorer.
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
- ## FIXES AND UPDATES LOG
+ ## FIXES, UPDATES, AND SOLUTIONS
  ### Accessibility: Settings Screen (7/12/2023)
  **This update describes the introduction of an in-game settings screen and button.**
  
