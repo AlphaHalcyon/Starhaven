@@ -3,14 +3,14 @@
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
  ## FIXES, UPDATES, AND SOLUTIONS
- ### Accessibility: Settings Screen (7/12/2023)
+ ### Accessibility: Settings Screen (6/12/2023)
  **This update describes the introduction of an in-game settings screen and button.**
  
  Changes:
  
  Users now have access to a beta Settings Screen from which they can adjust a variety of parameters, including skybox intensity, camera follow distance, audio volume, 1st/3rdPOV toggle in beta, etc.). This foreshadows further customizations around the app in the future.
  
- ### Optimization: OBJ. Model Sharing (7/11/2023)
+ ### Optimization: OBJ. Model Sharing (6/11/2023)
  **This update describes solutions created in struggling with memory management.**
  
  Changes:
