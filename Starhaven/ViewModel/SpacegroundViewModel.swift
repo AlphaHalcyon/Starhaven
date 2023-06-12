@@ -56,9 +56,6 @@ import AVFoundation
     @Published var points: Int = 0
     @Published var showScoreIncrement: Bool = false
     @Published var showKillIncrement: Bool = false
-
-    // Helper View Model
-    @Published var ecosystems: [Ecosystem] = []
     
     // Loading Sequence
     @Published var loadingSceneView: Bool = true
@@ -68,37 +65,12 @@ import AVFoundation
     @Published var musicPlayer: AVAudioPlayer = AVAudioPlayer()
     
     // Settings
-    @Published var skyboxIntensity: Double = 0
-    @Published var distanceFromShip: Float = 75
+    var skyboxIntensity: Double = 0
+    @Published var distanceFromShip: Double = 75
     @Published var missileLockEnabled: Bool = false
     @Published var enable3POV: Bool = false
     @Published var isPaused: Bool = false
-    public func pauseGame() {
-        self.isPaused.toggle()
-    }
-    public func toggleThirdPerson() {
-        self.enable3POV.toggle()
-        if self.enable3POV {
-            self.ship.shipNode = self.ship.modelNode
-            self.ship.containerNode.addChildNode(self.ship.shipNode)
-        }
-        else {
-            self.ship.shipNode.removeFromParentNode()
-        }
-    }
-    public func toggleMissileLock() {
-        self.missileLockEnabled.toggle()
-    }
-    public func setSkyboxIntensity(intensity: Double) {
-        self.scene.background.intensity = intensity
-    }
-    public func setDistanceFromShip(distance: Float) {
-        self.distanceFromShip = distance
-    }
-    public func setVolume(volume: Float) {
-        self.audioPlayer.volume = volume
-        self.musicPlayer.volume = volume
-    }
+    // Init
     init(view: SCNView, cameraNode: SCNNode) {
         // Initialize all properties
         self.view = view
@@ -142,6 +114,34 @@ import AVFoundation
             self.currentTime += 1/60
         }
     }
+    // Settings Functions
+    public func pauseGame() {
+        self.isPaused.toggle()
+    }
+    public func toggleThirdPerson() {
+        self.enable3POV.toggle()
+        if self.enable3POV {
+            self.ship.shipNode = self.ship.modelNode
+            self.ship.containerNode.addChildNode(self.ship.shipNode)
+        }
+        else {
+            self.ship.shipNode.removeFromParentNode()
+        }
+    }
+    public func toggleMissileLock() {
+        self.missileLockEnabled.toggle()
+    }
+    public func setSkyboxIntensity(intensity: Double) {
+        self.scene.background.intensity = intensity
+    }
+    public func setDistanceFromShip(distance: Float) {
+        self.distanceFromShip = Double(distance)
+    }
+    public func setVolume(volume: Float) {
+        self.audioPlayer.volume = volume
+        self.musicPlayer.volume = volume
+    }
+    // WORLD CREATION
     @MainActor func makeSpaceView() -> SCNView {
         let scnView = SCNView()
         scnView.scene = self.scene
@@ -158,7 +158,6 @@ import AVFoundation
         }
         return scnView
     }
-    // WORLD CREATION
     public func createStar() {
         let star = Star(radius: 200_000, color: .orange, camera: self.cameraNode)
         star.starNode.position = SCNVector3(1000, 100_000, 2_000_000)
@@ -223,7 +222,7 @@ import AVFoundation
         DispatchQueue.main.async {
             self.applyRotation() // CONTINUE UPDATING ROTATION
             self.ship.shipNode.simdPosition += self.ship.shipNode.simdWorldFront * self.ship.throttle
-            let cameraPosition = self.ship.shipNode.simdPosition - (self.ship.shipNode.simdWorldFront * self.distanceFromShip)
+            let cameraPosition = self.ship.shipNode.simdPosition - (self.ship.shipNode.simdWorldFront * Float(self.distanceFromShip))
             self.cameraNode.simdPosition = cameraPosition
             self.cameraNode.simdOrientation = self.ship.shipNode.simdOrientation
             // Update the look-at constraint target

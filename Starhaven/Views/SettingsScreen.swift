@@ -10,8 +10,8 @@ import SwiftUI
 
 @MainActor struct SettingsScreen: View {
     unowned var spaceViewModel: SpacegroundViewModel
-    @State var intensity: Double = 0.99
-    
+    @Binding var intensity: Double
+    @Binding var cameraDistance: Double
     @Binding var userSelectedSettings: Bool
     
     var settingsScreen: some View {
@@ -34,7 +34,6 @@ import SwiftUI
             }.padding()
         }
     }
-    @State var cameraDistance: Double = 75
     var distanceSettings: some View {
         VStack {
             Text("Camera Distance").font(.custom("Avenir Next Regular", size: 35)).foregroundColor(.white)

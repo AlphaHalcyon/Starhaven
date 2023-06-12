@@ -48,8 +48,8 @@ import simd
             }
             .font(.custom("Avenir Next Regular", size: 24)).padding().foregroundColor(.red)
             HStack {
-                self.settingsButton
-            }
+                self.settingsButton; Spacer()
+            }.padding(.horizontal)
             Spacer()
         }
     }
