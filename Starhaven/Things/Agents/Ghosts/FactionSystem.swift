@@ -33,7 +33,7 @@ import SceneKit
             }
         }
     }
-    private let droneLimit = 15
+    private let droneLimit = 14
     func createDrones() {
         // Load the model once before the loop
         if let modelNode = loadOBJModel(named: "Raider") {
