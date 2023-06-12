@@ -65,8 +65,8 @@ import AVFoundation
     @Published var musicPlayer: AVAudioPlayer = AVAudioPlayer()
     
     // Settings
-    @Published var skyboxIntensity: Double = 0
-    @Published var distanceFromShip: Float = 75
+    var skyboxIntensity: Double = 0
+    @Published var distanceFromShip: Double = 75
     @Published var missileLockEnabled: Bool = false
     @Published var enable3POV: Bool = false
     @Published var isPaused: Bool = false
@@ -135,7 +135,7 @@ import AVFoundation
         self.scene.background.intensity = intensity
     }
     public func setDistanceFromShip(distance: Float) {
-        self.distanceFromShip = distance
+        self.distanceFromShip = Double(distance)
     }
     public func setVolume(volume: Float) {
         self.audioPlayer.volume = volume
@@ -222,7 +222,7 @@ import AVFoundation
         DispatchQueue.main.async {
             self.applyRotation() // CONTINUE UPDATING ROTATION
             self.ship.shipNode.simdPosition += self.ship.shipNode.simdWorldFront * self.ship.throttle
-            let cameraPosition = self.ship.shipNode.simdPosition - (self.ship.shipNode.simdWorldFront * self.distanceFromShip)
+            let cameraPosition = self.ship.shipNode.simdPosition - (self.ship.shipNode.simdWorldFront * Float(self.distanceFromShip))
             self.cameraNode.simdPosition = cameraPosition
             self.cameraNode.simdOrientation = self.ship.shipNode.simdOrientation
             // Update the look-at constraint target

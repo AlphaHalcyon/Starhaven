@@ -12,8 +12,16 @@ import simd
 
 @MainActor struct ContentView: View {
     @StateObject var spacecraftViewModel = SpacegroundViewModel(view: SCNView(), cameraNode: SCNNode())
-    @State var userSelectedContinue: Bool = false
-    @State var userSelectedSettings: Bool = false
+    @State var userSelectedContinue: Bool = false // THE USER WOULD LIKE TO BEGIN
+    @State var userSelectedSettings: Bool = false // THE USER WANTS THE SETTINGS MENU
+    @State var skyboxIntensity: Double = 0.75 // THE BRIGHTNESS OF THE STARS n SKYBOX
+    @State var cameraDistance: Double = 75 // CAMERA FOLLOWS SHIP AT THIS DISTANCE
+    var settings: some View {
+        SettingsScreen(spaceViewModel: self.spacecraftViewModel, intensity: $skyboxIntensity, cameraDistance: $cameraDistance, userSelectedSettings: self.$userSelectedSettings)
+    }
+    var hud: some View {
+        HUDView(spaceViewModel: self.spacecraftViewModel, userSelectedSettings: self.$userSelectedSettings)
+    }
     var body: some View {
         if self.spacecraftViewModel.gameOver {
             Text("GAME OVER! SCORE: \(self.spacecraftViewModel.points)")
@@ -26,10 +34,10 @@ import simd
                     LoadingScreen(spaceViewModel: self.spacecraftViewModel, userSelectedContinue: self.$userSelectedContinue)
                 }
                 else if self.userSelectedSettings {
-                    SettingsScreen(spaceViewModel: self.spacecraftViewModel, userSelectedSettings: self.$userSelectedSettings)
+                    self.settings
                 }
                 else {
-                    HUDView(spaceViewModel: self.spacecraftViewModel, userSelectedSettings: $userSelectedSettings)
+                    self.hud
                 }
             }
         }

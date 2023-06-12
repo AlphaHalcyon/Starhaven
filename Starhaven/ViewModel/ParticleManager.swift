@@ -42,8 +42,8 @@ class ParticleManager {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
         particleSystem.particleIntensity = 1
-        particleSystem.particleSize = 2
-        particleSystem.birthRate = 50_000
+        particleSystem.particleSize = 2.5
+        particleSystem.birthRate = 55_000
         particleSystem.emissionDuration = 1
         particleSystem.particleLifeSpan = 0.1
         particleSystem.emitterShape = self.missileGeometry.geometry
