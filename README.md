@@ -3,15 +3,15 @@
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
  ## FIXES AND UPDATES LOG
- **Accessibility: Settings Screen (7/12/2023)**
- This update describes the introduction of an in-game settings screen and button.
+ ### Accessibility: Settings Screen (7/12/2023)
+ **This update describes the introduction of an in-game settings screen and button.**
  
  Changes:
  
  Users now have access to a beta Settings Screen from which they can adjust a variety of parameters, including skybox intensity, camera follow distance, audio volume, 1st/3rdPOV toggle in beta, etc.). This foreshadows further customizations around the app in the future.
  
- **Optimization: OBJ. Model Sharing (7/11/2023)**
- This update describes solutions created in struggling with memory management.
+ ### Optimization: OBJ. Model Sharing (7/11/2023)
+ **This update describes solutions created in struggling with memory management.**
  
  Changes:
  
@@ -23,8 +23,8 @@ The changes were made by modifying the relevant functions to load each model onc
 
 These changes allowed the program to share the same instance of each 3D model between multiple instances of the same object type, while still allowing each object to appear as its own individual entity. This helped reduce memory usage and improve performance, while still maintaining the desired behavior of the program.
  
- **Optimization: Introduction of ParticleManager for Consolidated Particle System Configurations**
- This update presents a major step in improving the performance of the game by introducing an efficient management of particle systems via a dedicated ParticleManager class.
+ ### Optimization: Introduction of ParticleManager for Consolidated Particle System Configurations
+ **This update presents a major step in improving the performance of the game by introducing an efficient management of particle systems via a dedicated ParticleManager class.**
 
  Changes:
 
@@ -38,8 +38,8 @@ These changes allowed the program to share the same instance of each 3D model be
 
  These improvements should result in noticeable performance gains, particularly in high-intensity scenes with many active particle systems.
 
-**Optimization: Quaternion-based Rotations for Improved Ship Orientation (5/29/2023)**
-This update addresses the issue of gimbal lock that was affecting the orientation and navigation of ships in our game. It describes the successful implementation of quaternion-based rotations to solve this problem and improve the game's performance.
+### Optimization: Quaternion-based Rotations for Improved Ship Orientation (5/29/2023)
+**This update addresses the issue of gimbal lock that was affecting the orientation and navigation of ships in our game. It describes the successful implementation of quaternion-based rotations to solve this problem and improve the game's performance.**
 
 Changes:
 
