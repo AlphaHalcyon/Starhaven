@@ -10,7 +10,7 @@ import SwiftUI
 import SceneKit
 import simd
 
-@MainActor struct ContentView: View {
+@MainActor struct CntentView: View {
     @StateObject var spacecraftViewModel = SpacegroundViewModel(view: SCNView(), cameraNode: SCNNode())
     @State var userSelectedContinue: Bool = false // THE USER WOULD LIKE TO BEGIN
     @State var userSelectedSettings: Bool = false // THE USER WANTS THE SETTINGS MENU

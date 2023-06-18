@@ -25,9 +25,9 @@ import SwiftUI
             Spacer()
             // PRACTICE YOUR BARREL ROLLS
             Text("Tip: \(self.generateTip())")
-                .font(.custom("Avenir Next Italic", size: 21))
+                .font(.custom("Avenir Next Italic", size: 20))
                 .multilineTextAlignment(.center)
-                .fixedSize(horizontal: false, vertical: true)
+                .fixedSize(horizontal: false, vertical: true).padding()
             HStack { Spacer() }
         }.background(.black)
     }
