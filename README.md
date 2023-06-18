@@ -7,17 +7,26 @@
  
  **This update primarily focuses on applying the single-responsibility principle to our codebase. Previously, most of our components were managed in one view model, creating complexities and dependencies that we needed to resolve.**
  The key changes include:
-#### PhysicsManager: This class is responsible for the physical interactions in our game world.
-#### CollisionHandlers: These handle the behavior of objects when they collide in our game world.
-#### Levels: Represent the stages or levels in our game, including the objects present and their arrangements.
+#### PhysicsManager: 
+This class is responsible for the physical interactions in our game world.
+#### CollisionHandlers: 
+These handle the behavior of objects when they collide in our game world.
+#### Levels: 
+Represent the stages or levels in our game, including the objects present and their arrangements.
 #### SceneManager: 
 Manages the rendering of our scenes. Includes the rendering loop where update functions are called.
-#### SceneObjects: Represent the various entities present in our scenes.
-#### CameraManager: This new class is responsible for managing the camera's movements. We have separated the navigation logic from the camera logic, which was previously intertwined.
-#### CameraTrackingState: This new enumeration provides us with more flexibility in positioning our camera.
-#### ShipManager: This class manages the player's control of the ship. This functionality is set to be further generalized in the future to accommodate other control objects.
-#### InputHandler and PlayerObjectManager: We plan to break down the ShipManager into these two new classes for improved organization and modularity.
-#### Interpolation Feature: Leveraged the flexibility of the CameraManager to add a mixing factor, enabling smoother rotations when turning.
+#### SceneObjects: 
+Represent the various entities present in our scenes. They are mapped to their respective nodes in a SceneManager.
+#### CameraManager: 
+This new class is responsible for managing the camera's movements. We have separated the navigation logic from the camera logic, which was previously intertwined.
+#### CameraTrackingState: 
+This new enumeration provides us with more flexibility in positioning our camera.
+#### ShipManager: 
+This class manages the player's control of the ship. This functionality is set to be further generalized in the future to accommodate other control objects.
+#### InputHandler and PlayerObjectManager: 
+We plan to break down the ShipManager into these two new classes for improved organization and modularity.
+#### Interpolation Feature: 
+Leveraged the flexibility of the CameraManager to add a mixing factor, enabling smoother rotations when turning.
 This refactoring aims to streamline our application's architecture and improve the rendering experience. We hope to continue improving our codebase with inspirations from the previous code.
 
  ### Accessibility: Settings Screen (6/12/2023)
