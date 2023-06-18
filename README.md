@@ -10,7 +10,8 @@
 #### PhysicsManager: This class is responsible for the physical interactions in our game world.
 #### CollisionHandlers: These handle the behavior of objects when they collide in our game world.
 #### Levels: Represent the stages or levels in our game, including the objects present and their arrangements.
-#### SceneManager: Manages the display of our scenes.
+#### SceneManager: 
+Manages the rendering of our scenes. Includes the rendering loop where update functions are called.
 #### SceneObjects: Represent the various entities present in our scenes.
 #### CameraManager: This new class is responsible for managing the camera's movements. We have separated the navigation logic from the camera logic, which was previously intertwined.
 #### CameraTrackingState: This new enumeration provides us with more flexibility in positioning our camera.
