@@ -7,10 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF0561092A3E98E20096E211 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0561082A3E98E20096E211 /* CameraManager.swift */; };
+		AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610A2A3E99140096E211 /* PhysicsManager.swift */; };
+		AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610C2A3E99C00096E211 /* SceneManager.swift */; };
+		AF05610F2A3E99E80096E211 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610E2A3E99E80096E211 /* Level.swift */; };
 		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
 		AF0C5C522A2F3CD600D6D008 /* she never loved u bro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */; };
-		AF12B9A72A33BADA0068D352 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A62A33BADA0068D352 /* SceneManager.swift */; };
-		AF12B9A92A33DFFF0068D352 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A82A33DFFF0068D352 /* PhysicsManager.swift */; };
+		AF12B9A72A33BADA0068D352 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A62A33BADA0068D352 /* GameManager.swift */; };
+		AF12B9A92A33DFFF0068D352 /* Physics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A82A33DFFF0068D352 /* Physics.swift */; };
 		AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9AA2A344D380068D352 /* ParticleManager.swift */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
@@ -26,6 +30,9 @@
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
 		AF63D43A2A08D68F007D8A40 /* snatchHiss.wav in Resources */ = {isa = PBXBuildFile; fileRef = AF63D4392A08D68F007D8A40 /* snatchHiss.wav */; };
 		AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */ = {isa = PBXBuildFile; fileRef = AF63D43B2A08D6EC007D8A40 /* snap.wav */; };
+		AF6707BA2A3BDA2700A923E4 /* ShipManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707B92A3BDA2700A923E4 /* ShipManager.swift */; };
+		AF6707BC2A3CC2C200A923E4 /* PhysicsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */; };
+		AF6707BE2A3D415000A923E4 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707BD2A3D415000A923E4 /* ModelManager.swift */; };
 		AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* Drone.swift */; };
 		AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */; };
 		AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */; };
@@ -59,10 +66,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF0561082A3E98E20096E211 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		AF05610A2A3E99140096E211 /* PhysicsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsManager.swift; sourceTree = "<group>"; };
+		AF05610C2A3E99C00096E211 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
+		AF05610E2A3E99E80096E211 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		AF07021C29E120D300667F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "she never loved u bro.mp3"; path = "../../she never loved u bro.mp3"; sourceTree = "<group>"; };
-		AF12B9A62A33BADA0068D352 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
-		AF12B9A82A33DFFF0068D352 /* PhysicsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsManager.swift; sourceTree = "<group>"; };
+		AF12B9A62A33BADA0068D352 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		AF12B9A82A33DFFF0068D352 /* Physics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Physics.swift; sourceTree = "<group>"; };
 		AF12B9AA2A344D380068D352 /* ParticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleManager.swift; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
@@ -78,6 +89,9 @@
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		AF63D4392A08D68F007D8A40 /* snatchHiss.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = snatchHiss.wav; path = "../Winter Sample Kit/Percussion/snatchHiss.wav"; sourceTree = SOURCE_ROOT; };
 		AF63D43B2A08D6EC007D8A40 /* snap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = snap.wav; path = "../Winter Sample Kit/Snare/snap.wav"; sourceTree = "<group>"; };
+		AF6707B92A3BDA2700A923E4 /* ShipManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipManager.swift; sourceTree = "<group>"; };
+		AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsTest.swift; sourceTree = "<group>"; };
+		AF6707BD2A3D415000A923E4 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		AF67FBB029F78C0B007CE669 /* Drone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drone.swift; sourceTree = "<group>"; };
 		AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
@@ -126,6 +140,13 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
+				AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */,
+				AF6707B92A3BDA2700A923E4 /* ShipManager.swift */,
+				AF05610E2A3E99E80096E211 /* Level.swift */,
+				AF05610C2A3E99C00096E211 /* SceneManager.swift */,
+				AF05610A2A3E99140096E211 /* PhysicsManager.swift */,
+				AF0561082A3E98E20096E211 /* CameraManager.swift */,
+				AF12B9A62A33BADA0068D352 /* GameManager.swift */,
 				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */,
@@ -189,9 +210,8 @@
 			isa = PBXGroup;
 			children = (
 				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
-				AF12B9A62A33BADA0068D352 /* SceneManager.swift */,
 				AF12B9AA2A344D380068D352 /* ParticleManager.swift */,
-				AF12B9A82A33DFFF0068D352 /* PhysicsManager.swift */,
+				AF12B9A82A33DFFF0068D352 /* Physics.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -256,6 +276,7 @@
 			children = (
 				AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */,
 				AF6388DF29DF78430086C90F /* Ship.swift */,
+				AF6707BD2A3D415000A923E4 /* ModelManager.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -376,17 +397,21 @@
 				AF6D0AF82A35C2A4001C1DEB /* SettingsScreen.swift in Sources */,
 				AFC92EDB2A12B8BE0042697B /* HomeScreen.swift in Sources */,
 				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
+				AF6707BA2A3BDA2700A923E4 /* ShipManager.swift in Sources */,
+				AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */,
 				AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
 				AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */,
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
-				AF12B9A72A33BADA0068D352 /* SceneManager.swift in Sources */,
+				AF6707BC2A3CC2C200A923E4 /* PhysicsTest.swift in Sources */,
+				AF12B9A72A33BADA0068D352 /* GameManager.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
 				AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */,
+				AF6707BE2A3D415000A923E4 /* ModelManager.swift in Sources */,
 				AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */,
-				AF12B9A92A33DFFF0068D352 /* PhysicsManager.swift in Sources */,
+				AF12B9A92A33DFFF0068D352 /* Physics.swift in Sources */,
 				AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */,
 				AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */,
@@ -394,10 +419,13 @@
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
+				AF0561092A3E98E20096E211 /* CameraManager.swift in Sources */,
+				AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */,
 				AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
 				AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,
+				AF05610F2A3E99E80096E211 /* Level.swift in Sources */,
 				AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -543,7 +571,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -579,7 +607,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

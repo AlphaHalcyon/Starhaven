@@ -42,7 +42,7 @@ class ParticleManager {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
         particleSystem.particleIntensity = 1
-        particleSystem.particleSize = 2.5
+        particleSystem.particleSize = 4
         particleSystem.birthRate = 55_000
         particleSystem.emissionDuration = 1
         particleSystem.particleLifeSpan = 0.1
@@ -51,13 +51,13 @@ class ParticleManager {
         return particleSystem
     }
     static let missileGeometry: SCNNode = {
-       return SCNNode(geometry: SCNCapsule(capRadius: 2, height: 10))
+       return SCNNode(geometry: SCNCapsule(capRadius: 3, height: 12))
     }()
     static func createShipMissileTrail(color: UIColor) -> SCNParticleSystem {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
         particleSystem.particleSize = 2
-        particleSystem.birthRate = 50_000
+        particleSystem.birthRate = 55_000
         particleSystem.emissionDuration = 1
         particleSystem.particleLifeSpan = 0.1
         particleSystem.spreadingAngle = 40
