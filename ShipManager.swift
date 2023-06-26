@@ -21,13 +21,14 @@ import SwiftUI
 
 class ShipManager {
     // Player controls
-    var ship: SCNNode = SCNNode()
+    var ship: SCNNode
+    var containerNode: SCNNode = SCNNode()
     var throttle: Float = 0
     var blackHoles: [BlackHole] // Assuming you have a BlackHole class
     var closestBlackHole: BlackHole?
     var missiles: [Missile] = [] // Assuming you have a Missile class
     // Navigation
-    var currentRotation = simd_quatf(angle: 0, axis: simd_float3(x: 0, y: 1, z: 0))
+    var currentRotation = simd_quatf(angle: .pi, axis: simd_float3(x: 0, y: 1, z: 0))
     var rotationDeltaX: Float = 0
     var rotationDeltaY: Float = 0
     var rotationVelocity: SIMD2<Float> = SIMD2<Float>(0, 0)
@@ -35,66 +36,86 @@ class ShipManager {
     var isDragging: Bool = false
     var isPressed: Bool = false
     var isInverted: Bool = false
-    var dampingFactor: Float = 0.666
+    var dampingFactor: Float = 0.99
     var previousTranslation: CGSize = CGSize.zero
+    var initialTouchPoint: CGPoint = .zero
+    var joystickVector: SIMD2<Float> = .zero
+    var closestEnemy: SCNNode?
     init(blackHoles: [BlackHole]) {
         self.ship = ModelManager.createShip()
+        self.ship.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
+        self.ship.physicsBody?.isAffectedByGravity = false
         self.blackHoles = blackHoles
     }
-    func update() {
-        self.updateRotation()
-        self.updateShipPosition()
+    func update(deltaTime: TimeInterval) {
+        self.updateShipPosition(deltaTime: deltaTime)
+        self.updateRotation(deltaTime: deltaTime)
         self.findClosestHole()
     }
-    func updateShipPosition() {
-        // Update the ship's position by its front face and throttle
-        ship.simdPosition += ship.simdWorldFront * throttle
-    }
-    // Update the ship's orientation by the controller's rotation values
-    func updateRotation() {
-        print("Here")
-        // Apply damping to the rotation velocity
-        if !self.isDragging { self.rotationVelocity *= self.dampingFactor }
-        let adjustedDeltaX = self.rotationVelocity.x
-        let rotationY = simd_quatf(angle: adjustedDeltaX, axis: self.ship.simdWorldUp)
-        let cameraRight = self.ship.simdWorldRight
-        let rotationX = simd_quatf(angle: self.rotationVelocity.y, axis: cameraRight)
+    var lastPosition: SIMD3<Float> = .zero
+    var lastRotation: simd_quatf = simd_quatf()
 
-        let totalRotation = simd_mul(rotationY, rotationX)
-        self.currentRotation = simd_mul(totalRotation, self.currentRotation)
-        print(totalRotation)
-        self.ship.simdOrientation = self.currentRotation
-        // Stop the rotation when the velocity is below a certain threshold
-        if length(self.rotationVelocity) < 0.01 {
-            self.isPressed = false
-            self.isRotationActive = false
-            self.rotationVelocity = .zero
+    func updateShipPosition(deltaTime: TimeInterval) {
+        // Apply the new position
+        let throttleDelta = self.throttle // * Float(deltaTime)
+        self.ship.simdPosition += self.ship.simdWorldFront * throttleDelta
+    }
+
+    func updateRotation(deltaTime: TimeInterval) {
+        // Update rotationVelocity with deltaTime
+        //self.rotationVelocity *= Float(deltaTime)
+        if self.rotationVelocity != .zero {
+            // Create the rotation quaternions
+            if !self.isDragging { self.rotationVelocity *= self.dampingFactor }
+            let adjustedDeltaX = self.rotationVelocity.x
+            let rotationY = simd_quatf(angle: adjustedDeltaX, axis: self.ship.simdWorldUp)
+            let cameraRight = self.ship.simdWorldRight
+            let rotationX = simd_quatf(angle: self.rotationVelocity.y, axis: cameraRight)
+            let totalRotation = simd_mul(rotationX, rotationY)
+            let newRotation = simd_mul(totalRotation, self.currentRotation)
+            
+            // Apply low-pass filter
+            let alpha: Float = 1
+            let filteredRotation =  simd_normalize(simd_slerp(self.lastRotation, newRotation, alpha))
+            // Normalize the quaternion
+            self.lastRotation = filteredRotation
+            
+            // Apply the new rotation
+            self.ship.simdOrientation = filteredRotation
+            self.currentRotation = filteredRotation
+            if length(self.rotationVelocity) < 0.01 {
+                self.rotationVelocity = .zero
+            }
+        } else {
+            self.ship.simdOrientation = self.currentRotation
         }
     }
     func dragChanged(value: DragGesture.Value) {
-        // Your dragChanged code here
         let translation = value.translation
-        print(translation.width, translation.height)
+        //print(translation.width, translation.height)
         let deltaX = Float(translation.width - previousTranslation.width) * 0.005
         let deltaY = Float(translation.height - previousTranslation.height) * 0.005
         // Update the averageRotationVelocity
         self.rotationVelocity = SIMD2<Float>(Float(deltaX), Float(deltaY))
         self.previousTranslation = translation
-        self.isRotationActive = true
     }
-    
     func dragEnded() {
-        // Your dragEnded code here
         self.isDragging = false
-        self.previousTranslation = CGSize.zero
+        self.previousTranslation = .zero
+        self.rotationVelocity = .zero
+        self.initialTouchPoint = .zero
+        self.rotationDeltaX = .zero
+        self.rotationDeltaY = .zero
+        self.isRotationActive = false
     }
-    
+
     func findClosestHole() {
         // Find the closest black hole and its distance
     }
     
     func throttle(value: Float) {
         // Your throttle code here
+        self.throttle = value
     }
     
     func fireMissile(target: SCNNode? = nil) {

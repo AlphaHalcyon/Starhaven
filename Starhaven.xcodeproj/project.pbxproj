@@ -11,16 +11,17 @@
 		AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610A2A3E99140096E211 /* PhysicsManager.swift */; };
 		AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610C2A3E99C00096E211 /* SceneManager.swift */; };
 		AF05610F2A3E99E80096E211 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610E2A3E99E80096E211 /* Level.swift */; };
+		AF05611B2A3EAE600096E211 /* AIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05611A2A3EAE600096E211 /* AIManager.swift */; };
 		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
-		AF0C5C522A2F3CD600D6D008 /* she never loved u bro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */; };
 		AF12B9A72A33BADA0068D352 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A62A33BADA0068D352 /* GameManager.swift */; };
 		AF12B9A92A33DFFF0068D352 /* Physics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A82A33DFFF0068D352 /* Physics.swift */; };
 		AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9AA2A344D380068D352 /* ParticleManager.swift */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
-		AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */; };
+		AF2C1D8C2A45167600E9D132 /* Luna.obj in Resources */ = {isa = PBXBuildFile; fileRef = AF2C1D8B2A45167600E9D132 /* Luna.obj */; };
+		AF2C1D8E2A45167C00E9D132 /* moon.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AF2C1D8D2A45167C00E9D132 /* moon.mtl */; };
+		AF2C1D902A451D8B00E9D132 /* tex in Resources */ = {isa = PBXBuildFile; fileRef = AF2C1D8F2A451D8B00E9D132 /* tex */; };
 		AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D1DA52A0A006600A8F2C7 /* Planet.swift */; };
-		AF4F696B2A0DBFD3007376EA /* HVNDarkseid.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */; };
 		AF5B368F2A0AA9660075581E /* Custom Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5B368E2A0AA9650075581E /* Custom Slider.swift */; };
 		AF6388DA29DF77940086C90F /* Space.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388D929DF77940086C90F /* Space.swift */; };
 		AF6388DC29DF77B80086C90F /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DB29DF77B80086C90F /* HUD.swift */; };
@@ -28,8 +29,6 @@
 		AF6388E029DF78430086C90F /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DF29DF78430086C90F /* Ship.swift */; };
 		AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */; };
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
-		AF63D43A2A08D68F007D8A40 /* snatchHiss.wav in Resources */ = {isa = PBXBuildFile; fileRef = AF63D4392A08D68F007D8A40 /* snatchHiss.wav */; };
-		AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */ = {isa = PBXBuildFile; fileRef = AF63D43B2A08D6EC007D8A40 /* snap.wav */; };
 		AF6707BA2A3BDA2700A923E4 /* ShipManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707B92A3BDA2700A923E4 /* ShipManager.swift */; };
 		AF6707BC2A3CC2C200A923E4 /* PhysicsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */; };
 		AF6707BE2A3D415000A923E4 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707BD2A3D415000A923E4 /* ModelManager.swift */; };
@@ -41,7 +40,8 @@
 		AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
-		AFB0EA462A318C8500313974 /* ISR.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AFB0EA452A318C8500313974 /* ISR.mp3 */; };
+		AFAFEF482A43ED1200247BAF /* IntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAFEF472A43ED1200247BAF /* IntroScreen.swift */; };
+		AFB0FD302A452764009B5061 /* base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFB0FD2F2A452764009B5061 /* base.jpg */; };
 		AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */; };
 		AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DB2A25A4C4009C998B /* Raider.obj */; };
 		AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DD2A25A4F0009C998B /* Raider.mtl */; };
@@ -62,6 +62,7 @@
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
 		AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E929F911A800401509 /* FactionSystem.swift */; };
 		AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46F129F91E2400401509 /* Dreadknought.swift */; };
+		AFE668A02A4277C00049D599 /* AI.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE6689F2A4277C00049D599 /* AI.swift */; };
 		AFF42A8629E6689800B6C603 /* Missile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFF42A8529E6689800B6C603 /* Missile.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,16 +71,23 @@
 		AF05610A2A3E99140096E211 /* PhysicsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsManager.swift; sourceTree = "<group>"; };
 		AF05610C2A3E99C00096E211 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
 		AF05610E2A3E99E80096E211 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		AF0561112A3EA8270096E211 /* ISR.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ISR.mp3; sourceTree = "<group>"; };
+		AF0561122A3EA8270096E211 /* HVNDarkseid.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HVNDarkseid.mp3; sourceTree = "<group>"; };
+		AF0561132A3EA8270096E211 /* HVN.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HVN.mp3; sourceTree = "<group>"; };
+		AF0561142A3EA82A0096E211 /* snatchHiss.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = snatchHiss.wav; sourceTree = "<group>"; };
+		AF0561152A3EA82A0096E211 /* snap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = snap.wav; sourceTree = "<group>"; };
+		AF0561162A3EA82B0096E211 /* she never loved u bro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "she never loved u bro.mp3"; sourceTree = "<group>"; };
+		AF05611A2A3EAE600096E211 /* AIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIManager.swift; sourceTree = "<group>"; };
 		AF07021C29E120D300667F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "she never loved u bro.mp3"; path = "../../she never loved u bro.mp3"; sourceTree = "<group>"; };
 		AF12B9A62A33BADA0068D352 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		AF12B9A82A33DFFF0068D352 /* Physics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Physics.swift; sourceTree = "<group>"; };
 		AF12B9AA2A344D380068D352 /* ParticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleManager.swift; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
-		AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVN.mp3; path = ../../Music/Logic/Bounces/HVN.mp3; sourceTree = "<group>"; };
+		AF2C1D8B2A45167600E9D132 /* Luna.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Luna.obj; path = ../../Downloads/Luna.obj; sourceTree = "<group>"; };
+		AF2C1D8D2A45167C00E9D132 /* moon.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = moon.mtl; path = ../../Downloads/moon.mtl; sourceTree = "<group>"; };
+		AF2C1D8F2A451D8B00E9D132 /* tex */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tex; path = ../../Downloads/tex; sourceTree = "<group>"; };
 		AF3D1DA52A0A006600A8F2C7 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
-		AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVNDarkseid.mp3; path = ../../Music/Logic/Bounces/HVNDarkseid.mp3; sourceTree = "<group>"; };
 		AF5B368E2A0AA9650075581E /* Custom Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Slider.swift"; sourceTree = "<group>"; };
 		AF6388D929DF77940086C90F /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
 		AF6388DB29DF77B80086C90F /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
@@ -87,8 +95,6 @@
 		AF6388DF29DF78430086C90F /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacegroundViewModel.swift; sourceTree = "<group>"; };
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
-		AF63D4392A08D68F007D8A40 /* snatchHiss.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = snatchHiss.wav; path = "../Winter Sample Kit/Percussion/snatchHiss.wav"; sourceTree = SOURCE_ROOT; };
-		AF63D43B2A08D6EC007D8A40 /* snap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = snap.wav; path = "../Winter Sample Kit/Snare/snap.wav"; sourceTree = "<group>"; };
 		AF6707B92A3BDA2700A923E4 /* ShipManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipManager.swift; sourceTree = "<group>"; };
 		AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsTest.swift; sourceTree = "<group>"; };
 		AF6707BD2A3D415000A923E4 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
@@ -100,7 +106,8 @@
 		AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMissile.swift; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
-		AFB0EA452A318C8500313974 /* ISR.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = ISR.mp3; path = ../../ISR.mp3; sourceTree = "<group>"; };
+		AFAFEF472A43ED1200247BAF /* IntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreen.swift; sourceTree = "<group>"; };
+		AFB0FD2F2A452764009B5061 /* base.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = base.jpg; path = ../../Downloads/tex/base.jpg; sourceTree = "<group>"; };
 		AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = HeavyBattleship.obj; sourceTree = "<group>"; };
 		AFBB77DB2A25A4C4009C998B /* Raider.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.obj; path = ../../../Downloads/Raider.obj; sourceTree = "<group>"; };
 		AFBB77DD2A25A4F0009C998B /* Raider.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.mtl; path = ../../../Downloads/Raider.mtl; sourceTree = "<group>"; };
@@ -122,6 +129,7 @@
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
 		AFDE46E929F911A800401509 /* FactionSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSystem.swift; sourceTree = "<group>"; };
 		AFDE46F129F91E2400401509 /* Dreadknought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dreadknought.swift; sourceTree = "<group>"; };
+		AFE6689F2A4277C00049D599 /* AI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AI.swift; sourceTree = "<group>"; };
 		AFF42A8529E6689800B6C603 /* Missile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Missile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,26 +145,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AF0561172A3EA8300096E211 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				AF0561122A3EA8270096E211 /* HVNDarkseid.mp3 */,
+				AF0561132A3EA8270096E211 /* HVN.mp3 */,
+				AF0561112A3EA8270096E211 /* ISR.mp3 */,
+				AF0561152A3EA82A0096E211 /* snap.wav */,
+				AF0561142A3EA82A0096E211 /* snatchHiss.wav */,
+				AF0561162A3EA82B0096E211 /* she never loved u bro.mp3 */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		AF0561182A3EA8870096E211 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				AF12B9A62A33BADA0068D352 /* GameManager.swift */,
+				AF05611A2A3EAE600096E211 /* AIManager.swift */,
+				AF05610C2A3E99C00096E211 /* SceneManager.swift */,
+				AF0561082A3E98E20096E211 /* CameraManager.swift */,
+				AF05610A2A3E99140096E211 /* PhysicsManager.swift */,
+				AF6707B92A3BDA2700A923E4 /* ShipManager.swift */,
+				AFE6689F2A4277C00049D599 /* AI.swift */,
+				AF6707BD2A3D415000A923E4 /* ModelManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		AF0561192A3EA8970096E211 /* Game Design */ = {
+			isa = PBXGroup;
+			children = (
+				AF05610E2A3E99E80096E211 /* Level.swift */,
+			);
+			path = "Game Design";
+			sourceTree = "<group>";
+		};
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
 				AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */,
-				AF6707B92A3BDA2700A923E4 /* ShipManager.swift */,
-				AF05610E2A3E99E80096E211 /* Level.swift */,
-				AF05610C2A3E99C00096E211 /* SceneManager.swift */,
-				AF05610A2A3E99140096E211 /* PhysicsManager.swift */,
-				AF0561082A3E98E20096E211 /* CameraManager.swift */,
-				AF12B9A62A33BADA0068D352 /* GameManager.swift */,
+				AF2C1D8D2A45167C00E9D132 /* moon.mtl */,
+				AFB0FD2F2A452764009B5061 /* base.jpg */,
+				AF2C1D8F2A451D8B00E9D132 /* tex */,
+				AF2C1D8B2A45167600E9D132 /* Luna.obj */,
+				AF0561182A3EA8870096E211 /* Managers */,
+				AF0561192A3EA8970096E211 /* Game Design */,
+				AF0561172A3EA8300096E211 /* Audio */,
+				AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */,
 				AFD4C04E29CFA48200A127BB /* Starhaven */,
 				AFC43CD929D7CF200080E891 /* Privacy Policy.txt */,
 				AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */,
 				AF07021C29E120D300667F9B /* Assets.xcassets */,
-				AF63D4392A08D68F007D8A40 /* snatchHiss.wav */,
-				AF63D43B2A08D6EC007D8A40 /* snap.wav */,
-				AF3D1DA32A09ED1700A8F2C7 /* HVN.mp3 */,
-				AFB0EA452A318C8500313974 /* ISR.mp3 */,
-				AF0C5C512A2F3CD600D6D008 /* she never loved u bro.mp3 */,
-				AF4F696A2A0DBFD3007376EA /* HVNDarkseid.mp3 */,
 				AFD4C04D29CFA48200A127BB /* Products */,
 				AFD4C06929CFFB4E00A127BB /* Frameworks */,
 			);
@@ -184,7 +224,6 @@
 				AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */,
 				AFD7EEBB2A2C88FD00A92162 /* dh10.obj */,
 				AFBB77DD2A25A4F0009C998B /* Raider.mtl */,
-				AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */,
 				AFD4C05529CFA48400A127BB /* Preview Content */,
 			);
 			path = Starhaven;
@@ -276,7 +315,6 @@
 			children = (
 				AF6388DD29DF77DF0086C90F /* VelocityBuffer.swift */,
 				AF6388DF29DF78430086C90F /* Ship.swift */,
-				AF6707BD2A3D415000A923E4 /* ModelManager.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -298,6 +336,7 @@
 				AFDBFDD929DD2775006DEB3E /* ContentView.swift */,
 				AF6D0AF72A35C2A4001C1DEB /* SettingsScreen.swift */,
 				AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */,
+				AFAFEF472A43ED1200247BAF /* IntroScreen.swift */,
 				AF6388D929DF77940086C90F /* Space.swift */,
 				AFDE46EC29F9121500401509 /* Heads-Up Display */,
 			);
@@ -363,21 +402,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */,
-				AF3D1DA42A09ED1700A8F2C7 /* HVN.mp3 in Resources */,
-				AF63D43C2A08D6EC007D8A40 /* snap.wav in Resources */,
-				AFB0EA462A318C8500313974 /* ISR.mp3 in Resources */,
+				AFB0FD302A452764009B5061 /* base.jpg in Resources */,
+				AF2C1D8C2A45167600E9D132 /* Luna.obj in Resources */,
+				AF2C1D902A451D8B00E9D132 /* tex in Resources */,
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
 				AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */,
 				AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */,
 				AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */,
 				AF07021E29E120D300667F9B /* Assets.xcassets in Resources */,
-				AF0C5C522A2F3CD600D6D008 /* she never loved u bro.mp3 in Resources */,
 				AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */,
-				AF63D43A2A08D68F007D8A40 /* snatchHiss.wav in Resources */,
 				AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */,
-				AF4F696B2A0DBFD3007376EA /* HVNDarkseid.mp3 in Resources */,
 				AFD7EEBD2A2C88FD00A92162 /* dh10.obj in Resources */,
+				AF2C1D8E2A45167C00E9D132 /* moon.mtl in Resources */,
 				AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,6 +439,7 @@
 				AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
+				AFE668A02A4277C00049D599 /* AI.swift in Sources */,
 				AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */,
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
@@ -415,6 +453,7 @@
 				AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */,
 				AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */,
+				AFAFEF482A43ED1200247BAF /* IntroScreen.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
@@ -422,6 +461,7 @@
 				AF0561092A3E98E20096E211 /* CameraManager.swift in Sources */,
 				AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */,
 				AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */,
+				AF05611B2A3EAE600096E211 /* AIManager.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
 				AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,

@@ -27,4 +27,16 @@ class SpacegroundCollisionHandler: CollisionHandler {
 
 // Specific PhysicsObject classes
 class Hellfire: SceneObject {
+    var node: SCNNode
+    
+    required init(node: SCNNode) {
+        self.node = node
+    }
+    
+    func update() {
+    }
+    
+    func destroy() {
+    }
+    
 }
