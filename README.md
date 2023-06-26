@@ -3,6 +3,29 @@
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
  ## FIXES, UPDATES, AND SOLUTIONS
+ ### Update: Solution to Floating Point Precision Errors in SceneKit
+Our latest update to Starhaven tackles a critical issue that was limiting the scale of our in-game world: floating point precision errors in SceneKit.
+
+SceneKit, the 3D graphics API we use for rendering the game world, conducts all of its calculations using floating point numbers (floats) instead of doubles. Floats are less precise than doubles, especially for large numbers, which leads to noticeable precision errors as objects move far away from the origin.
+
+In our case, this limitation was causing jittery movement in the spaceship when it was more than approximately 100,000 meters (SceneKit units) away from the origin.
+
+Our solution to this problem was to implement a 'player-centric' approach. Instead of having the player move around in the world, we now move the world around the player. To do this, we recenter the world to the player's position every frame, effectively keeping the player at the origin at all times.
+
+Here's how it works in detail:
+
+We start by storing all objects in the world in an array sceneObjects.
+
+#### In the renderer(_:updateAtTime:) method, which is called every frame, we call updateObjectPositions(). We will limit the number of calls made to the function dynamically in the future, based on when the player and camera rig have exceeded a maximum distance from the origin.
+
+#### updateObjectPositions() iterates over all objects in sceneObjects and updates their positions relative to the player's position. Effectively, it moves the entire world so that the player is at the origin.
+
+#### Finally, we reset the player's position to the origin.
+
+This approach allows us to simulate the player moving through the world while keeping all objects within a relatively small distance from the origin, thus avoiding precision errors.
+
+With this update, we're able to maintain the ambitious scale of our world while reducing the vector component sizes SceneKit has to work with when doing origin-based calculations, leading to smoother and more realistic movement for the spaceship.
+
  ### Refactoring: Managers (6/17/2023)
  
  **This update primarily focuses on applying the single-responsibility principle to our codebase. Previously, most of our components were managed in one view model, creating complexities and dependencies that we needed to resolve.**
