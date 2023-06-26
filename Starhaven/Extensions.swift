@@ -68,8 +68,8 @@ extension SCNVector3 {
         return CGFloat(sqrt(dx * dx + dy * dy + dz * dz))
     }
     static func != (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
-            return !SCNVector3EqualToVector3(lhs, rhs)
-        }
+        return !SCNVector3EqualToVector3(lhs, rhs)
+    }
     func length() -> Float {
         return sqrtf(x * x + y * y + z * z)
     }

@@ -9,21 +9,24 @@ import Foundation
 import SceneKit
 import SwiftUI
 
-class Star {
-    @Published var starNode: SCNNode
+class Star: SceneObject {
+    required init(node: SCNNode) {
+        self.node = node
+        self.camera = SCNNode()
+    }
+    @Published var node: SCNNode
     @Published var camera: SCNNode
     init(radius: CGFloat, color: UIColor, camera: SCNNode) {
-        let coronaGeo = SCNSphere(radius: radius + 50)
+        let coronaGeo = SCNSphere(radius: radius + 150)
         self.camera = camera
-        self.starNode = SCNNode(geometry: SCNSphere(radius: radius))
-        
+        self.node = SCNNode(geometry: SCNSphere(radius: radius))
         // Create the particle system programmatically
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
         fireParticleSystem.birthRate = 10_000
-        fireParticleSystem.particleSize = 5
-        fireParticleSystem.particleIntensity = 1
-        fireParticleSystem.particleLifeSpan = 0.5
+        fireParticleSystem.particleSize = 1
+        fireParticleSystem.particleIntensity = 0.90
+        fireParticleSystem.particleLifeSpan = 0.3
         fireParticleSystem.spreadingAngle = 180
         fireParticleSystem.particleAngularVelocity = 50
         fireParticleSystem.emitterShape = coronaGeo
@@ -31,9 +34,18 @@ class Star {
         fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
         let material = SCNMaterial()
         material.diffuse.contents = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg", in: Bundle.main, compatibleWith: nil)
-        self.starNode.geometry?.firstMaterial = material
+        
+        // Update the material's properties
+        material.emission.contents = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg", in: Bundle.main, compatibleWith: nil)
+        material.lightingModel = .physicallyBased
+
+        self.node.geometry?.firstMaterial = material
         
         // Add the particle system to the star node
-        self.starNode.addParticleSystem(fireParticleSystem)
+        self.node.addParticleSystem(fireParticleSystem)
+    }
+    public func update() {
+    }
+    func destroy() {
     }
 }

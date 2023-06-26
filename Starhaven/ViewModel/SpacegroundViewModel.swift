@@ -144,8 +144,8 @@ import AVFoundation
     }
     public func createStar() {
         let star = Star(radius: 200_000, color: .orange, camera: self.cameraNode)
-        star.starNode.position = SCNVector3(1000, 100_000, 2_000_000)
-        self.scene.rootNode.addChildNode(star.starNode)
+        star.node.position = SCNVector3(1000, 100_000, 2_000_000)
+        self.scene.rootNode.addChildNode(star.node)
     }
     public func createPlanet(name: String) {
         let planet = Planet(image: UIImage(imageLiteralResourceName: name), radius: 50_000, view: self.view)

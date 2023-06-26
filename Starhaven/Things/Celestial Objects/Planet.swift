@@ -10,8 +10,8 @@ import SwiftUI
 import SceneKit
 
 class Planet {
-    private let sphere: SCNSphere
-    private let node: SCNNode
+    public let sphere: SCNSphere
+    public let node: SCNNode
     public var view: SCNView
     
     init(image: UIImage, radius: CGFloat, view: SCNView) {
@@ -27,7 +27,7 @@ class Planet {
     }
     
     func addToScene(scene: SCNScene) {
-        node.position = SCNVector3(x: 0, y: -50_000, z: 120_000)
+        node.position = SCNVector3(x: 0, y: -500_000, z: 0)
         node.simdOrientation = simd_quatf(angle: .pi/2, axis: simd_float3(x: 0, y: 1, z: 0))
         self.view.prepare([node]) { success in
             DispatchQueue.main.async {
