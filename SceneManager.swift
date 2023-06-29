@@ -55,13 +55,15 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.shipManager.ship.position = SCNVector3Zero
     }
     public func createStar() {
-        let star = Star(radius: 500_000, color: .orange, camera: self.cameraManager.cameraNode)
+        let star = Star(radius: 500_000, color: .orange, camera: self.cameraManager.cameraNode, sceneManager: self)
         star.node.position = SCNVector3(0, 1_750_000, 5_000_000)
         
         let lightNode = SCNNode()
         let light = SCNLight()
-        light.intensity = 4_000
+        light.intensity = 10_000
         light.type = .omni
+        light.color = UIColor.orange
+
         lightNode.light = light
         self.sceneObjects.append(star)
         self.view.prepare([star.node, lightNode]) { success in
@@ -73,7 +75,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     }
     public func createPlanet(name: String) {
         let image = UIImage(imageLiteralResourceName: name)
-        let planet = Planet(image: image, radius: 1_750_000, view: self.view, asteroidBeltImage: image)
+        let planet = Planet(image: image, radius: 1_750_000, view: self.view, asteroidBeltImage: image, sceneManager: self)
         planet.node.castsShadow = true
         self.sceneObjects.append(planet)
         self.view.prepare([planet.node]) { success in
@@ -147,6 +149,7 @@ protocol Updateable {
 protocol SceneObject: Updateable {
     var node: SCNNode { get set }
     var sceneManager: SceneManager { get set }
+    var isAI: Bool { get set }
     init(node: SCNNode, sceneManager: SceneManager)
     func update()
     func destroy()

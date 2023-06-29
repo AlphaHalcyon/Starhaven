@@ -10,13 +10,19 @@ import SceneKit
 import SwiftUI
 
 class Star: SceneObject {
-    required init(node: SCNNode) {
+    var sceneManager: SceneManager
+    
+    var isAI: Bool = false
+    
+    required init(node: SCNNode, sceneManager: SceneManager) {
+        self.sceneManager = sceneManager
         self.node = node
         self.camera = SCNNode()
     }
     @Published var node: SCNNode
     @Published var camera: SCNNode
-    init(radius: CGFloat, color: UIColor, camera: SCNNode) {
+    init(radius: CGFloat, color: UIColor, camera: SCNNode, sceneManager: SceneManager) {
+        self.sceneManager = sceneManager
         let coronaGeo = SCNSphere(radius: radius + 150)
         self.camera = camera
         let image = UIImage(named: "tex/Sun.jpg", in: Bundle.main, compatibleWith: nil)
@@ -57,6 +63,7 @@ class Star: SceneObject {
         self.node = SCNNode(geometry: geo)
         // Add the particle system to the star node
         self.node.addParticleSystem(fireParticleSystem)
+        self.node.light?.color = image
     }
     public func update() {
     }

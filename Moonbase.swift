@@ -10,6 +10,14 @@ import SwiftUI
 import SceneKit
 
 class Moonbase: SceneObject {
+    var sceneManager: SceneManager
+    var isAI: Bool = false
+    
+    required init(node: SCNNode, sceneManager: SceneManager) {
+        self.node = node
+        self.sceneManager = sceneManager
+    }
+    
     
     public var node: SCNNode
     private var habNode: SCNNode?
@@ -17,14 +25,14 @@ class Moonbase: SceneObject {
     // Add other moonbase parts here
     private var railgunBaseNodes: [SCNNode] = []
     private var railgunTurretNode: SCNNode?
-    
-    required init(node: SCNNode) {
-        self.node = node
-    }
-    init() {
+    init(sceneManager: SceneManager, planet: Planet) {
+        
         self.node = SCNNode()
+        self.sceneManager = sceneManager
         self.loadHab()
         self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(0,0,1_500))
+        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(0,0,-1_500))
+        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1500,0,1_500))
         self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1_500,0,-1_500))
         //self.loadRailgunTurret(named: "moonGun")
         // Load other moonbase parts here

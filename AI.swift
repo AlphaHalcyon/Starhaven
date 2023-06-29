@@ -13,6 +13,7 @@ class AI: SceneObject {
     var node: SCNNode
     var faction: Faction
     var target: SCNNode? = nil
+    var isAI: Bool = true
     var offset: SCNVector3 = SCNVector3(0,0,0)
     var sceneManager: SceneManager
     required init(node: SCNNode, sceneManager: SceneManager) {
@@ -78,7 +79,17 @@ class AI: SceneObject {
                     self.fireMissile(target: self.target, particleSystemColor: self.faction == .Wraith ? .systemPink : .cyan)
                 }
             }
+        } else {
+            self.selectNewTarget()
         }
+    }
+    // OPERATIONS
+    func selectNewTarget() {
+        let targets = self.sceneManager.sceneObjects.filter { $0.isAI }
+        if let target = targets.randomElement() {
+            self.target = target.node
+        }
+        self.target = targets.randomElement()?.node
     }
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {

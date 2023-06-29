@@ -13,14 +13,16 @@ class Planet: SceneObject {
     public var node: SCNNode
     public var sphere: SCNSphere = SCNSphere()
     public var view: SCNView = SCNView()
-    
-    required init(node: SCNNode) {
+    var sceneManager: SceneManager
+    var isAI: Bool = false
+    required init(node: SCNNode, sceneManager: SceneManager) {
         self.node = node
+        self.sceneManager = sceneManager
     }
-    
-    init(image: UIImage, radius: CGFloat, view: SCNView, asteroidBeltImage: UIImage? = nil) {
+    init(image: UIImage, radius: CGFloat, view: SCNView, asteroidBeltImage: UIImage? = nil, sceneManager: SceneManager) {
         self.view = view
         self.sphere.radius = radius
+        self.sceneManager = sceneManager
         let material = SCNMaterial()
         material.diffuse.contents = image
         material.isDoubleSided = false
@@ -32,15 +34,45 @@ class Planet: SceneObject {
 
         self.node = SCNNode(geometry: sphere)
         
-        self.addMoonbase(moonbase: Moonbase(), atLatitude: 0, longitude: 0)
+        self.addMoonbase(moonbase: Moonbase(sceneManager: self.sceneManager, planet: self), atLatitude: 0, longitude: 0)
     }
     // Inside Planet class
     func addMoonbase(moonbase: Moonbase, atLatitude latitude: Double, longitude: Double) {
-        moonbase.node.position = SCNVector3(0, self.sphere.radius - 150, 0)
         moonbase.node.scale = SCNVector3(50,50,50)
-        //moonbase.node.eulerAngles.x = -90
-        node.addChildNode(moonbase.node)
+        self.addObject(object: moonbase.node, atLatitude: 90, longitude: 0, offset: 0)
+        let ship = ModelManager.createShip(scale: 100)
+        self.addObject(object: ship, atLatitude: 85, longitude: 10, offset: 0)
+        let base: SCNNode = moonbase.node.clone()
+        self.addObject(object: base, atLatitude: -45, longitude: 0, offset: 0)
     }
+    func addObject(object: SCNNode, atLatitude latitude: Double, longitude: Double, offset: CGFloat) {
+        let latitudeInRadians = latitude * .pi / 180
+        let longitudeInRadians = longitude * .pi / 180
+
+        let radius = self.sphere.radius + offset
+        let x = radius * cos(latitudeInRadians) * cos(longitudeInRadians)
+        let y = radius * sin(latitudeInRadians)
+        let z = radius * cos(latitudeInRadians) * sin(longitudeInRadians)
+
+        let position = SCNVector3(x, y, z)
+        object.position = position
+
+        // Convert SCNVector3 to simd_float3
+        let simdPosition = simd_float3(x: Float(x), y: Float(y), z: Float(z))
+
+        // Compute the direction vector pointing towards the center of the planet
+        let downDirection = -normalize(simdPosition)
+
+        // Rotate the object to align its "down" direction with the direction towards the planet's center
+        let rotation = simd_quatf(from: simd_float3(0, -1, 0), to: downDirection)
+
+        object.simdOrientation = rotation
+
+        node.addChildNode(object)
+    }
+
+
+
     func addToScene(scene: SCNScene) {
         node.position = SCNVector3(x: 0, y: -500_000, z: 0)
         node.simdOrientation = simd_quatf(angle: .pi/2, axis: simd_float3(x: 0, y: 1, z: 0))
