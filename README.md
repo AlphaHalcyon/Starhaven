@@ -1,4 +1,5 @@
-![image](https://github.com/AlphaHalcyon/Starhaven/assets/74324748/256cab16-917a-4f28-a418-ec66d660a3c5)# Starhaven
+![image](https://github.com/AlphaHalcyon/Starhaven/assets/74324748/256cab16-917a-4f28-a418-ec66d660a3c5)
+# Starhaven
  An event horizon explorer.
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
