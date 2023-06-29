@@ -3,7 +3,7 @@
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
  ## FIXES, UPDATES, AND SOLUTIONS
- ### Update: Moonbase and Such
+ ### Update: Moonbase and Such (6/29/2023)
 1. **Planet**: The Planet class represents a celestial body in the scene. It includes methods for adding other objects (such as a Moonbase) to the surface of the planet at specific latitudinal and longitudinal coordinates. The method `addObject` was updated to ensure that added objects are properly oriented relative to the planet's surface. This is done by creating a downward direction vector, which points towards the center of the planet from the object's position, and then rotating the object to align its downward direction with this vector. In other words, objects are now properly "gravity-aligned" with the planet.
 
 Possible improvements for this class could be creating helper methods for common tasks such as adding multiple similar objects (like an array of Moonbases) at once or creating a method to adjust an object's position after it's been added to the planet.
@@ -24,7 +24,7 @@ Quaternions (often abbreviated to "quats") are used in the `Planet` class's `add
 
 The use of quaternions here makes the task of aligning the object with the planet's surface straightforward and numerically stable, even as the object's position changes.
 
- ### Update: Solution to Floating Point Precision Errors in SceneKit
+ ### Update: Solution to Floating Point Precision Errors in SceneKit (6/2x/2023)
 Our latest update to Starhaven tackles a critical issue that was limiting the scale of our in-game world: floating point precision errors in SceneKit.
 
 SceneKit, the 3D graphics API we use for rendering the game world, conducts all of its calculations using floating point numbers (floats) instead of doubles. Floats are less precise than doubles, especially for large numbers, which leads to noticeable precision errors as objects move far away from the origin.
