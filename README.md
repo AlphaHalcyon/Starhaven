@@ -116,7 +116,7 @@ Introduction of Quaternions: In order to overcome the issue of gimbal lock that 
 
 To understand this, imagine you're in an aircraft and you want to change its orientation. You have three degrees of freedom – you can roll (tilt side-to-side), pitch (tilt forward or backward), or yaw (turn left or right). This can be achieved by rotations around the x, y, and z axes respectively.
 
-However, if the pitch (tilt forward or backward) is 90 degrees, that is, the aircraft is pointing straight up or straight down, then roll and yaw both end up rotating the aircraft about the same axis. You've lost a degree of freedom, and certain maneuvers are now impossible. This situation is known as gimbal lock.
+However, if the pitch (tilt forward or backward) is 90 degrees, that is, the aircraft is pointing straight up or straight down, then roll and yaw both end up rotating the aircraft about the same axis. You've lost a degree of freedom, and certain maneuvers are now impossible (read: you cannot steer predictably, and in some ways cannot steer at all). This situation is known as gimbal lock.
 
 In 3D computer graphics and robotics, Euler angles are often used to represent rotations, but they suffer from this gimbal lock issue. When an object's orientation approaches gimbal lock, further rotations may not have the effect one expects, leading to awkward movement or sudden jumps in orientation. 
 
