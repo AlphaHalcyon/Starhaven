@@ -37,41 +37,42 @@ Here's how it works in detail:
 
 We start by storing all objects in the world in an array sceneObjects.
 
-#### In the renderer(_:updateAtTime:) method, which is called every frame, we call updateObjectPositions(). We will limit the number of calls made to the function dynamically in the future, based on when the player and camera rig have exceeded a maximum distance from the origin.
+**In the renderer(_:updateAtTime:) method,** which is called every frame, we call updateObjectPositions(). We will limit the number of calls made to the function dynamically in the future, based on when the player and camera rig have exceeded a maximum distance from the origin.
 
-#### updateObjectPositions() iterates over all objects in sceneObjects and updates their positions relative to the player's position. Effectively, it moves the entire world so that the player is at the origin.
+**updateObjectPositions()** iterates over all objects in sceneObjects and updates their positions relative to the player's position. Effectively, it moves the entire world so that the player is at the origin.
 
-#### Finally, we reset the player's position to the origin.
+**Finally**, we reset the player's position to the origin.
 
-This approach allows us to simulate the player moving through the world while keeping all objects within a relatively small distance from the origin, thus avoiding precision errors.
+**This approach** allows us to simulate the player moving through the world while keeping all objects within a relatively small distance from the origin, thus avoiding precision errors.
 
-With this update, we're able to maintain the ambitious scale of our world while reducing the vector component sizes SceneKit has to work with when doing origin-based calculations, leading to smoother and more realistic movement for the spaceship.
+**With this update,** we're able to maintain the ambitious scale of our world while reducing the vector component sizes SceneKit has to work with when doing origin-based calculations, leading to smoother and more realistic movement for the spaceship.
 
  ### Refactoring: Managers (6/17/2023)
  
  **This update primarily focuses on applying the single-responsibility principle to our codebase. Previously, most of our components were managed in one view model, creating complexities and dependencies that we needed to resolve.**
  The key changes include:
-#### PhysicsManager: 
+**PhysicsManager:**
 This class is responsible for the physical interactions in our game world.
-#### CollisionHandlers: 
+**CollisionHandlers:** 
 These handle the behavior of objects when they collide in our game world.
-#### Levels: 
+**Levels:**
 Represent the stages or levels in our game, including the objects present and their arrangements.
-#### SceneManager: 
+**SceneManager:** 
 Manages the rendering of our scenes. Includes the rendering loop where update functions are called.
-#### SceneObjects: 
+**SceneObjects:**
 Represent the various entities present in our scenes. They are mapped to their respective nodes in a SceneManager.
-#### CameraManager: 
+**CameraManager**
 This new class is responsible for managing the camera's movements. We have separated the navigation logic from the camera logic, which was previously intertwined.
-#### CameraTrackingState: 
+**CameraTrackingState**
 This new enumeration provides us with more flexibility in positioning our camera.
-#### ShipManager: 
+**ShipManager:**
 This class manages the player's control of the ship. This functionality is set to be further generalized in the future to accommodate other control objects.
-#### InputHandler and PlayerObjectManager: 
+**InputManager and PlayerObjectManager:**
 We plan to break down the ShipManager into these two new classes for improved organization and modularity.
-#### Interpolation Feature: 
+**Interpolation Feature:**
 Leveraged the flexibility of the CameraManager to add a mixing factor, enabling smoother rotations when turning.
-This refactoring aims to streamline our application's architecture and improve the rendering experience. We hope to continue improving our codebase with inspirations from the previous code.
+
+**This refactoring aims to streamline our application's architecture and improve the rendering experience. We hope to continue improving our codebase with inspirations from the previous code.**
 
  ### Accessibility: Settings Screen (6/12/2023)
  **This update describes the introduction of an in-game settings screen and button.**
@@ -94,7 +95,7 @@ These changes allowed the program to share the same instance of each 3D model be
  ### Optimization: Introduction of ParticleManager for Consolidated Particle System Configurations
  **This update presents a major step in improving the performance of the game by introducing an efficient management of particle systems via a dedicated ParticleManager class.**
 
- #### Changes:
+ **Changes:**
  ParticleManager Class: This class is the centralized location where we define and manage our particle system configurations. Instead of creating configurations on-the-fly, they are now predefined within this class and can be accessed when needed, thereby reducing computational overhead.
 
  Static Particle Systems: We've defined the configurations for different particle systems like lasers, missile trails, and explosions as static properties in the ParticleManager. This means we can use these configurations throughout our game without creating new ones each time, which significantly reduces memory usage and boosts rendering performance.
