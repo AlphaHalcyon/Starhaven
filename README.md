@@ -12,15 +12,15 @@ Possible improvements for this class could be creating helper methods for common
 
 Quaternions (often abbreviated to "quats") are used in the `Planet` class's `addObject` method.
 
-First, it's essential to understand that quaternions are a mathematical tool used to represent and manipulate rotations in 3D space. They are more complex than Euler angles or rotation matrices, but they have some significant advantages: they are more numerically stable, they don't suffer from "gimbal lock" (a problem where you lose a degree of freedom due to aligned rotation axes), and it's easy to interpolate between them smoothly.
+1. First, it's essential to understand that quaternions are a mathematical tool used to represent and manipulate rotations in 3D space. They are more complex than Euler angles or rotation matrices, but they have some significant advantages: they are more numerically stable, they don't suffer from "gimbal lock" (a problem where you lose a degree of freedom due to aligned rotation axes), and it's easy to interpolate between them smoothly.
 
-In the `addObject` method, a quaternion is used to orient an added object so that its downward direction aligns with the vector pointing towards the planet's center.
+2. In the `addObject` method, a quaternion is used to orient an added object so that its downward direction aligns with the vector pointing towards the planet's center.
 
-First, a direction vector `downDirection` is computed. This vector points from the object's position towards the planet's center. The direction is made to be "down" by negating the normalized position vector.
+3. First, a direction vector `downDirection` is computed. This vector points from the object's position towards the planet's center. The direction is made to be "down" by negating the normalized position vector.
 
-Then, a quaternion `rotation` is created using `simd_quatf(from:to:)`. This function returns a quaternion that represents a rotation from one direction to another. In this case, it's a rotation from the direction `(0, -1, 0)` (which is the default "down" direction in SceneKit) to the `downDirection` computed earlier.
+4. Then, a quaternion `rotation` is created using `simd_quatf(from:to:)`. This function returns a quaternion that represents a rotation from one direction to another. In this case, it's a rotation from the direction `(0, -1, 0)` (which is the default "down" direction in SceneKit) to the `downDirection` computed earlier.
 
-Finally, this quaternion is applied to the object, orienting it so that its down direction points towards the planet's center. The object's orientation is stored as a quaternion (`simdOrientation`), allowing for easy and efficient manipulation of its orientation later on.
+5. Finally, this quaternion is applied to the object, orienting it so that its down direction points towards the planet's center. The object's orientation is stored as a quaternion (`simdOrientation`), allowing for easy and efficient manipulation of its orientation later on.
 
 The use of quaternions here makes the task of aligning the object with the planet's surface straightforward and numerically stable, even as the object's position changes.
 
