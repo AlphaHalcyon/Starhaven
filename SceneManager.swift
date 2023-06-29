@@ -23,7 +23,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.cameraManager = cameraManager
         self.shipManager = shipManager
         super.init()
-        self.shipManager.ship.position = SCNVector3(0, 2_000_000, -1_250_000)
+        self.shipManager.ship.position = SCNVector3(0, 2_000_000, -1_000_000)
         self.addNode(self.shipManager.ship)
         self.createStar()
         self.createPlanet(name: "base.jpg")
@@ -60,15 +60,24 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         
         let lightNode = SCNNode()
         let light = SCNLight()
-        light.intensity = 10_000
+        light.intensity = 4_000
         light.type = .omni
         light.color = UIColor.orange
 
         lightNode.light = light
+        let lightNode2 = SCNNode()
+        let light2 = SCNLight()
+        light2.intensity = 4_000
+        light2.type = .omni
+        light2.color = UIColor.white
+
+        lightNode2.light = light2
+        
         self.sceneObjects.append(star)
-        self.view.prepare([star.node, lightNode]) { success in
+        self.view.prepare([star.node, lightNode, lightNode2]) { success in
             DispatchQueue.main.async {
                 star.node.addChildNode(lightNode)
+                star.node.addChildNode(lightNode2)
                 self.scene.rootNode.addChildNode(star.node)
             }
         }
