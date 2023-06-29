@@ -61,7 +61,7 @@ class CameraManager {
         
         self.cameraNode.simdPosition = cameraPosition
         self.cameraNode.simdOrientation = newOrientation // set the interpolated orientation
-        print(cameraNode.presentation.position, ship.presentation.position)
+        //print(cameraNode.presentation.position, ship.presentation.position)
     }
 
     
@@ -87,20 +87,22 @@ class CameraManager {
         let mixedY = simd_mix(self.cameraNode.simdPosition.y, cameraPosition.y, mixFactor)
         let mixedZ = simd_mix(self.cameraNode.simdPosition.z, cameraPosition.z, mixFactor)
         self.cameraNode.simdPosition = SIMD3<Float>(mixedX, mixedY, cameraPosition.z)
-        self.cameraNode.simdOrientation = newOrientation
+        self.cameraNode.simdOrientation = simd_slerp(self.cameraNode.simdOrientation, newOrientation, 0.5)
         // Update the look-at constraint target
         self.cameraNode.constraints = [self.createLookAtConstraintForNode(node: node)]
     }
     private func setupCamera(scene: SCNScene) {
         // Create a camera
         let camera = SCNCamera()
-        camera.zFar = 10_000_000
+        camera.zFar = 16_000_000
+        camera.zNear = 1
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera
         
         // Position the camera node relative to the spacecraft
         self.cameraNode.camera?.fieldOfView = 120
+        
         self.addCameraToScene(for: scene)
         self.cameraNode.physicsBody = nil
     }

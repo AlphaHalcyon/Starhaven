@@ -9,4 +9,5 @@ import Foundation
 enum Faction: Int, CaseIterable {
     case Wraith
     case Phantom
+    case OSNR
 }

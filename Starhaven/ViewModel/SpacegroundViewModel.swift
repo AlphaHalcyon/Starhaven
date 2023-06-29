@@ -143,13 +143,13 @@ import AVFoundation
         return scnView
     }
     public func createStar() {
-        let star = Star(radius: 200_000, color: .orange, camera: self.cameraNode)
-        star.node.position = SCNVector3(1000, 100_000, 2_000_000)
-        self.scene.rootNode.addChildNode(star.node)
+        //let star = Star(radius: 200_000, color: .orange, camera: self.cameraNode, sceneManager: SceneManager())
+       // star.node.position = SCNVector3(1000, 100_000, 2_000_000)
+        //self.scene.rootNode.addChildNode(star.node)
     }
     public func createPlanet(name: String) {
-        let planet = Planet(image: UIImage(imageLiteralResourceName: name), radius: 50_000, view: self.view)
-        planet.addToScene(scene: self.scene)
+        //let planet = Planet(image: UIImage(imageLiteralResourceName: name), radius: 50_000, view: self.view, sceneManager: SceneManager())
+        //planet.addToScene(scene: self.scene)
     }
     public func createShip(scnView: SCNView) {
         self.ship.shipNode = self.ship.createShip(scale: 0.05)
@@ -517,6 +517,8 @@ import AVFoundation
                                 //node.isEvading = true
                             }
                         }
+                    default:
+                        return
                     }
                 }
             }
