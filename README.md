@@ -37,39 +37,39 @@ Here's how it works in detail:
 
 We start by storing all objects in the world in an array sceneObjects.
 
-**In the renderer(_:updateAtTime:) method,** which is called every frame, we call updateObjectPositions(). We will limit the number of calls made to the function dynamically in the future, based on when the player and camera rig have exceeded a maximum distance from the origin.
+1. **In the renderer(_:updateAtTime:) method,** which is called every frame, we call updateObjectPositions(). We will limit the number of calls made to the function dynamically in the future, based on when the player and camera rig have exceeded a maximum distance from the origin.
 
-**updateObjectPositions()** iterates over all objects in sceneObjects and updates their positions relative to the player's position. Effectively, it moves the entire world so that the player is at the origin.
+2. **updateObjectPositions()** iterates over all objects in sceneObjects and updates their positions relative to the player's position. Effectively, it moves the entire world so that the player is at the origin.
 
-**Finally**, we reset the player's position to the origin.
+3. **Finally**, we reset the player's position to the origin.
 
-**This approach** allows us to simulate the player moving through the world while keeping all objects within a relatively small distance from the origin, thus avoiding precision errors.
+4. **This approach** allows us to simulate the player moving through the world while keeping all objects within a relatively small distance from the origin, thus avoiding precision errors.
 
-**With this update,** we're able to maintain the ambitious scale of our world while reducing the vector component sizes SceneKit has to work with when doing origin-based calculations, leading to smoother and more realistic movement for the spaceship.
+5. **With this update,** we're able to maintain the ambitious scale of our world while reducing the vector component sizes SceneKit has to work with when doing origin-based calculations, leading to smoother and more realistic movement for the spaceship.
 
  ### Refactoring: Managers (6/17/2023)
  
  **This update primarily focuses on applying the single-responsibility principle to our codebase. Previously, most of our components were managed in one view model, creating complexities and dependencies that we needed to resolve.**
  The key changes include:
-**PhysicsManager:**
+1. **PhysicsManager:**
 This class is responsible for the physical interactions in our game world.
-**CollisionHandlers:** 
+2. **CollisionHandlers:** 
 These handle the behavior of objects when they collide in our game world.
-**Levels:**
+3. **Levels:**
 Represent the stages or levels in our game, including the objects present and their arrangements.
-**SceneManager:** 
+4. **SceneManager:** 
 Manages the rendering of our scenes. Includes the rendering loop where update functions are called.
-**SceneObjects:**
+5. **SceneObjects:**
 Represent the various entities present in our scenes. They are mapped to their respective nodes in a SceneManager.
-**CameraManager**
+6. **CameraManager**
 This new class is responsible for managing the camera's movements. We have separated the navigation logic from the camera logic, which was previously intertwined.
-**CameraTrackingState**
+7. **CameraTrackingState**
 This new enumeration provides us with more flexibility in positioning our camera.
-**ShipManager:**
+8. **ShipManager:**
 This class manages the player's control of the ship. This functionality is set to be further generalized in the future to accommodate other control objects.
-**InputManager and PlayerObjectManager:**
+9. **InputManager and PlayerObjectManager:**
 We plan to break down the ShipManager into these two new classes for improved organization and modularity.
-**Interpolation Feature:**
+10. **Interpolation Feature:**
 Leveraged the flexibility of the CameraManager to add a mixing factor, enabling smoother rotations when turning.
 
 **This refactoring aims to streamline our application's architecture and improve the rendering experience. We hope to continue improving our codebase with inspirations from the previous code.**
@@ -86,11 +86,11 @@ Leveraged the flexibility of the CameraManager to add a mixing factor, enabling 
  #### Changes:
  We implemented an optimization approach to reduce memory usage and improve performance for our Raider models, missiles, and larger ships. Previously, the program was loading the same 3D model multiple times for each object, resulting in multiple copies of the same model being stored in memory. This was causing memory errors and impacting performance.
 
-To address this issue, we modified the code to load each 3D model once and reuse it for each object of the same type. This reduced the number of copies of each model in memory from n to just one, which helped reduce memory usage and improve performance. We used .flattenedCopy() to reduce the complexity of the root model for each.
+1. To address this issue, we modified the code to load each 3D model once and reuse it for each object of the same type. This reduced the number of copies of each model in memory from n to just one, which helped reduce memory usage and improve performance. We used .flattenedCopy() to reduce the complexity of the root model for each.
 
-The changes were made by modifying the relevant functions to load each model once before creating the objects, and then passing the loaded model as a parameter to the object's initializer. The classes for each object type were also modified to accept a `modelNode` parameter in their initializer and store it as a property of the class. The functions that create the objects were then modified to use this property instead of loading the model again.
+2. The changes were made by modifying the relevant functions to load each model once before creating the objects, and then passing the loaded model as a parameter to the object's initializer. The classes for each object type were also modified to accept a `modelNode` parameter in their initializer and store it as a property of the class. The functions that create the objects were then modified to use this property instead of loading the model again.
 
-These changes allowed the program to share the same instance of each 3D model between multiple instances of the same object type, while still allowing each object to appear as its own individual entity. This helped reduce memory usage and improve performance, while still maintaining the desired behavior of the program.
+3. These changes allowed the program to share the same instance of each 3D model between multiple instances of the same object type, while still allowing each object to appear as its own individual entity. This helped reduce memory usage and improve performance, while still maintaining the desired behavior of the program.
  
  ### Optimization: Introduction of ParticleManager for Consolidated Particle System Configurations
  **This update presents a major step in improving the performance of the game by introducing an efficient management of particle systems via a dedicated ParticleManager class.**
@@ -98,11 +98,11 @@ These changes allowed the program to share the same instance of each 3D model be
  **Changes:**
  ParticleManager Class: This class is the centralized location where we define and manage our particle system configurations. Instead of creating configurations on-the-fly, they are now predefined within this class and can be accessed when needed, thereby reducing computational overhead.
 
- Static Particle Systems: We've defined the configurations for different particle systems like lasers, missile trails, and explosions as static properties in the ParticleManager. This means we can use these configurations throughout our game without creating new ones each time, which significantly reduces memory usage and boosts rendering performance.
+ 1. Static Particle Systems: We've defined the configurations for different particle systems like lasers, missile trails, and explosions as static properties in the ParticleManager. This means we can use these configurations throughout our game without creating new ones each time, which significantly reduces memory usage and boosts rendering performance.
 
- Functions for Dynamic Configurations: For the particle systems that require more dynamic properties, such as color for missile trails, we have defined functions that return configured particle systems. This gives us the best of both worlds, maintaining the performance benefits of static configurations and providing flexibility where required.
+ 2. Functions for Dynamic Configurations: For the particle systems that require more dynamic properties, such as color for missile trails, we have defined functions that return configured particle systems. This gives us the best of both worlds, maintaining the performance benefits of static configurations and providing flexibility where required.
 
- Applied Changes: We've applied these changes across the Laser, GhostMissile, and Explosion classes, which now utilize the ParticleManager for their particle systems.
+ 3. Applied Changes: We've applied these changes across the Laser, GhostMissile, and Explosion classes, which now utilize the ParticleManager for their particle systems.
 
  These improvements should result in noticeable performance gains, particularly in high-intensity scenes with many active particle systems.
 
@@ -110,13 +110,21 @@ These changes allowed the program to share the same instance of each 3D model be
 **This update addresses the issue of gimbal lock that was affecting the orientation and navigation of ships in our game. It describes the successful implementation of quaternion-based rotations to solve this problem and improve the game's performance.**
 
 #### Changes:
-Introduction of Quaternions: In order to overcome the issue of gimbal lock that is common with Euler angle-based rotations, we have moved to quaternion-based rotations. Quaternions, represented by SCNQuaternion in SceneKit, are complex numbers that can represent 3D rotations more efficiently and reliably.
+Introduction of Quaternions: In order to overcome the issue of gimbal lock that is common with Euler angle-based rotations, we have moved to quaternion-based rotations. Quaternions, represented by SCNQuaternion in SceneKit, are complex numbers that can represent 3D rotations more efficiently and reliably. They are ultimately a four-dimensional godsend that allow us to represent orientations around an imaginary (read: whichever we want) axis.
 
-Avoiding Gimbal Lock: Quaternions operate in four dimensions, which allows for smooth and continuous rotation in 3D space. They have been employed to rotate our ships, ensuring the avoidance of gimbal lock. With this change, we have been able to ensure consistent and predictable rotation behavior for all ships, irrespective of their current orientation.
+1. Avoiding Gimbal Lock: Gimbal lock is a term from mechanics and control theory, related to the use of gimbals for achieving rotation around multiple axes. It's the loss of one degree of freedom in a three-dimensional, three-gimbal system that occurs when the axes of two of the three gimbals are driven into a parallel configuration, "locking" the system into rotation in a degenerate two-dimensional space.
 
-Application to SceneKit: We have applied this rotation mechanism to SceneKit by modifying the orientation property of the nodes representing the ships. This property is a quaternion and by manipulating it, we were able to control the rotation of the nodes, thus achieving the desired ship orientation.
+To understand this, imagine you're in an aircraft and you want to change its orientation. You have three degrees of freedom – you can roll (tilt side-to-side), pitch (tilt forward or backward), or yaw (turn left or right). This can be achieved by rotations around the x, y, and z axes respectively.
 
-User Interaction: While quaternions don't suffer from gimbal lock, converting between quaternions and Euler angles, if not handled properly, could reintroduce the problem. As our app involves user input and displays rotation in terms of Euler angles, we have ensured careful handling of these situations.
+However, if the pitch (tilt forward or backward) is 90 degrees, that is, the aircraft is pointing straight up or straight down, then roll and yaw both end up rotating the aircraft about the same axis. You've lost a degree of freedom, and certain maneuvers are now impossible. This situation is known as gimbal lock.
+
+In 3D computer graphics and robotics, Euler angles are often used to represent rotations, but they suffer from this gimbal lock issue. When an object's orientation approaches gimbal lock, further rotations may not have the effect one expects, leading to awkward movement or sudden jumps in orientation. 
+
+**Quaternions** operate in four dimensions, which allows for smooth and continuous rotation in 3D space. They have been employed to rotate our ships, ensuring the avoidance of gimbal lock. With this change, we have been able to ensure consistent and predictable rotation behavior for all ships, irrespective of their current orientation.
+
+2. Application to SceneKit: We have applied this rotation mechanism to SceneKit by modifying the orientation property of the nodes representing the ships. This property is a quaternion and by manipulating it, we were able to control the rotation of the nodes, thus achieving the desired ship orientation.
+
+3. User Interaction: While quaternions don't suffer from gimbal lock, converting between quaternions and Euler angles, if not handled properly, could reintroduce the problem. As our app involves user input and displays rotation in terms of Euler angles, we have ensured careful handling of these situations.
 
 Result:
 
