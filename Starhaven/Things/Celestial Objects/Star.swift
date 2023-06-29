@@ -19,7 +19,9 @@ class Star: SceneObject {
     init(radius: CGFloat, color: UIColor, camera: SCNNode) {
         let coronaGeo = SCNSphere(radius: radius + 150)
         self.camera = camera
-        self.node = SCNNode(geometry: SCNSphere(radius: radius))
+        let image = UIImage(named: "tex/Sun.jpg", in: Bundle.main, compatibleWith: nil)
+        let geo = SCNSphere(radius: radius)
+        
         // Create the particle system programmatically
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleImage = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg")
@@ -33,14 +35,26 @@ class Star: SceneObject {
         // Make the particle system surface-based
         fireParticleSystem.emissionDurationVariation = fireParticleSystem.emissionDuration
         let material = SCNMaterial()
-        material.diffuse.contents = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg", in: Bundle.main, compatibleWith: nil)
-        
         // Update the material's properties
-        material.emission.contents = UIImage(named: "SceneKit Asset Catalog.scnassets/SunWeakMesh.jpg", in: Bundle.main, compatibleWith: nil)
+        material.emission.contents = image
         material.lightingModel = .physicallyBased
-
-        self.node.geometry?.firstMaterial = material
-        
+        material.diffuse.contents = image
+        material.isDoubleSided = false
+        material.diffuse.contentsTransform = SCNMatrix4MakeScale(2, 2, 1)
+        material.diffuse.wrapS = .repeat
+        material.diffuse.wrapT = .repeat
+        let imageFiery = UIImage(named: "tex/b3.jpg")
+        let materialFiery = SCNMaterial()
+        // Update the material's properties
+        materialFiery.emission.contents = imageFiery
+        materialFiery.lightingModel = .physicallyBased
+        materialFiery.diffuse.contents = imageFiery
+        materialFiery.isDoubleSided = false
+        materialFiery.diffuse.contentsTransform = SCNMatrix4MakeScale(2, 2, 1)
+        materialFiery.diffuse.wrapS = .repeat
+        materialFiery.diffuse.wrapT = .repeat
+        geo.materials = [material, materialFiery]
+        self.node = SCNNode(geometry: geo)
         // Add the particle system to the star node
         self.node.addParticleSystem(fireParticleSystem)
     }

@@ -23,7 +23,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.cameraManager = cameraManager
         self.shipManager = shipManager
         super.init()
-        //self.shipManager.ship.position = SCNVector3(0, 1_500_000, -1_000_000)
+        self.shipManager.ship.position = SCNVector3(0, 2_000_000, -1_250_000)
         self.addNode(self.shipManager.ship)
         self.createStar()
         self.createPlanet(name: "base.jpg")
@@ -54,10 +54,9 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         // Don't forget to set the player's position back to the origin.
         self.shipManager.ship.position = SCNVector3Zero
     }
-    
     public func createStar() {
-        let star = Star(radius: 1_500_000, color: .orange, camera: self.cameraManager.cameraNode)
-        star.node.position = SCNVector3(1000, 100_000, 6_000_000)
+        let star = Star(radius: 500_000, color: .orange, camera: self.cameraManager.cameraNode)
+        star.node.position = SCNVector3(0, 1_750_000, 5_000_000)
         
         let lightNode = SCNNode()
         let light = SCNLight()
@@ -72,15 +71,17 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
             }
         }
     }
-
     public func createPlanet(name: String) {
-        let planet = Planet(image: UIImage(imageLiteralResourceName: name), radius: 750_000, view: self.view)
+        let image = UIImage(imageLiteralResourceName: name)
+        let planet = Planet(image: image, radius: 1_750_000, view: self.view, asteroidBeltImage: image)
         planet.node.castsShadow = true
-        //let moon = ModelManager.createMoon(scale: 1000)
+        self.sceneObjects.append(planet)
         self.view.prepare([planet.node]) { success in
             DispatchQueue.main.async {
                 planet.addToScene(scene: self.scene)
                 self.scene.rootNode.addChildNode(planet.node)
+                self.shipManager.ship.look(at: planet.node.position)
+                self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
             }
         }
     }
@@ -109,7 +110,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     func updateShip(deltaTime: TimeInterval) {
         self.shipManager.update(deltaTime: deltaTime)
     }
-    
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         // Update the game state
         let deltaTime = time - lastUpdateTime
@@ -119,13 +119,35 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.updateCamera(deltaTime: Float(deltaTime))
     }
     // More methods to manage scene
+    func createExplosion(at position: SCNVector3) {
+        let explosionNode = SCNNode()
+        explosionNode.position = position
+        explosionNode.addParticleSystem(ParticleManager.explosionParticleSystem)
+        
+        let implodeAction = SCNAction.scale(to: 5, duration: 0.40)
+        let implodeActionStep = SCNAction.scale(to: 2.5, duration: 1)
+        let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
+        let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
+        
+        DispatchQueue.main.async {
+            self.view.prepare([explosionNode]) { success in
+                self.scene.rootNode.addChildNode(explosionNode)
+                explosionNode.runAction(SCNAction.repeat(pulseSequence, count: 1))
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    explosionNode.removeFromParentNode()
+                }
+            }
+        }
+    }
 }
 protocol Updateable {
     func update()
 }
 protocol SceneObject: Updateable {
     var node: SCNNode { get set }
-    init(node: SCNNode)
+    var sceneManager: SceneManager { get set }
+    init(node: SCNNode, sceneManager: SceneManager)
     func update()
     func destroy()
 }

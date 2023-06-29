@@ -8,6 +8,8 @@
 import Foundation
 import SceneKit
 import SwiftUI
+import SwiftUI
+import ARKit
 
 struct ContentView: View {
     @StateObject var viewModel = GameViewModel()
@@ -242,3 +244,4 @@ struct SpaceView: UIViewRepresentable {
         }
     }
 }
+
