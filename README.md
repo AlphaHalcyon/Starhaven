@@ -1,8 +1,29 @@
-# Starhaven
+![image](https://github.com/AlphaHalcyon/Starhaven/assets/74324748/256cab16-917a-4f28-a418-ec66d660a3c5)# Starhaven
  An event horizon explorer.
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
  ## FIXES, UPDATES, AND SOLUTIONS
+ ### Moonbase and Such
+1. **Planet**: The Planet class represents a celestial body in the scene. It includes methods for adding other objects (such as a Moonbase) to the surface of the planet at specific latitudinal and longitudinal coordinates. The method `addObject` was updated to ensure that added objects are properly oriented relative to the planet's surface. This is done by creating a downward direction vector, which points towards the center of the planet from the object's position, and then rotating the object to align its downward direction with this vector. In other words, objects are now properly "gravity-aligned" with the planet.
+
+Possible improvements for this class could be creating helper methods for common tasks such as adding multiple similar objects (like an array of Moonbases) at once or creating a method to adjust an object's position after it's been added to the planet.
+
+2. **Moonbase**: The Moonbase class represents a moon base object in the scene. It includes methods to load various parts of the base, such as a habitat module (`loadHab`), railgun bases (`loadRailgunBase`), solar panels (`loadPanels`), and a railgun turret (`loadTurret`). The Moonbase class is also set up to manage these individual parts, allowing the base to be easily modified or extended in the future.
+
+Quaternions (often abbreviated to "quats") are used in the `Planet` class's `addObject` method.
+
+First, it's essential to understand that quaternions are a mathematical tool used to represent and manipulate rotations in 3D space. They are more complex than Euler angles or rotation matrices, but they have some significant advantages: they are more numerically stable, they don't suffer from "gimbal lock" (a problem where you lose a degree of freedom due to aligned rotation axes), and it's easy to interpolate between them smoothly.
+
+In the `addObject` method, a quaternion is used to orient an added object so that its downward direction aligns with the vector pointing towards the planet's center.
+
+First, a direction vector `downDirection` is computed. This vector points from the object's position towards the planet's center. The direction is made to be "down" by negating the normalized position vector.
+
+Then, a quaternion `rotation` is created using `simd_quatf(from:to:)`. This function returns a quaternion that represents a rotation from one direction to another. In this case, it's a rotation from the direction `(0, -1, 0)` (which is the default "down" direction in SceneKit) to the `downDirection` computed earlier.
+
+Finally, this quaternion is applied to the object, orienting it so that its down direction points towards the planet's center. The object's orientation is stored as a quaternion (`simdOrientation`), allowing for easy and efficient manipulation of its orientation later on.
+
+The use of quaternions here makes the task of aligning the object with the planet's surface straightforward and numerically stable, even as the object's position changes.
+
  ### Update: Solution to Floating Point Precision Errors in SceneKit
 Our latest update to Starhaven tackles a critical issue that was limiting the scale of our in-game world: floating point precision errors in SceneKit.
 
