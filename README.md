@@ -3,7 +3,7 @@
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
  ## FIXES, UPDATES, AND SOLUTIONS
- ### Moonbase and Such
+ ### Update: Moonbase and Such
 1. **Planet**: The Planet class represents a celestial body in the scene. It includes methods for adding other objects (such as a Moonbase) to the surface of the planet at specific latitudinal and longitudinal coordinates. The method `addObject` was updated to ensure that added objects are properly oriented relative to the planet's surface. This is done by creating a downward direction vector, which points towards the center of the planet from the object's position, and then rotating the object to align its downward direction with this vector. In other words, objects are now properly "gravity-aligned" with the planet.
 
 Possible improvements for this class could be creating helper methods for common tasks such as adding multiple similar objects (like an array of Moonbases) at once or creating a method to adjust an object's position after it's been added to the planet.
