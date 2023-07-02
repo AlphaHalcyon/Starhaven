@@ -18,7 +18,7 @@ enum CameraTrackState {
 class CameraManager {
     var cameraNode: SCNNode
     var trackingState: CameraTrackState
-    var followDistance: Float = 15
+    var followDistance: Float = 0.5
     var throttle: Float
     init(trackingState: CameraTrackState, scene: SCNScene, throttle: Float) {
         self.throttle = throttle
@@ -36,35 +36,16 @@ class CameraManager {
             updateCameraTarget(target: target)
         }
     }
-    var pGain: SIMD3<Float> = SIMD3<Float>(0.5, 0.5, 0.5)
-    var iGain: SIMD3<Float> = SIMD3<Float>(0.1, 0.1, 0.1)
-    var dGain: SIMD3<Float> = SIMD3<Float>(0.2, 0.2, 0.2)
-    
-    var iMax: Float = 1
-    var iMin: Float = -1
-    var setPoint: SIMD3<Float> = SIMD3<Float>(0, 0, 0)
-    var integral: SIMD3<Float> = SIMD3<Float>(0, 0, 0)
-    var lastError: SIMD3<Float> = SIMD3<Float>(0, 0, 0)
-    
     private func updateCameraForShip(ship: SCNNode) {
         // Track player ship
         let newOrientation = ship.presentation.simdOrientation
         let normalizedWorldFront = simd_normalize(ship.simdWorldFront)
         let cameraPosition = ship.simdPosition - (normalizedWorldFront * self.followDistance)
-        let length = simd_length(ship.simdWorldFront)
-        
-        let mixFactor: Float = 0.1
-        let t = simd_smoothstep(0.0, 1.0, mixFactor)
-        let mixedX = simd_mix(self.cameraNode.presentation.simdPosition.x, cameraPosition.x, t)
-        let mixedY = simd_mix(self.cameraNode.presentation.simdPosition.y, cameraPosition.y, t)
-        let mixedZ = simd_mix(self.cameraNode.presentation.simdPosition.z, cameraPosition.z, t)
-        
         self.cameraNode.simdPosition = cameraPosition
         self.cameraNode.simdOrientation = newOrientation // set the interpolated orientation
         //print(cameraNode.presentation.position, ship.presentation.position)
     }
 
-    
     public func updateCameraTarget(target: SCNNode? = nil) {
         // Track missile from target
     }
@@ -94,17 +75,17 @@ class CameraManager {
     private func setupCamera(scene: SCNScene) {
         // Create a camera
         let camera = SCNCamera()
-        camera.zFar = 16_000_000
+        camera.zFar = 150000
         camera.zNear = 1
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()
         self.cameraNode.camera = camera
         
         // Position the camera node relative to the spacecraft
-        self.cameraNode.camera?.fieldOfView = 120
-        
+        self.cameraNode.camera?.fieldOfView = 90
         self.addCameraToScene(for: scene)
         self.cameraNode.physicsBody = nil
+        self.cameraNode.camera?.categoryBitMask = 1
     }
     public func addCameraToScene(for scene: SCNScene) {
         scene.rootNode.addChildNode(self.cameraNode)

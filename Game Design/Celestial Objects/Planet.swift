@@ -15,9 +15,13 @@ class Planet: SceneObject {
     public var view: SCNView = SCNView()
     var sceneManager: SceneManager
     var isAI: Bool = false
+    var faction: Faction = .Celestial
     required init(node: SCNNode, sceneManager: SceneManager) {
         self.node = node
         self.sceneManager = sceneManager
+        let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
+        self.node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+        self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
     }
     init(image: UIImage, radius: CGFloat, view: SCNView, asteroidBeltImage: UIImage? = nil, sceneManager: SceneManager) {
         self.view = view
@@ -33,23 +37,32 @@ class Planet: SceneObject {
         self.sphere.segmentCount = 120
 
         self.node = SCNNode(geometry: sphere)
-        
-        self.addMoonbase(moonbase: Moonbase(sceneManager: self.sceneManager, planet: self), atLatitude: 0, longitude: 0)
+        let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
+        self.node.physicsBody = SCNPhysicsBody(type: .static, shape: shape)
+        self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
+        let startLatitude: Double = 50
+        let endLatitude: Double = 160
+        let latitudes: [Double] = Array(stride(from: startLatitude, through: endLatitude, by: 5))
+        let longitudes: [Double] = Array(repeating: 0.0, count: latitudes.count)
+        let lights: [Bool] = latitudes.map { $0 >= 60 && $0 <= 80 }
+
+        self.addMoonbase(latitudes: latitudes, longitudes: longitudes, lights: lights)
     }
     // Inside Planet class
-    func addMoonbase(moonbase: Moonbase, atLatitude latitude: Double, longitude: Double) {
-        moonbase.node.scale = SCNVector3(50,50,50)
-        self.addObject(object: moonbase.node, atLatitude: 90, longitude: 0, offset: 0)
-        let ship = ModelManager.createShip(scale: 100)
-        self.addObject(object: ship, atLatitude: 85, longitude: 10, offset: 0)
-        let base: SCNNode = moonbase.node.clone()
-        self.addObject(object: base, atLatitude: -45, longitude: 0, offset: 0)
+    func addMoonbase(latitudes: [Double], longitudes: [Double], lights: [Bool]) {
+        for i in 0..<latitudes.count {
+            let moonbase = Moonbase(sceneManager: self.sceneManager, planet: self, hasLight: lights[i])
+            moonbase.node.scale = SCNVector3(25,25,25)
+            let base: SCNNode = moonbase.node
+            self.addObject(object: base, atLatitude: latitudes[i], longitude: longitudes[i])
+        }
     }
-    func addObject(object: SCNNode, atLatitude latitude: Double, longitude: Double, offset: CGFloat) {
+
+    func addObject(object: SCNNode, atLatitude latitude: Double, longitude: Double) {
         let latitudeInRadians = latitude * .pi / 180
         let longitudeInRadians = longitude * .pi / 180
 
-        let radius = self.sphere.radius + offset
+        let radius = self.sphere.radius
         let x = radius * cos(latitudeInRadians) * cos(longitudeInRadians)
         let y = radius * sin(latitudeInRadians)
         let z = radius * cos(latitudeInRadians) * sin(longitudeInRadians)
@@ -71,15 +84,10 @@ class Planet: SceneObject {
         node.addChildNode(object)
     }
 
-
-
     func addToScene(scene: SCNScene) {
-        node.position = SCNVector3(x: 0, y: -500_000, z: 0)
         node.simdOrientation = simd_quatf(angle: .pi/2, axis: simd_float3(x: 0, y: 1, z: 0))
-        self.view.prepare([node]) { success in
-            DispatchQueue.main.async {
-                scene.rootNode.addChildNode(self.node)
-            }
+        self.sceneManager.view.prepare([self.node]) { success in
+            scene.rootNode.addChildNode(self.node)
         }
         //node.eulerAngles.x = 90
     }

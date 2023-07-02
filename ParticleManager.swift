@@ -11,11 +11,11 @@ import SceneKit
 class ParticleManager {
     // Explosions!
     static let explosionParticleSystem: SCNParticleSystem = {
-        let coronaGeo = SCNSphere(radius: 100)
+        let coronaGeo = SCNSphere(radius: 5)
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleColor = .orange
-        fireParticleSystem.birthRate = 100_000
-        fireParticleSystem.particleSize = 1.25
+        fireParticleSystem.birthRate = 20_000
+        fireParticleSystem.particleSize = 0.25
         fireParticleSystem.particleIntensity = 1
         fireParticleSystem.particleLifeSpan = 0.4
         fireParticleSystem.spreadingAngle = 180
@@ -26,10 +26,10 @@ class ParticleManager {
     }()
     // Missile Explosion
     static let createMissileExplosion: SCNParticleSystem = {
-        let coronaGeo = SCNSphere(radius: 50)
+        let coronaGeo = SCNSphere(radius: 75)
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleColor = .orange
-        fireParticleSystem.birthRate = 80_000
+        fireParticleSystem.birthRate = 50_000
         fireParticleSystem.particleSize = 1
         fireParticleSystem.particleIntensity = 1
         fireParticleSystem.particleLifeSpan = 0.30
@@ -42,16 +42,15 @@ class ParticleManager {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
         particleSystem.particleIntensity = 1
-        particleSystem.particleSize = 4
-        particleSystem.birthRate = 55_000
-        particleSystem.emissionDuration = 1
-        particleSystem.particleLifeSpan = 0.1
-        particleSystem.emitterShape = self.missileGeometry.geometry
-        particleSystem.blendMode = .additive
+        particleSystem.particleSize = 0.5
+        particleSystem.birthRate = 35_000
+        particleSystem.emissionDuration = particleSystem.emissionDurationVariation
+        particleSystem.particleLifeSpan = 0.025
+        particleSystem.emitterShape = ModelManager.missileGeometry.geometry
         return particleSystem
     }
     static let missileGeometry: SCNNode = {
-       return SCNNode(geometry: SCNCapsule(capRadius: 3, height: 12))
+        return SCNNode(geometry: SCNCapsule(capRadius: 0.5, height: 2.5))
     }()
     static func createShipMissileTrail(color: UIColor) -> SCNParticleSystem {
         let particleSystem = SCNParticleSystem()
