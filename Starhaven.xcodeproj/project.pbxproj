@@ -200,9 +200,8 @@
 				AF0561082A3E98E20096E211 /* CameraManager.swift */,
 				AF05610A2A3E99140096E211 /* PhysicsManager.swift */,
 				AF6707B92A3BDA2700A923E4 /* ShipManager.swift */,
-				AFE6689F2A4277C00049D599 /* AI.swift */,
 				AF6707BD2A3D415000A923E4 /* ModelManager.swift */,
-				AFAA93922A4B91AB001718D6 /* Moonbase.swift */,
+				AF12B9AA2A344D380068D352 /* ParticleManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -210,6 +209,8 @@
 		AF0561192A3EA8970096E211 /* Game Design */ = {
 			isa = PBXGroup;
 			children = (
+				AFE6689F2A4277C00049D599 /* AI.swift */,
+				AFAA93922A4B91AB001718D6 /* Moonbase.swift */,
 				AF05610E2A3E99E80096E211 /* Level.swift */,
 			);
 			path = "Game Design";
@@ -299,7 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */,
-				AF12B9AA2A344D380068D352 /* ParticleManager.swift */,
 				AF12B9A82A33DFFF0068D352 /* Physics.swift */,
 			);
 			path = ViewModel;

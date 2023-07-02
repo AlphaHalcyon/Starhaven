@@ -9,12 +9,12 @@ import Foundation
 import SceneKit
 
 class ModelManager {
-    static func createShip(scale: CGFloat = 0.01) -> SCNNode {
+    static func createShip(scale: CGFloat = 0.0001) -> SCNNode {
         // Load the spaceship model
         do {
             if let modelNode = try loadOBJModel(named: "Raider") {
                 modelNode.scale = SCNVector3(scale, scale, scale)
-                modelNode.position = SCNVector3(0, -2.5, 0)
+                modelNode.position = SCNVector3(0, -0.0025, 0)
                 let containerNode = SCNNode()
                 containerNode.addChildNode(modelNode)
                 return containerNode
@@ -52,6 +52,9 @@ class ModelManager {
         case modelNotFound(String)
         case failedToCastToMDLMesh
     }
+    static let missileGeometry: SCNNode = {
+        return SCNNode(geometry: SCNCapsule(capRadius: 0.5, height: 1))
+    }()
     static func loadOBJModel(named name: String, materials: Bool = true) throws -> SCNNode? {
         guard let url = Bundle.main.url(forResource: name, withExtension: "obj") else {
             throw ModelLoadingError.modelNotFound(name)
@@ -63,25 +66,14 @@ class ModelManager {
         let node = SCNNode(mdlObject: object)
         return materials ? self.applyHullMaterials(to: node) : node
     }
-
     static func applyHullMaterials(to node: SCNNode) -> SCNNode {
         // Create a material for the hull
         let hullMaterial = SCNMaterial()
         hullMaterial.diffuse.contents = UIColor.darkGray
-        hullMaterial.metalness.contents = 0.5
-        hullMaterial.roughness.contents = 1
-        
-        // Create a material for the white lines
-        let linesMaterial = SCNMaterial()
-        linesMaterial.diffuse.contents = UIColor.cyan
-        
-        // Create a material for the hull
-        let tertiaryMaterial = SCNMaterial()
-        hullMaterial.diffuse.contents = UIColor.darkGray
-        hullMaterial.metalness.contents = 0.5
+        hullMaterial.metalness.contents = 1
         hullMaterial.roughness.contents = 1
         // Apply the materials to the geometry of the node
-        node.geometry?.materials = [hullMaterial, linesMaterial, tertiaryMaterial]
+        node.geometry?.materials = [hullMaterial]
         return node
     }
 }

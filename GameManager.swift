@@ -11,8 +11,8 @@ import SwiftUI
 import SwiftUI
 import ARKit
 
-struct ContentView: View {
-    @StateObject var viewModel = GameViewModel()
+@MainActor struct ONSRMoonView: View {
+    @StateObject var manager = GameManager()
     @State var userSelectedSettings: Bool = false
     @State var userSelectedContinue: Bool = false
     @State private var reticlePosition: CGPoint = CGPoint()
@@ -23,22 +23,22 @@ struct ContentView: View {
             if !self.userSelectedContinue {
                 self.loadingScreen
             }
-        }.onChange(of: self.viewModel.sceneManager.viewLoaded, perform: { val in print("here"); self.viewModel.sceneManager.viewLoaded = val })
+        }.onChange(of: self.manager.sceneManager.viewLoaded, perform: { val in print("here"); self.manager.sceneManager.viewLoaded = val })
     }
     var starHaven: some View {
         ZStack {
-            SpaceView(viewModel: viewModel).gesture(DragGesture(minimumDistance: 0.001)
+            SpaceView(manager: manager).gesture(DragGesture(minimumDistance: 0.001)
                 .onChanged { value in
-                    self.viewModel.handleDragChange(value: value)
+                    self.manager.handleDragChange(value: value)
                 }
                 .onEnded { _ in
-                    self.viewModel.handleDragEnd()
+                    self.manager.handleDragEnd()
                 })
             self.HUD
         }
     }
     var loadingScreen: some View {
-        IntroScreen(spaceViewModel: self.viewModel, userSelectedContinue: self.$userSelectedContinue)
+        IntroScreen(spaceViewModel: self.manager, userSelectedContinue: self.$userSelectedContinue)
     }
     var HUD: some View {
         ZStack {
@@ -54,7 +54,7 @@ struct ContentView: View {
     }
     var reticle: some View {
         Crosshair()
-            .stroke(self.viewModel.shipManager.closestEnemy == nil ? Color.white : Color.red, lineWidth: 1)
+            .stroke(self.manager.shipManager.closestEnemy == nil ? Color.white : Color.red, lineWidth: 1)
             .frame(width: 20, height: 20).opacity(0.98)
     }
     var dynamicCamera: some View {
@@ -79,13 +79,13 @@ struct ContentView: View {
         }
     }
     var settingsButton: some View {
-        Image(systemName: "gear.circle.fill").resizable().scaledToFit().frame(width: UIScreen.main.bounds.width/10)
+        Image(systemName: "gear.circle.fill").resizable().scaledToFit().frame(width: UIScreen.main.bounds.height/10)
             .onTapGesture {
                 self.userSelectedSettings = true
             }
     }
     var pointStack: some View {
-        VStack { Text("POINTS"); Text("\(self.viewModel.points)") }
+        VStack { Text("POINTS"); Text("\(self.manager.points)") }
     }
     var speedStack: some View {
         VStack { Text("SPEED"); Text("\(Int(self.throttle * 10)) km/s") }
@@ -103,6 +103,8 @@ struct ContentView: View {
             if self.gear == 4 {
                 self.gear = 1
             } else { self.gear += 1 }
+            self.throttle = min(self.throttle, Float(10*self.gear))
+            self.manager.shipManager.throttle = self.throttle
         }
     }
     @State var throttle: Float = 0
@@ -110,8 +112,8 @@ struct ContentView: View {
         HStack {
             VStack {
                 Spacer()
-                CustomSlider(value: self.$throttle, range: -1000 * Float(self.gear)...1000 * Float(self.gear), onChange: { val in
-                    self.viewModel.handleThrottle(value: val)
+                CustomSlider(value: self.$throttle, range: -10 * Float(self.gear)...10 * Float(self.gear), onChange: { val in
+                    self.manager.handleThrottle(value: val)
                 })
             }
             Spacer()
@@ -124,51 +126,51 @@ struct ContentView: View {
     var fireButton: some View {
         Button(action: {
             Task {
-                self.viewModel.handleFireMissile()
-                self.viewModel.fireCooldown = true
+                self.manager.handleFireMissile()
+                self.manager.fireCooldown = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                    self.viewModel.fireCooldown = false
+                    self.manager.fireCooldown = false
                 }
             }
         }) {
             Image(systemName: "flame")
                 .resizable()
                 .scaledToFit()
-                .foregroundColor(self.viewModel.fireCooldown ? .gray : .red)
-                .frame(width: UIScreen.main.bounds.width/6, height: UIScreen.main.bounds.width/6, alignment: .center)
-        }.disabled(self.viewModel.fireCooldown)
+                .foregroundColor(self.manager.fireCooldown ? .gray : .red)
+                .frame(width: UIScreen.main.bounds.height/6, height: UIScreen.main.bounds.height/6, alignment: .center)
+        }.disabled(self.manager.fireCooldown)
         .foregroundColor(.white)
         .padding()
     }
     var scoreUpdates: some View {
         VStack {
             Spacer()
-            if viewModel.showKillIncrement {
+            if manager.showKillIncrement {
                 Text("+10,000")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.5), value: viewModel.showKillIncrement)
+                    .animation(.easeInOut(duration: 0.5), value: self.manager.showKillIncrement)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.33) {
-                            viewModel.showKillIncrement = false
+                            self.manager.showKillIncrement = false
                         }
                     }
                 Text("ENEMY DESTROYED")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.5), value: viewModel.showKillIncrement)
+                    .animation(.easeInOut(duration: 0.5), value: self.manager.showKillIncrement)
             }
-            if viewModel.showScoreIncrement {
-                Text("+\(Int(self.viewModel.shipManager.throttle) * 100 * 60)")
+            if manager.showScoreIncrement {
+                Text("+\(Int(self.manager.shipManager.throttle) * 100 * 60)")
                     .foregroundColor(.red)
                     .font(.largeTitle)
                     .transition(.opacity)
-                    .animation(.easeInOut(duration: 0.5), value: viewModel.showScoreIncrement)
+                    .animation(.easeInOut(duration: 0.5), value: self.manager.showScoreIncrement)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                            viewModel.showScoreIncrement = false
+                            self.manager.showScoreIncrement = false
                         }
                     }
             }
@@ -178,8 +180,8 @@ struct ContentView: View {
     }
 
 }
-class GameViewModel: ObservableObject {
-    @Published var sceneManager: SceneManager
+class GameManager: ObservableObject {
+    var sceneManager: SceneManager
     var cameraManager: CameraManager
     var physicsManager: PhysicsManager
     var shipManager: ShipManager
@@ -220,17 +222,17 @@ class GameViewModel: ObservableObject {
 }
 
 struct SpaceView: UIViewRepresentable {
-    @State var viewModel: GameViewModel
-    init(viewModel: GameViewModel) {
-        self.viewModel = viewModel
+    @State var manager: GameManager
+    init(manager: GameManager) {
+        self.manager = manager
     }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
     func makeUIView(context: Context) -> SCNView {
-        let scnView = self.viewModel.sceneManager.view
-        scnView.pointOfView = self.viewModel.cameraManager.cameraNode
+        let scnView = self.manager.sceneManager.view
+        scnView.pointOfView = self.manager.cameraManager.cameraNode
         return scnView
     }
     func updateUIView(_ uiView: SCNView, context: Context) {

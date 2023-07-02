@@ -8,6 +8,7 @@
 import Foundation
 import SceneKit
 import SwiftUI
+import ARKit
 
 // This refactoring is majorly focused on single-responsibility as a principle, because that was lacking before: we managed nearly all of these components in one view model. \\
 // So! We have a PhysicsManager. We have CollisionHandlers. We have Levels. We have a SceneManager. And we have SceneObjects. \\
@@ -36,20 +37,42 @@ class ShipManager {
     var isDragging: Bool = false
     var isPressed: Bool = false
     var isInverted: Bool = false
-    var dampingFactor: Float = 0.99
+    var dampingFactor: Float = 0.5
     var previousTranslation: CGSize = CGSize.zero
     var initialTouchPoint: CGPoint = .zero
     var joystickVector: SIMD2<Float> = .zero
     var closestEnemy: SCNNode?
+    let arSession: ARSession = ARSession()
+    var currentFrame: ARFrame?
+    
     init(blackHoles: [BlackHole]) {
-        self.ship = ModelManager.createShip()
+        self.ship = SCNNode() //ModelManager.createShip()
         self.ship.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
         self.ship.physicsBody?.isAffectedByGravity = false
         self.blackHoles = blackHoles
+        self.startARSession()
     }
+    
+    func startARSession() {
+        let configuration = ARWorldTrackingConfiguration()
+        arSession.run(configuration)
+    }
+    var currentOrientation: SIMD2<Float> = .zero
     func update(deltaTime: TimeInterval) {
+        self.currentFrame = arSession.currentFrame
+        if let cameraTransform = currentFrame?.camera.transform {
+            // Convert the 4x4 transform matrix to a quaternion
+            let quaternion = simd_quaternion(cameraTransform)
+
+            // Use the quaternion to update the ship's orientation
+            self.currentRotation = quaternion
+            self.ship.simdOrientation = quaternion
+        } else {
+            //print("failed")
+        }
+
         self.updateShipPosition(deltaTime: deltaTime)
-        self.updateRotation(deltaTime: deltaTime)
+        //self.updateRotation(deltaTime: deltaTime)
         self.findClosestHole()
     }
     var lastPosition: SIMD3<Float> = .zero
@@ -60,13 +83,18 @@ class ShipManager {
         let throttleDelta = self.throttle // * Float(deltaTime)
         self.ship.simdPosition += self.ship.simdWorldFront * throttleDelta
     }
-
+    // Add a new function to calculate the distance between two orientation vectors
+        func distance(_ a: simd_float3, _ b: simd_float3) -> Float {
+            let dx = a.x - b.x
+            let dy = a.y - b.y
+            let dz = a.z - b.z
+            return sqrt(dx*dx + dy*dy + dz*dz)
+        }
     func updateRotation(deltaTime: TimeInterval) {
         // Update rotationVelocity with deltaTime
         //self.rotationVelocity *= Float(deltaTime)
         if self.rotationVelocity != .zero {
             // Create the rotation quaternions
-            if !self.isDragging { self.rotationVelocity *= self.dampingFactor }
             let adjustedDeltaX = self.rotationVelocity.x
             let rotationY = simd_quatf(angle: adjustedDeltaX, axis: self.ship.simdWorldUp)
             let cameraRight = self.ship.simdWorldRight
@@ -75,7 +103,7 @@ class ShipManager {
             let newRotation = simd_mul(totalRotation, self.currentRotation)
             
             // Apply low-pass filter
-            let alpha: Float = 1
+            let alpha: Float = 0.75
             let filteredRotation =  simd_normalize(simd_slerp(self.lastRotation, newRotation, alpha))
             // Normalize the quaternion
             self.lastRotation = filteredRotation
@@ -83,7 +111,7 @@ class ShipManager {
             // Apply the new rotation
             self.ship.simdOrientation = filteredRotation
             self.currentRotation = filteredRotation
-            if length(self.rotationVelocity) < 0.01 {
+            if length(self.rotationVelocity) < 0.005 {
                 self.rotationVelocity = .zero
             }
         } else {

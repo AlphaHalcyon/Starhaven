@@ -11,32 +11,44 @@ import SceneKit
 
 class Moonbase: SceneObject {
     var sceneManager: SceneManager
+    var faction: Faction = .OSNR
     var isAI: Bool = false
-    
     required init(node: SCNNode, sceneManager: SceneManager) {
         self.node = node
         self.sceneManager = sceneManager
     }
     
-    
     public var node: SCNNode
+    private var scale: Float = 1.0
     private var habNode: SCNNode?
     private var innerHab: SCNNode?
     // Add other moonbase parts here
+    private var hasLight: Bool = false
     private var railgunBaseNodes: [SCNNode] = []
     private var railgunTurretNode: SCNNode?
-    init(sceneManager: SceneManager, planet: Planet) {
-        
+    init(sceneManager: SceneManager, planet: Planet, hasLight: Bool) {
         self.node = SCNNode()
+        self.hasLight = hasLight
+        if self.hasLight {
+            let lightNode = SCNNode()
+            let light = SCNLight()
+            light.intensity = 250
+            light.type = .omni
+            light.color = UIColor.cyan
+            lightNode.position = SCNVector3(0, 5, 0)
+            lightNode.light = light
+            lightNode.look(at: planet.node.position)
+            self.node.addChildNode(lightNode)
+        }
         self.sceneManager = sceneManager
         self.loadHab()
-        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(0,0,1_500))
-        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(0,0,-1_500))
-        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1500,0,1_500))
-        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1_500,0,-1_500))
+        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(0,0,1.5 * self.scale))
+        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(0,0,-1.5 * self.scale))
+        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1.5,0,1.5 * self.scale))
+        self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1.5,0,-1.5 * self.scale))
         //self.loadRailgunTurret(named: "moonGun")
         // Load other moonbase parts here
-        self.loadPanels()
+        //self.loadPanels()
     }
     private func loadRailgunBase(named name: String, offset: SCNVector3) {
         do {
@@ -47,12 +59,13 @@ class Moonbase: SceneObject {
             if let railgunBaseNode = model {
                 railgunBaseNode.position=SCNVector3(0,50,0)
                 self.railgunBaseNodes.append(railgunBaseNode)
-                node.addChildNode(railgunBaseNode)
+                node.addChildNode(railgunBaseNode.flattenedClone())
             }
             node.position = offset
-            node.scale = SCNVector3(2,2,2)
+            node.scale = SCNVector3(0.001 * self.scale,0.001 * self.scale,0.001 * self.scale)
             node.castsShadow = true
-            self.node.addChildNode(node)
+            
+            self.node.addChildNode(node.flattenedClone())
         } catch {
             print("Failed to load railgun base node: \(error)")
         }
@@ -72,9 +85,9 @@ class Moonbase: SceneObject {
             for i in 0...10 {
                 let panel = try ModelManager.loadOBJModel(named: "objSolar")
                 if let panel = panel {
-                    panel.position = SCNVector3(-2_500,-100 + -i * 10,i*10*25)
-                    panel.eulerAngles.y = .pi * 1.5
-                    panel.scale=SCNVector3(25,25,25)
+                    panel.position = SCNVector3(-2_5,-10 + -i * 1,i*1*2)
+                    panel.eulerAngles.y = .pi * 0.15
+                    panel.scale=SCNVector3(2.5,2.5,2.5)
                     self.node.addChildNode(panel)
                 }
             }
@@ -87,7 +100,8 @@ class Moonbase: SceneObject {
             self.innerHab = try ModelManager.loadOBJModel(named: "innerHDU")
             if let innerHab = self.innerHab {
                 innerHab.castsShadow = true
-                self.node.addChildNode(innerHab)
+                innerHab.scale = SCNVector3(0.001 * self.scale,0.001 * self.scale,0.001 * self.scale)
+                self.node.addChildNode(innerHab.flattenedClone())
             }
         } catch {
             print("Failed to load inner hab: \(error)")
@@ -97,7 +111,8 @@ class Moonbase: SceneObject {
             self.habNode = try ModelManager.loadOBJModel(named: "outerHDU")
             if let habNode = self.habNode {
                 habNode.castsShadow = true
-                self.node.addChildNode(habNode)
+                habNode.scale = SCNVector3(0.001 * self.scale,0.001 * self.scale,0.001 * self.scale)
+                self.node.addChildNode(habNode.flattenedClone())
             }
         } catch {
             print("Failed to load outer hab: \(error)")

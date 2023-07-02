@@ -17,7 +17,7 @@ import Foundation
 import SwiftUI
 
 struct IntroScreen: View {
-    unowned var spaceViewModel: GameViewModel
+    unowned var spaceViewModel: GameManager
     @Binding var userSelectedContinue: Bool
     var body: some View {
         self.loadScreen
@@ -47,7 +47,7 @@ struct IntroScreen: View {
             .font(.custom("Avenir Next Regular", size: 50))
             .foregroundColor(!self.spaceViewModel.sceneManager.viewLoaded ? .gray : .red)
             .onTapGesture {
-                if self.spaceViewModel.sceneManager.viewLoaded { self.userSelectedContinue = true }
+                if self.spaceViewModel.sceneManager.viewLoaded { self.userSelectedContinue = true; self.spaceViewModel.sceneManager.view.play(nil) }
             }.padding()
     }
     var mission: some View {
