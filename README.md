@@ -37,7 +37,7 @@ Quaternions (often abbreviated to "quats") are used in the `Planet` class's `add
 
 The use of quaternions here makes the task of aligning the object with the planet's surface straightforward and numerically stable, even as the object's position changes.
 
- ### Update: Solution to Floating Point Precision Errors in SceneKit (6/2x/2023)
+ ### Update: (Temporary) Solution to Floating Point Precision Errors in SceneKit (6/2x/2023)
 Our latest update to Starhaven tackles a critical issue that was limiting the scale of our in-game world: floating point precision errors in SceneKit.
 
 SceneKit, the 3D graphics API we use for rendering the game world, conducts all of its calculations using floating point numbers (floats) instead of doubles. Floats are less precise than doubles, especially for large numbers, which leads to noticeable precision errors as objects move far away from the origin.
