@@ -10,7 +10,7 @@
 
 When an explosion or missile event occurs, the respective methods createExplosion(at:) and fireMissile(at: towards: faction:) first check if there are any unused objects of the corresponding type. If available, an existing object is reused by updating its properties, instead of creating a new instance. Otherwise, a new object is instantiated.
 
-The OSNRMissile class and Explosion class conform to the Updateable protocol, requiring a update() method, allowing them to be managed via the object pooling mechanism effectively.
+The OSNRMissile class and Explosion class are managed via the object pooling mechanism effectively.
 
 2. **AR Navigation** is utilized for real-time tracking and navigation within the game. The ShipManager class manages an AR session through startARSession(), initiating an ARWorldTrackingConfiguration. This configuration tracks the device's orientation and position in the real world and uses the ARKit camera's transform quaternion to match the orientation of the player's ship (now in first person), allowing for an immersive 3D experience.
 
