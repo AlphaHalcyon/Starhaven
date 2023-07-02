@@ -75,8 +75,8 @@ class AI: SceneObject {
                 if Float.random(in: 0...1) > 0.998 {
                     //self.fireLaser(color: self.faction == .Wraith ? .red : .green)
                 }
-                if Float.random(in: 0...1) < 1/60/10 { // every 3 seconds {
-                    self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? UIColor.systemPink : UIColor.cyan)
+                if Float.random(in: 0...1) < 1/120 { // every 3 seconds {
+                    self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? UIColor(red: 255/255, green: 87/255, blue: 210/255, alpha: 1.0) : UIColor.cyan)
                 }
             }
         } else {
@@ -94,21 +94,26 @@ class AI: SceneObject {
     }
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
-        let missile = OSNRMissile(target: target,
-                                  particleSystemColor: particleSystemColor,
-                                  sceneManager: self.sceneManager,
-                                  faction: self.faction)
-        // Convert shipNode's local position to world position
-        let worldPosition = self.node.convertPosition(SCNVector3(0, -1, 15), to: self.node.parent)
+        let missile: OSNRMissile
+        if self.sceneManager.missiles.isEmpty {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode)
+        } else if let missile = self.sceneManager.missiles.popLast() {
+            missile.target = target
+            missile.faction = faction
+            self.fire(missile: missile.missileNode)
+        }
         
-        missile.missileNode.position = worldPosition
+    }
+    func fire(missile: SCNNode) {
+        missile.position = self.node.position
         let direction = self.node.presentation.worldFront
-        let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        missile.missileNode.orientation = self.node.presentation.orientation
-        missile.missileNode.eulerAngles.x += Float.pi / 2
+        let missileMass = missile.physicsBody?.mass ?? 1
+        missile.orientation = self.node.presentation.orientation
+        missile.eulerAngles.x += Float.pi / 2
         let missileForce = 500 * missileMass
-        missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        self.sceneManager.addNode(missile.missileNode)
+        missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+        self.sceneManager.addNode(missile)
     }
 }
 
@@ -124,12 +129,11 @@ class OSNRMissile: SceneObject {
     var sceneManager: SceneManager
     var faction: Faction = .OSNR
     init(target: SCNNode? = nil, particleSystemColor: UIColor, sceneManager: SceneManager, faction: Faction = .OSNR) {
-        self.node = self.missileNode
+        self.node = ModelManager.missileGeometry.flattenedClone()
         self.faction = faction
         self.target = target
         self.sceneManager = sceneManager
-        let node = ModelManager.missileGeometry.flattenedClone()
-        node.physicsBody = self.addPhysicsBody()
+        self.node.physicsBody = self.addPhysicsBody()
         self.missileNode = node
         // Create missile trail particle system
         self.particleSystem = ParticleManager.createMissileTrail(color: particleSystemColor)
@@ -164,7 +168,7 @@ class OSNRMissile: SceneObject {
         if Float.random(in: 0...1) > 0.10 { self.sceneManager.createExplosion(at: pos) }
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.missileNode.removeFromParentNode()
-            self.sceneManager.missiles.append(self)
+            //self.sceneManager.missiles.append(self)
         }
     }
     func setPosition(at position: SCNVector3, towards target: SCNNode, faction: Faction) {

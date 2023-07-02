@@ -47,7 +47,7 @@ class ShipManager {
     
     init(blackHoles: [BlackHole]) {
         self.ship = SCNNode() //ModelManager.createShip()
-        self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(node: self.ship))
         self.ship.physicsBody?.isAffectedByGravity = false
         self.ship.physicsBody?.categoryBitMask = CollisionCategory.ship
         // Set the category, collision, and contact test bit masks
@@ -63,25 +63,26 @@ class ShipManager {
     }
     var currentOrientation: SIMD2<Float> = .zero
     func update(deltaTime: TimeInterval) {
-        self.currentFrame = arSession.currentFrame
-        if let cameraTransform = currentFrame?.camera.transform {
-            // Convert the 4x4 transform matrix to a quaternion
-            //let quaternion = simd_quaternion(cameraTransform)
-
-            // Use the quaternion to update the ship's orientation
-            //self.currentRotation = quaternion
-            //self.ship.simdOrientation = quaternion
-        } else {
-            //print("failed")
-        }
-
+        //self.adoptDeviceOrientation()
         self.updateShipPosition(deltaTime: deltaTime)
         self.updateRotation(deltaTime: deltaTime)
         self.findClosestHole()
     }
     var lastPosition: SIMD3<Float> = .zero
     var lastRotation: simd_quatf = simd_quatf()
+    func adoptDeviceOrientation() {
+        self.currentFrame = arSession.currentFrame
+        if let cameraTransform = currentFrame?.camera.transform {
+            // Convert the 4x4 transform matrix to a quaternion
+            let quaternion = simd_quaternion(cameraTransform)
 
+            // Use the quaternion to update the ship's orientation
+            self.currentRotation = quaternion
+            self.ship.simdOrientation = quaternion
+        } else {
+            //print("failed")
+        }
+    }
     func updateShipPosition(deltaTime: TimeInterval) {
         // Apply the new position
         let throttleDelta = self.throttle // * Float(deltaTime)
@@ -107,7 +108,7 @@ class ShipManager {
             let newRotation = simd_mul(totalRotation, self.currentRotation)
             
             // Apply low-pass filter
-            let alpha: Float = 0.75
+            let alpha: Float = 1
             let filteredRotation =  simd_normalize(simd_slerp(self.lastRotation, newRotation, alpha))
             // Normalize the quaternion
             self.lastRotation = filteredRotation

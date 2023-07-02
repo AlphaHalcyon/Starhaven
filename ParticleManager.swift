@@ -14,7 +14,7 @@ class ParticleManager {
         let coronaGeo = SCNSphere(radius: 5)
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleColor = .orange
-        fireParticleSystem.birthRate = 20_000
+        fireParticleSystem.birthRate = 21_000
         fireParticleSystem.particleSize = 0.25
         fireParticleSystem.particleIntensity = 1
         fireParticleSystem.particleLifeSpan = 0.4

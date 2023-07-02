@@ -88,11 +88,11 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         self.scene.physicsWorld.contactDelegate = self
     }
     func addShip() {
-        self.shipManager.ship.position = SCNVector3(-2500,2500,-2500)
+        self.shipManager.ship.position = SCNVector3(-2000,2500,-2500)
         self.addNode(self.shipManager.ship)
     }
     func createAI() {
-        let num = 8
+        let num = 12
         let node = ModelManager.createShip(scale: 0.05)
         for i in 0...num {
             let drone = AI(node: node.clone(), faction: .OSNR, sceneManager: self)
@@ -159,7 +159,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        self.view.scene?.background.intensity = 0.98
+        self.view.scene?.background.intensity = 0.5
     }
     
     // Scene Manipulation AND ... regrettably ... Contact Handling
@@ -188,9 +188,9 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         if let contactBody = contact.nodeA.physicsBody {
             let laserNode = contactBody.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
             let enemyNode = contactBody.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            if let sceneObject = self.sceneObjects.first(where: { $0.node == enemyNode }), let ai = sceneObject as? AI {
+            if let sceneObject = self.sceneObjects.first(where: { $0.node == enemyNode }), let ai = sceneObject as? AI, let color = laserNode.particleSystems?.first?.particleColor {
                 //Assuming color is a property of SceneObject
-                if ai.faction == .OSNR  {
+                if ai.faction == .OSNR && color == .cyan {
                     if Float.random(in: 0...1) > 0.9 {
                         print("AI death")
                         self.death(node: laserNode, enemyNode: enemyNode)
@@ -198,7 +198,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
                     else {
                         //ai.isEvading = true
                     }
-                } else if ai.faction == .Wraith  {
+                } else if ai.faction == .Wraith && color != .cyan {
                     if Float.random(in: 0...1) > 0.9 {
                         print("AI death")
                         self.death(node: laserNode, enemyNode: enemyNode)

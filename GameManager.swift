@@ -181,10 +181,10 @@ import ARKit
 
 }
 class GameManager: ObservableObject {
-    var sceneManager: SceneManager
-    var cameraManager: CameraManager
-    var physicsManager: PhysicsManager
-    var shipManager: ShipManager
+    let sceneManager: SceneManager
+    let cameraManager: CameraManager
+    let physicsManager: PhysicsManager
+    let shipManager: ShipManager
     var points: Int = 0
     var fireCooldown: Bool = false
     var showKillIncrement: Bool = false
