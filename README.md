@@ -12,8 +12,7 @@ When an explosion or missile event occurs, the respective methods createExplosio
 
 The OSNRMissile class and Explosion class conform to the Updateable protocol, requiring a update() method, allowing them to be managed via the object pooling mechanism effectively.
 
-2. **AR Navigation**
-ARKit is utilized for real-time tracking and navigation within the game. The ShipManager class manages an AR session through startARSession(), initiating an ARWorldTrackingConfiguration. This configuration tracks the device's orientation and position in the real world, allowing for an immersive 3D experience.
+2. **AR Navigation** is utilized for real-time tracking and navigation within the game. The ShipManager class manages an AR session through startARSession(), initiating an ARWorldTrackingConfiguration. This configuration tracks the device's orientation and position in the real world and uses the ARKit camera's transform quaternion to match the orientation of the player's ship (now in first person), allowing for an immersive 3D experience.
 
 The update(deltaTime: TimeInterval) method in ShipManager is responsible for fetching the current AR frame and updating the ship's orientation based on the device's real-world orientation. The game harnesses the device's position and orientation in the real world to control the ship's movements, leading to a more interactive and realistic gaming experience.
 
