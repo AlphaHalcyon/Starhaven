@@ -47,8 +47,12 @@ class ShipManager {
     
     init(blackHoles: [BlackHole]) {
         self.ship = SCNNode() //ModelManager.createShip()
-        self.ship.physicsBody = SCNPhysicsBody(type: .kinematic, shape: nil)
+        self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         self.ship.physicsBody?.isAffectedByGravity = false
+        self.ship.physicsBody?.categoryBitMask = CollisionCategory.ship
+        // Set the category, collision, and contact test bit masks
+        self.ship.physicsBody?.collisionBitMask = CollisionCategory.celestial
+        self.ship.physicsBody?.contactTestBitMask = CollisionCategory.celestial
         self.blackHoles = blackHoles
         self.startARSession()
     }
@@ -62,17 +66,17 @@ class ShipManager {
         self.currentFrame = arSession.currentFrame
         if let cameraTransform = currentFrame?.camera.transform {
             // Convert the 4x4 transform matrix to a quaternion
-            let quaternion = simd_quaternion(cameraTransform)
+            //let quaternion = simd_quaternion(cameraTransform)
 
             // Use the quaternion to update the ship's orientation
-            self.currentRotation = quaternion
-            self.ship.simdOrientation = quaternion
+            //self.currentRotation = quaternion
+            //self.ship.simdOrientation = quaternion
         } else {
             //print("failed")
         }
 
         self.updateShipPosition(deltaTime: deltaTime)
-        //self.updateRotation(deltaTime: deltaTime)
+        self.updateRotation(deltaTime: deltaTime)
         self.findClosestHole()
     }
     var lastPosition: SIMD3<Float> = .zero

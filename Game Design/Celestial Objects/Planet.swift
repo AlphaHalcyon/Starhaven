@@ -19,6 +19,9 @@ class Planet: SceneObject {
     required init(node: SCNNode, sceneManager: SceneManager) {
         self.node = node
         self.sceneManager = sceneManager
+        let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
+        self.node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+        self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
     }
     init(image: UIImage, radius: CGFloat, view: SCNView, asteroidBeltImage: UIImage? = nil, sceneManager: SceneManager) {
         self.view = view
@@ -34,7 +37,9 @@ class Planet: SceneObject {
         self.sphere.segmentCount = 120
 
         self.node = SCNNode(geometry: sphere)
-        
+        let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
+        self.node.physicsBody = SCNPhysicsBody(type: .static, shape: shape)
+        self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
         let startLatitude: Double = 50
         let endLatitude: Double = 160
         let latitudes: [Double] = Array(stride(from: startLatitude, through: endLatitude, by: 5))

@@ -12,19 +12,19 @@ import Metal
 import simd
 
 class BlackHole: ObservableObject {
-    @Published var containerNode: SCNNode = SCNNode()
-    @Published var blackHoleNode: SCNNode = SCNNode()
-    @Published var scene: SCNScene
-    @Published var view: SCNView
-    @State var radius: CGFloat
-    @State var shipNode: SCNNode
-    @State var vibeOffset: Int
-    @State var ringCount: Int
-    @State var bothRings: Bool
-    @State var vibe: String
-    @State var period: Float
-    @State var discMaterial: SCNMaterial = SCNMaterial()
-    @State var rotationAction: SCNAction?
+    var containerNode: SCNNode = SCNNode()
+    var blackHoleNode: SCNNode = SCNNode()
+    var scene: SCNScene
+    var view: SCNView
+    var radius: CGFloat
+    var shipNode: SCNNode
+    var vibeOffset: Int
+    var ringCount: Int
+    var bothRings: Bool
+    var vibe: String
+    var period: Float
+    var discMaterial: SCNMaterial = SCNMaterial()
+    var rotationAction: SCNAction?
     init(scene: SCNScene, view: SCNView, radius: CGFloat, camera: SCNNode, ringCount: Int, vibeOffset: Int, bothRings: Bool, vibe: String, period: Float, shipNode: SCNNode) {
         self.scene = scene
         self.view = view

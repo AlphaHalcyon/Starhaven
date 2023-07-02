@@ -74,7 +74,7 @@
 		AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */; };
 		AFD7EEBD2A2C88FD00A92162 /* dh10.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBB2A2C88FD00A92162 /* dh10.obj */; };
 		AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* ContentView.swift */; };
-		AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* GhostEnums.swift */; };
+		AFDE46E429F8A17500401509 /* Faction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* Faction.swift */; };
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
 		AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E929F911A800401509 /* FactionSystem.swift */; };
 		AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46F129F91E2400401509 /* Dreadknought.swift */; };
@@ -158,7 +158,7 @@
 		AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.mtl; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.mtl; sourceTree = "<group>"; };
 		AFD7EEBB2A2C88FD00A92162 /* dh10.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.obj; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.obj; sourceTree = "<group>"; };
 		AFDBFDD929DD2775006DEB3E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		AFDE46E329F8A17500401509 /* GhostEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostEnums.swift; sourceTree = "<group>"; };
+		AFDE46E329F8A17500401509 /* Faction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Faction.swift; sourceTree = "<group>"; };
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
 		AFDE46E929F911A800401509 /* FactionSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSystem.swift; sourceTree = "<group>"; };
 		AFDE46F129F91E2400401509 /* Dreadknought.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dreadknought.swift; sourceTree = "<group>"; };
@@ -210,8 +210,11 @@
 			isa = PBXGroup;
 			children = (
 				AFE6689F2A4277C00049D599 /* AI.swift */,
+				AFDE46E329F8A17500401509 /* Faction.swift */,
+				AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */,
 				AFAA93922A4B91AB001718D6 /* Moonbase.swift */,
 				AF05610E2A3E99E80096E211 /* Level.swift */,
+				AFF42A8729E773D000B6C603 /* Celestial Objects */,
 			);
 			path = "Game Design";
 			sourceTree = "<group>";
@@ -311,7 +314,6 @@
 				AFDE46E729F908CA00401509 /* Ecosystem.swift */,
 				AFDE46ED29F9125800401509 /* Agents */,
 				AFDE46EB29F911F600401509 /* Projectiles */,
-				AFF42A8729E773D000B6C603 /* Celestial Objects */,
 				AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */,
 			);
 			path = Things;
@@ -321,7 +323,6 @@
 			isa = PBXGroup;
 			children = (
 				AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */,
-				AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */,
 				AFF42A8529E6689800B6C603 /* Missile.swift */,
 				AFAAB44A29F468D3007D5A2F /* Laser.swift */,
 			);
@@ -355,7 +356,6 @@
 				AF67FBB029F78C0B007CE669 /* Drone.swift */,
 				AF778F0729F9F44700F299E5 /* Raider.swift */,
 				AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */,
-				AFDE46E329F8A17500401509 /* GhostEnums.swift */,
 			);
 			path = Ghosts;
 			sourceTree = "<group>";
@@ -501,7 +501,7 @@
 				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
 				AF6707BA2A3BDA2700A923E4 /* ShipManager.swift in Sources */,
 				AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */,
-				AFDE46E429F8A17500401509 /* GhostEnums.swift in Sources */,
+				AFDE46E429F8A17500401509 /* Faction.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
 				AFE668A02A4277C00049D599 /* AI.swift in Sources */,
