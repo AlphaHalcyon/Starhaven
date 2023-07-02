@@ -4,6 +4,19 @@
  An open-source spaceflight and combat game. Watch enemies engage in laser warfare as you collect black holes randomly scattered through the starry conflict region.
  
  ## FIXES, UPDATES, AND SOLUTIONS
+ 
+### Update: Object Pooling and ARKit Integration (7/2/2023)
+1. **Object pooling,** utilized for both Explosion and Missile objects. Object pooling is a design pattern that allows for the reuse of objects that are expensive to instantiate, significantly optimizing performance by minimizing memory allocations and deallocations.
+
+When an explosion or missile event occurs, the respective methods createExplosion(at:) and fireMissile(at: towards: faction:) first check if there are any unused objects of the corresponding type. If available, an existing object is reused by updating its properties, instead of creating a new instance. Otherwise, a new object is instantiated.
+
+The OSNRMissile class and Explosion class conform to the Updateable protocol, requiring a update() method, allowing them to be managed via the object pooling mechanism effectively.
+
+2. **AR Navigation**
+ARKit is utilized for real-time tracking and navigation within the game. The ShipManager class manages an AR session through startARSession(), initiating an ARWorldTrackingConfiguration. This configuration tracks the device's orientation and position in the real world, allowing for an immersive 3D experience.
+
+The update(deltaTime: TimeInterval) method in ShipManager is responsible for fetching the current AR frame and updating the ship's orientation based on the device's real-world orientation. The game harnesses the device's position and orientation in the real world to control the ship's movements, leading to a more interactive and realistic gaming experience.
+
  ### Update: Moonbase and Such (6/29/2023)
 1. **Planet**: The Planet class represents a celestial body in the scene. It includes methods for adding other objects (such as a Moonbase) to the surface of the planet at specific latitudinal and longitudinal coordinates. The method `addObject` was updated to ensure that added objects are properly oriented relative to the planet's surface. This is done by creating a downward direction vector, which points towards the center of the planet from the object's position, and then rotating the object to align its downward direction with this vector. In other words, objects are now properly "gravity-aligned" with the planet.
 
