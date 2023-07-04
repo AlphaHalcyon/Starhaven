@@ -11,10 +11,9 @@ import SwiftUI
 import SwiftUI
 import ARKit
 
-class GameManager: ObservableObject {
+@MainActor class GameManager: ObservableObject {
     let sceneManager: SceneManager
     let cameraManager: CameraManager
-    let physicsManager: PhysicsManager
     let shipManager: ShipManager
     var points: Int = 0
     var fireCooldown: Bool = false
@@ -26,7 +25,6 @@ class GameManager: ObservableObject {
         let scene = SCNScene()
         let view = SCNView()
         // Initialize the managers
-        self.physicsManager = PhysicsManager(scene: scene, view: view, level: level)
         self.shipManager = ShipManager(blackHoles: [])
         self.cameraManager = CameraManager(trackingState: CameraTrackState.player(ship: self.shipManager.ship), scene: scene, throttle: self.shipManager.throttle)
         self.sceneManager = SceneManager(cameraManager: cameraManager, shipManager: shipManager, scene: scene)
@@ -52,7 +50,7 @@ class GameManager: ObservableObject {
     
 }
 
-struct OSNRMoonView: View {
+@MainActor struct OSNRMoonView: View {
     @StateObject var manager = GameManager()
     @State var userSelectedSettings: Bool = false
     @State var userSelectedContinue: Bool = false
@@ -108,7 +106,7 @@ struct SpaceView: UIViewRepresentable {
         }
     }
 }
-struct HUD: View {
+@MainActor struct HUD: View {
     @State var manager: GameManager
     @State var OSNRMoonView: OSNRMoonView
     var body: some View {
