@@ -23,6 +23,10 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
                 self.handleLaserEnemyCollision(contact: contact)
             case CollisionCategory.missile | CollisionCategory.enemyShip:
                 self.handleMissileEnemyCollision(contact: contact)
+            case CollisionCategory.ship | CollisionCategory.celestial:
+                self.sceneManager.shipManager.throttle *= -1
+            case CollisionCategory.laser | CollisionCategory.celestial:
+                self.sceneManager.createExplosion(at: contact.nodeA.position)
             default:
                 return
             }
@@ -30,8 +34,10 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
     }
     func death(node: SCNNode, enemyNode: SCNNode) {
         self.sceneManager.createExplosion(at: enemyNode.presentation.position)
-        enemyNode.removeFromParentNode()
-        self.sceneManager.sceneObjects = self.sceneManager.sceneObjects.filter { $0.node != enemyNode }
+        DispatchQueue.main.async {
+            enemyNode.removeFromParentNode()
+            self.sceneManager.sceneObjects = self.sceneManager.sceneObjects.filter { $0.node != enemyNode }
+        }
     }
     func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
         if let contactBody = contact.nodeA.physicsBody {
@@ -42,8 +48,9 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
                     //Player missile
                     if color == UIColor.green {
                         if let manager = self.sceneManager.gameManager {
-                            manager.points += 10
-                            print(manager.points)
+                            DispatchQueue.main.async {
+                                manager.points += 10
+                            }
                         } else { print("Failed to get manager.") }
                     }
                     
@@ -69,7 +76,9 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
                     self.sceneManager.createExplosion(at: laserNode.presentation.position)
                     self.death(node: laserNode, enemyNode: moonbase.node)
                     if let manager = self.sceneManager.gameManager {
-                        manager.points += 10
+                        DispatchQueue.main.async {
+                            manager.points += 10
+                        }
                     } else { print("Failed to get manager.") }
                 }
             }

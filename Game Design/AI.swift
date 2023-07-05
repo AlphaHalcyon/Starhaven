@@ -72,10 +72,7 @@ class AI: SceneObject {
                         self.node.worldPosition.z + normalizedDirection.z * speed
                     )
                 }
-                if Float.random(in: 0...1) > 0.998 {
-                    //self.fireLaser(color: self.faction == .Wraith ? .red : .green)
-                }
-                if Float.random(in: 0...1) < 1/120 { // every 3 seconds {
+                if Float.random(in: 0...1) < 1/180 { // every 3 seconds {
                     self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? .red : .cyan)
                 }
             }
@@ -188,8 +185,8 @@ class OSNRMissile: SceneObject {
         let physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         physicsBody.angularVelocityFactor = SCNVector3(0, 0, 0) // Prevent rotation after being fired
         physicsBody.categoryBitMask = CollisionCategory.laser
-        physicsBody.collisionBitMask = CollisionCategory.enemyShip
-        physicsBody.contactTestBitMask = CollisionCategory.enemyShip
+        physicsBody.collisionBitMask = CollisionCategory.celestial
+        physicsBody.contactTestBitMask = CollisionCategory.enemyShip | CollisionCategory.celestial
         physicsBody.isAffectedByGravity = false
         physicsBody.friction = 0
         physicsBody.damping = 0

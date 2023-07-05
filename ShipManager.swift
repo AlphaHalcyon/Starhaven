@@ -59,9 +59,9 @@ class ShipManager {
     }
     var currentOrientation: SIMD2<Float> = .zero
     func update(deltaTime: TimeInterval) {
-        //self.adoptDeviceOrientation()
+        self.adoptDeviceOrientation()
         self.updateShipPosition(deltaTime: deltaTime)
-        self.updateRotation(deltaTime: deltaTime)
+        //self.updateRotation(deltaTime: deltaTime)
         self.findClosestHole()
     }
     var lastPosition: SIMD3<Float> = .zero

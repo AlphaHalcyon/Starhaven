@@ -91,11 +91,10 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.view.scene = self.scene
         self.createSkybox()
         self.view.delegate = self
-        
         self.scene.physicsWorld.contactDelegate = self.createPhysicsManager()
     }
     func addShip() {
-        self.shipManager.ship.position = SCNVector3(-2000,2500,-2500)
+        self.shipManager.ship.position = SCNVector3(-2000,2500,-2000)
         self.addNode(self.shipManager.ship)
     }
     func createAI() {
@@ -138,8 +137,8 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     }
     
     public func createStar() {
-        let star = Star(radius: 500, color: .orange, sceneManager: self)
-        star.node.position = SCNVector3(0, 1_500, 10_000)
+        let star = Star(radius: 1_000, color: .orange, sceneManager: self)
+        star.node.position = SCNVector3(0, 1_500, 100_000)
         self.sceneObjects.append(star)
         self.addNode(star.node)
     }

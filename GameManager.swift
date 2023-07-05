@@ -49,7 +49,7 @@ class GameManager: ObservableObject {
     }
     func handleFireMissile() {
         // Fire a missile at the current target
-        self.fireMissile(target: self.shipManager.hitTest(), particleSystemColor: .green)
+        self.fireMissile(target: self.shipManager.hitTest(), particleSystemColor: .systemPink)
     }
     // WEAPONS
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
@@ -166,6 +166,7 @@ struct SpaceView: UIViewRepresentable {
     var infoHUD: some View {
         VStack {
             HStack {
+                self.settingsButton.padding(.horizontal)
                 self.speedStack
                 Spacer()
                 self.gearStack
@@ -173,9 +174,6 @@ struct SpaceView: UIViewRepresentable {
                 self.pointStack
             }
             .font(.custom("Avenir Next Regular", size: 24)).padding().foregroundColor(.red)
-            HStack {
-                self.settingsButton; Spacer()
-            }.padding(.horizontal)
             Spacer()
         }
     }
