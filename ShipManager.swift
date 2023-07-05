@@ -44,7 +44,6 @@ class ShipManager {
     var closestEnemy: SCNNode?
     let arSession: ARSession = ARSession()
     var currentFrame: ARFrame?
-    
     init(blackHoles: [BlackHole]) {
         self.ship = SCNNode() //ModelManager.createShip()
         self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(node: self.ship))
@@ -126,8 +125,8 @@ class ShipManager {
     func dragChanged(value: DragGesture.Value) {
         let translation = value.translation
         //print(translation.width, translation.height)
-        let deltaX = Float(translation.width - previousTranslation.width) * 0.005
-        let deltaY = Float(translation.height - previousTranslation.height) * 0.005
+        let deltaX = Float(translation.width - self.previousTranslation.width) * 0.005
+        let deltaY = Float(translation.height - self.previousTranslation.height) * 0.005
         // Update the averageRotationVelocity
         self.rotationVelocity = SIMD2<Float>(Float(deltaX), Float(deltaY))
         self.previousTranslation = translation
@@ -147,8 +146,10 @@ class ShipManager {
     }
     
     func throttle(value: Float) {
-        // Your throttle code here
-        self.throttle = value
+        DispatchQueue.main.async {
+            // Your throttle code here
+            self.throttle = value
+        }
     }
     
     func fireMissile(target: SCNNode? = nil) {

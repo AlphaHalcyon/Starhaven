@@ -9,7 +9,7 @@ import Foundation
 import SceneKit
 
 // Physics Manager
-class PhysicsManager: NSObject, SCNPhysicsContactDelegate {
+class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
     let sceneManager: SceneManager
     init(sceneManager: SceneManager) {
         self.sceneManager = sceneManager
@@ -30,11 +30,10 @@ class PhysicsManager: NSObject, SCNPhysicsContactDelegate {
     }
     func death(node: SCNNode, enemyNode: SCNNode) {
         self.sceneManager.createExplosion(at: enemyNode.position)
-        DispatchQueue.main.async {
-            node.removeFromParentNode()
-            enemyNode.removeFromParentNode()
-            self.sceneManager.sceneObjects = self.sceneManager.sceneObjects.filter { $0.node != enemyNode }
-        }
+        enemyNode.removeFromParentNode()
+        print(self.sceneManager.sceneObjects.count)
+        self.sceneManager.sceneObjects = self.sceneManager.sceneObjects.filter { $0.node != enemyNode }
+        print(self.sceneManager.sceneObjects.count)
     }
     func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
         if let contactBody = contact.nodeA.physicsBody {
@@ -42,16 +41,16 @@ class PhysicsManager: NSObject, SCNPhysicsContactDelegate {
             let enemyNode = contactBody.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
             if let sceneObject = self.sceneManager.sceneObjects.first(where: { $0.node == enemyNode }), let ai = sceneObject as? AI, let color = laserNode.particleSystems?.first?.particleColor {
                 //Assuming color is a property of SceneObject
-                if ai.faction == .OSNR && color == .cyan {
-                    if Float.random(in: 0...1) > 0.9 {
+                if ai.faction == .OSNR && color == UIColor.cyan {
+                    if Float.random(in: 0...1) > 0.1 {
                         print("AI death")
                         self.death(node: laserNode, enemyNode: enemyNode)
                     }
                     else {
                         //ai.isEvading = true
                     }
-                } else if ai.faction == .Wraith && color != .cyan {
-                    if Float.random(in: 0...1) > 0.9 {
+                } else if ai.faction == .Wraith && color != UIColor.cyan {
+                    if Float.random(in: 0...1) > 0.1 {
                         print("AI death")
                         self.death(node: laserNode, enemyNode: enemyNode)
                     }

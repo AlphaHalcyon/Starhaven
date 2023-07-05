@@ -38,7 +38,7 @@ class AI: SceneObject {
     }
     func update() {
         // Check if the current target is still valid
-        if let target = self.target {
+        if let target = self.target { if !self.sceneManager.sceneObjects.contains(where: {$0.node == target}) { self.selectNewTarget() }
             let pos = self.node.worldPosition
             let targetPos = target.worldPosition
             // Update the enemy ship's behavior based on the current target
@@ -76,7 +76,7 @@ class AI: SceneObject {
                     //self.fireLaser(color: self.faction == .Wraith ? .red : .green)
                 }
                 if Float.random(in: 0...1) < 1/120 { // every 3 seconds {
-                    self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? UIColor(red: 255/255, green: 87/255, blue: 210/255, alpha: 1.0) : UIColor.cyan)
+                    self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? .red : .cyan)
                 }
             }
         } else {
@@ -101,19 +101,24 @@ class AI: SceneObject {
         } else if let missile = self.sceneManager.missiles.popLast() {
             missile.target = target
             missile.faction = faction
+            missile.particleSystem.particleColor = particleSystemColor
             self.fire(missile: missile.missileNode)
+            missile.fire()
         }
         
     }
     func fire(missile: SCNNode) {
         missile.position = self.node.position
+        missile.physicsBody?.velocity = SCNVector3(0,0,0)
         let direction = self.node.presentation.worldFront
         let missileMass = missile.physicsBody?.mass ?? 1
         missile.orientation = self.node.presentation.orientation
         missile.eulerAngles.x += Float.pi / 2
         let missileForce = 500 * missileMass
-        missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
         self.sceneManager.addNode(missile)
+        DispatchQueue.main.async {
+            missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+        }
     }
 }
 
@@ -165,10 +170,10 @@ class OSNRMissile: SceneObject {
     }
     func destroy() {
         let pos = self.missileNode.presentation.worldPosition
-        if Float.random(in: 0...1) > 0.10 { self.sceneManager.createExplosion(at: pos) }
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.missileNode.removeFromParentNode()
-            //self.sceneManager.missiles.append(self)
+        self.sceneManager.createExplosion(at: pos)
+        self.missileNode.removeFromParentNode()
+        DispatchQueue.main.async {
+            self.sceneManager.missiles.append(self)
         }
     }
     func setPosition(at position: SCNVector3, towards target: SCNNode, faction: Faction) {

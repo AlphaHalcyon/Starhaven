@@ -19,6 +19,7 @@ import ARKit
     var fireCooldown: Bool = false
     var showKillIncrement: Bool = false
     var showScoreIncrement: Bool = false
+    var gear: Int = 1
     init() {
         // Initialize the SCNScene, SCNView, Level, and other objects
         let level = Level(objects: [], collisionHandler: Level.DefaultCollisionHandler())
@@ -55,7 +56,6 @@ import ARKit
     @State var userSelectedSettings: Bool = false
     @State var userSelectedContinue: Bool = false
     @State private var reticlePosition: CGPoint = CGPoint()
-    @State var gear: Int = 1
     var body: some View {
         ZStack {
             self.starHaven
@@ -162,21 +162,25 @@ struct SpaceView: UIViewRepresentable {
     var speedStack: some View {
         VStack { Text("SPEED"); Text("\(Int(self.throttle * 10)) km/s") }
     }
+    @State var gear: Int = 1
     var gearStack: some View {
         VStack {
             Text("GEAR")
             HStack {
-                Text("1").foregroundColor(self.OSNRMoonView.gear==1 ? .white : .red)
-                Text("2").foregroundColor(self.OSNRMoonView.gear==2 ? .white : .red)
-                Text("3").foregroundColor(self.OSNRMoonView.gear==3 ? .white : .red)
-                Text("4").foregroundColor(self.OSNRMoonView.gear==4 ? .white : .red)
+                Text("1").foregroundColor(self.gear==1 ? .white : .red)
+                Text("2").foregroundColor(self.gear==2 ? .white : .red)
+                Text("3").foregroundColor(self.gear==3 ? .white : .red)
+                Text("4").foregroundColor(self.gear==4 ? .white : .red)
             }
         }.onTapGesture {
-            if self.OSNRMoonView.gear == 4 {
-                self.OSNRMoonView.gear = 1
-            } else { self.OSNRMoonView.gear += 1 }
-            self.throttle = min(self.throttle, Float(10*self.OSNRMoonView.gear))
+            if self.manager.gear == 4 {
+                self.manager.gear = 1
+                self.gear = 1
+                self.throttle = min(self.throttle, Float(10*self.manager.gear))
+            } else { self.manager.gear += 1; self.gear += 1 }
+            
             self.manager.shipManager.throttle = self.throttle
+            print("Tapped gear!")
         }
     }
     @State var throttle: Float = 0
@@ -184,7 +188,7 @@ struct SpaceView: UIViewRepresentable {
         HStack {
             VStack {
                 Spacer()
-                CustomSlider(value: self.$throttle, range: -10 * Float(self.OSNRMoonView.gear)...10 * Float(self.OSNRMoonView.gear), onChange: { val in
+                CustomSlider(value: self.$throttle, range: -10 * Float(self.manager.gear)...10 * Float(self.manager.gear), onChange: { val in
                     self.manager.handleThrottle(value: val)
                 })
             }

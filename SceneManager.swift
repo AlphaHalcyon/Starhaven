@@ -8,7 +8,7 @@
 import Foundation
 import SceneKit
 
-class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhysicsContactDelegate {
+class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     var sceneObjects: [SceneObject] = []
     var viewLoaded: Bool = false
     var lastUpdateTime: TimeInterval = .zero
@@ -37,7 +37,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
     deinit {
         print("SceneManager is being deallocated")
     }
-    
     // Rendering Loop
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         // Update the game state
@@ -61,7 +60,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
     }
     func updateObjectPositions() {
         let playerPosition = self.shipManager.ship.position
-
+        
         // Calculate distance from the origin
         let distanceFromOrigin = sqrt(pow(playerPosition.x, 2) + pow(playerPosition.y, 2) + pow(playerPosition.z, 2))
         
@@ -79,21 +78,27 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
             self.shipManager.ship.position = SCNVector3Zero
         }
     }
-
+    var physicsManager: PhysicsManager? // This is a strong reference
+    
+    func createPhysicsManager() -> PhysicsManager {
+        let manager = PhysicsManager(sceneManager: self)
+        self.physicsManager = manager // Hold a strong reference
+        return manager
+    }
     // Scene Creation
     func setupScene() {
         self.view.scene = self.scene
         self.createSkybox()
         self.view.delegate = self
-        let manager = PhysicsManager(sceneManager: self)
-        self.scene.physicsWorld.contactDelegate = manager
+        
+        self.scene.physicsWorld.contactDelegate = self.createPhysicsManager()
     }
     func addShip() {
         self.shipManager.ship.position = SCNVector3(-2000,2500,-2500)
         self.addNode(self.shipManager.ship)
     }
     func createAI() {
-        let num = 12
+        let num = 8
         let node = ModelManager.createShip(scale: 0.05)
         for i in 0...num {
             let drone = AI(node: node.clone(), faction: .OSNR, sceneManager: self)
@@ -132,7 +137,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         let z = radius * cos(phi)
         return SCNVector3(x, y, z)
     }
-
+    
     public func createStar() {
         let star = Star(radius: 500, color: .orange, sceneManager: self)
         star.node.position = SCNVector3(0, 1_500, 10_000)
@@ -151,6 +156,16 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         //self.createBlackHoles(around: planet, count: 10)
         self.shipManager.ship.look(at: planet.node.position)
         self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
+    }
+    public func createEarth() {
+        guard let image = UIImage(named: "Earth.jpg") else {
+            return
+        }
+        let planet = Planet(image: image, radius: 10_000, view: self.view, asteroidBeltImage: image, sceneManager: self)
+        planet.node.castsShadow = true
+        planet.node.position = SCNVector3(-5_000, -15_000, 15000)
+        self.sceneObjects.append(planet)
+        planet.addToScene(scene: self.scene)
     }
     func createSkybox() {
         self.view.allowsCameraControl = false
@@ -178,19 +193,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         }
     }
     var missiles: [OSNRMissile] = []
-    func fireMissile(from position: SCNNode, towards target: SCNNode?, faction: Faction) {
-        if self.missiles.isEmpty {
-            let missile = OSNRMissile(target: target, particleSystemColor: faction == Faction.OSNR ?  UIColor.systemPink : UIColor.cyan, sceneManager: self)
-            self.missiles.append(missile)
-            missile.fire()
-            
-        } else if let missile = self.missiles.popLast() {
-            missile.target = target
-            missile.faction = faction
-            missile.node.position = position.position
-            missile.fire()
-        }
-    }
     func addNode(_ node: SCNNode) {
         self.scene.rootNode.addChildNode(node)
     }

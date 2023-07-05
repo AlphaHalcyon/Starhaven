@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import SceneKit
-import GLKit
 import simd
 import SceneKit.ModelIO
 class Dreadknought: ObservableObject {
