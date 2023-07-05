@@ -86,7 +86,6 @@ class AI: SceneObject {
     // OPERATIONS
     func selectNewTarget() {
         let targets = self.sceneManager.sceneObjects.filter { $0.isAI && $0.faction != self.faction }
-        print(targets)
         if let target = targets.randomElement() {
             self.target = target.node
         }

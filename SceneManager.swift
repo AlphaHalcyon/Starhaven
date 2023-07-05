@@ -9,6 +9,7 @@ import Foundation
 import SceneKit
 
 class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
+    weak var gameManager: GameManager?
     var sceneObjects: [SceneObject] = []
     var viewLoaded: Bool = false
     var lastUpdateTime: TimeInterval = .zero
@@ -107,7 +108,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
             
             self.addNode(drone.node)
             self.sceneObjects.append(drone)
-            print(drone.node.position)
         }
         for i in 0...num {
             let drone = AI(node: node.clone(), faction: .Wraith, sceneManager: self)
@@ -116,7 +116,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
             
             self.addNode(drone.node)
             self.sceneObjects.append(drone)
-            print(drone.node.position)
         }
     }
     func createBlackHoles(around planet: Planet, count: Int) {

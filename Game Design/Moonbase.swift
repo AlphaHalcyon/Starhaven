@@ -20,8 +20,8 @@ class Moonbase: SceneObject {
     
     public var node: SCNNode
     private var scale: Float = 1.0
-    private var habNode: SCNNode?
-    private var innerHab: SCNNode?
+    var habNode: SCNNode?
+    var innerHab: SCNNode?
     // Add other moonbase parts here
     private var hasLight: Bool = false
     private var railgunBaseNodes: [SCNNode] = []
@@ -46,6 +46,12 @@ class Moonbase: SceneObject {
         self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(0,0,-1.5 * self.scale))
         self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1.5,0,1.5 * self.scale))
         self.loadRailgunBase(named: "TankCannon", offset: SCNVector3(1.5,0,-1.5 * self.scale))
+        let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
+        let physicsBody: SCNPhysicsBody = SCNPhysicsBody(type: .static, shape: shape)
+        physicsBody.categoryBitMask = CollisionCategory.enemyShip
+        physicsBody.collisionBitMask = CollisionCategory.laser
+        physicsBody.contactTestBitMask = CollisionCategory.laser
+        self.node.physicsBody = physicsBody
         //self.loadRailgunTurret(named: "moonGun")
         // Load other moonbase parts here
         //self.loadPanels()

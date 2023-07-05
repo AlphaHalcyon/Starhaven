@@ -25,10 +25,7 @@ class ShipManager {
     var ship: SCNNode
     var containerNode: SCNNode = SCNNode()
     var throttle: Float = 0
-    var blackHoles: [BlackHole] // Assuming you have a BlackHole class
     var closestBlackHole: BlackHole?
-    var missiles: [Missile] = [] // Assuming you have a Missile class
-    // Navigation
     var currentRotation = simd_quatf(angle: .pi, axis: simd_float3(x: 0, y: 1, z: 0))
     var rotationDeltaX: Float = 0
     var rotationDeltaY: Float = 0
@@ -44,7 +41,7 @@ class ShipManager {
     var closestEnemy: SCNNode?
     let arSession: ARSession = ARSession()
     var currentFrame: ARFrame?
-    init(blackHoles: [BlackHole]) {
+    init() {
         self.ship = SCNNode() //ModelManager.createShip()
         self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(node: self.ship))
         self.ship.physicsBody?.isAffectedByGravity = false
@@ -52,10 +49,10 @@ class ShipManager {
         // Set the category, collision, and contact test bit masks
         self.ship.physicsBody?.collisionBitMask = CollisionCategory.celestial
         self.ship.physicsBody?.contactTestBitMask = CollisionCategory.celestial
-        self.blackHoles = blackHoles
         self.startARSession()
     }
     
+    //  ROTATION and POSITION HANDLING
     func startARSession() {
         let configuration = ARWorldTrackingConfiguration()
         arSession.run(configuration)

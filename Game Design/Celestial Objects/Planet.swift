@@ -55,6 +55,7 @@ class Planet: SceneObject {
             moonbase.node.scale = SCNVector3(25,25,25)
             let base: SCNNode = moonbase.node
             self.addObject(object: base, atLatitude: latitudes[i], longitude: longitudes[i])
+            self.sceneManager.sceneObjects.append(moonbase)
         }
     }
 

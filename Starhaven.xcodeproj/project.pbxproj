@@ -80,7 +80,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4948D7752A538F4C006FE8FE /* Raider.obj */ = {isa = PBXFileReference; lastKnownFileType = file; name = Raider.obj; path = ../../../../Downloads/Raider.obj; sourceTree = "<group>"; };
 		4948D78C2A53933A006FE8FE /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = Models/README.txt; sourceTree = "<group>"; };
 		4948D78D2A53933A006FE8FE /* Turret_Reflection.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Reflection.jpg; path = Models/Turret_Reflection.jpg; sourceTree = "<group>"; };
 		4948D78E2A53933A006FE8FE /* panel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = panel.jpg; path = Models/panel.jpg; sourceTree = "<group>"; };
@@ -374,7 +373,6 @@
 		AFF42A8729E773D000B6C603 /* Celestial Objects */ = {
 			isa = PBXGroup;
 			children = (
-				4948D7752A538F4C006FE8FE /* Raider.obj */,
 				AF6388E629DFC9610086C90F /* Star.swift */,
 				AF3D1DA52A0A006600A8F2C7 /* Planet.swift */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
@@ -674,7 +672,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -714,7 +712,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

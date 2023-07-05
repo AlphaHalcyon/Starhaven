@@ -11,25 +11,28 @@ import SwiftUI
 import SwiftUI
 import ARKit
 
-@MainActor class GameManager: ObservableObject {
+class GameManager: ObservableObject {
     let sceneManager: SceneManager
     let cameraManager: CameraManager
     let shipManager: ShipManager
-    var points: Int = 0
-    var fireCooldown: Bool = false
-    var showKillIncrement: Bool = false
-    var showScoreIncrement: Bool = false
-    var gear: Int = 1
+    @Published var points: Int = 0
+    @Published var kills: Int = 0
+    @Published var fireCooldown: Bool = false
+    @Published var showKillIncrement: Bool = false
+    @Published var showScoreIncrement: Bool = false
+    @Published var gear: Int = 1
+    
     init() {
         // Initialize the SCNScene, SCNView, Level, and other objects
         let level = Level(objects: [], collisionHandler: Level.DefaultCollisionHandler())
         let scene = SCNScene()
         let view = SCNView()
         // Initialize the managers
-        self.shipManager = ShipManager(blackHoles: [])
+        self.shipManager = ShipManager()
         self.cameraManager = CameraManager(trackingState: CameraTrackState.player(ship: self.shipManager.ship), scene: scene, throttle: self.shipManager.throttle)
         self.sceneManager = SceneManager(cameraManager: cameraManager, shipManager: shipManager, scene: scene)
         self.sceneManager.viewLoaded = true
+        self.sceneManager.gameManager = self
     }
     
     func handleDragChange(value: DragGesture.Value) {
@@ -46,9 +49,35 @@ import ARKit
     }
     func handleFireMissile() {
         // Fire a missile at the current target
-        self.shipManager.fireMissile(target: self.shipManager.hitTest())
+        self.fireMissile(target: self.shipManager.hitTest(), particleSystemColor: .green)
     }
-    
+    // WEAPONS
+    func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
+        let missile: OSNRMissile
+        if self.sceneManager.missiles.isEmpty {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode)
+        } else if let missile = self.sceneManager.missiles.popLast() {
+            missile.target = target
+            missile.faction = .Phantom
+            missile.particleSystem.particleColor = particleSystemColor
+            self.fire(missile: missile.missileNode)
+            missile.fire()
+        }
+    }
+    func fire(missile: SCNNode) {
+        missile.position = self.shipManager.ship.position - SCNVector3(0, -1, 1)
+        missile.physicsBody?.velocity = SCNVector3(0,0,0)
+        missile.simdOrientation = self.shipManager.ship.simdOrientation
+        let direction = self.shipManager.ship.presentation.worldFront
+        let missileMass = missile.physicsBody?.mass ?? 1
+        missile.eulerAngles.x += Float.pi / 2
+        let missileForce = 500 * missileMass
+        self.sceneManager.addNode(missile)
+        DispatchQueue.main.async {
+            missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+        }
+    }
 }
 
 @MainActor struct OSNRMoonView: View {
@@ -156,8 +185,11 @@ struct SpaceView: UIViewRepresentable {
                 self.OSNRMoonView.userSelectedSettings = true
             }
     }
+    @State var points: Int = 0
     var pointStack: some View {
-        VStack { Text("POINTS"); Text("\(self.manager.points)") }
+        VStack { Text("POINTS"); Text("\(self.points)") }.onChange(of: self.manager.points) { val in
+            self.points = self.manager.points
+        }
     }
     var speedStack: some View {
         VStack { Text("SPEED"); Text("\(Int(self.throttle * 10)) km/s") }
