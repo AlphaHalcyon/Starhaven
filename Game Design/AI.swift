@@ -38,7 +38,7 @@ class AI: SceneObject {
     }
     func update() {
         // Check if the current target is still valid
-        if let target = self.target {
+        if let target = self.target { if !self.sceneManager.sceneObjects.contains(where: {$0.node == target}) { self.selectNewTarget() }
             let pos = self.node.worldPosition
             let targetPos = target.worldPosition
             // Update the enemy ship's behavior based on the current target
@@ -75,8 +75,8 @@ class AI: SceneObject {
                 if Float.random(in: 0...1) > 0.998 {
                     //self.fireLaser(color: self.faction == .Wraith ? .red : .green)
                 }
-                if Float.random(in: 0...1) < 1/60/10 { // every 3 seconds {
-                    self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? UIColor.systemPink : UIColor.cyan)
+                if Float.random(in: 0...1) < 1/120 { // every 3 seconds {
+                    self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? .red : .cyan)
                 }
             }
         } else {
@@ -94,21 +94,31 @@ class AI: SceneObject {
     }
     // WEAPONS MECHANICS
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
-        let missile = OSNRMissile(target: target,
-                                  particleSystemColor: particleSystemColor,
-                                  sceneManager: self.sceneManager,
-                                  faction: self.faction)
-        // Convert shipNode's local position to world position
-        let worldPosition = self.node.convertPosition(SCNVector3(0, -1, 15), to: self.node.parent)
+        let missile: OSNRMissile
+        if self.sceneManager.missiles.isEmpty {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode)
+        } else if let missile = self.sceneManager.missiles.popLast() {
+            missile.target = target
+            missile.faction = faction
+            missile.particleSystem.particleColor = particleSystemColor
+            self.fire(missile: missile.missileNode)
+            missile.fire()
+        }
         
-        missile.missileNode.position = worldPosition
+    }
+    func fire(missile: SCNNode) {
+        missile.position = self.node.position
+        missile.physicsBody?.velocity = SCNVector3(0,0,0)
         let direction = self.node.presentation.worldFront
-        let missileMass = missile.missileNode.physicsBody?.mass ?? 1
-        missile.missileNode.orientation = self.node.presentation.orientation
-        missile.missileNode.eulerAngles.x += Float.pi / 2
+        let missileMass = missile.physicsBody?.mass ?? 1
+        missile.orientation = self.node.presentation.orientation
+        missile.eulerAngles.x += Float.pi / 2
         let missileForce = 500 * missileMass
-        missile.missileNode.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        self.sceneManager.addNode(missile.missileNode)
+        self.sceneManager.addNode(missile)
+        DispatchQueue.main.async {
+            missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+        }
     }
 }
 
@@ -124,12 +134,11 @@ class OSNRMissile: SceneObject {
     var sceneManager: SceneManager
     var faction: Faction = .OSNR
     init(target: SCNNode? = nil, particleSystemColor: UIColor, sceneManager: SceneManager, faction: Faction = .OSNR) {
-        self.node = self.missileNode
+        self.node = ModelManager.missileGeometry.flattenedClone()
         self.faction = faction
         self.target = target
         self.sceneManager = sceneManager
-        let node = ModelManager.missileGeometry.flattenedClone()
-        node.physicsBody = self.addPhysicsBody()
+        self.node.physicsBody = self.addPhysicsBody()
         self.missileNode = node
         // Create missile trail particle system
         self.particleSystem = ParticleManager.createMissileTrail(color: particleSystemColor)
@@ -161,9 +170,9 @@ class OSNRMissile: SceneObject {
     }
     func destroy() {
         let pos = self.missileNode.presentation.worldPosition
-        if Float.random(in: 0...1) > 0.10 { self.sceneManager.createExplosion(at: pos) }
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.missileNode.removeFromParentNode()
+        self.sceneManager.createExplosion(at: pos)
+        self.missileNode.removeFromParentNode()
+        DispatchQueue.main.async {
             self.sceneManager.missiles.append(self)
         }
     }

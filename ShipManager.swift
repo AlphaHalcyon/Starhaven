@@ -44,10 +44,9 @@ class ShipManager {
     var closestEnemy: SCNNode?
     let arSession: ARSession = ARSession()
     var currentFrame: ARFrame?
-    
     init(blackHoles: [BlackHole]) {
         self.ship = SCNNode() //ModelManager.createShip()
-        self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(node: self.ship))
         self.ship.physicsBody?.isAffectedByGravity = false
         self.ship.physicsBody?.categoryBitMask = CollisionCategory.ship
         // Set the category, collision, and contact test bit masks
@@ -63,25 +62,26 @@ class ShipManager {
     }
     var currentOrientation: SIMD2<Float> = .zero
     func update(deltaTime: TimeInterval) {
-        self.currentFrame = arSession.currentFrame
-        if let cameraTransform = currentFrame?.camera.transform {
-            // Convert the 4x4 transform matrix to a quaternion
-            //let quaternion = simd_quaternion(cameraTransform)
-
-            // Use the quaternion to update the ship's orientation
-            //self.currentRotation = quaternion
-            //self.ship.simdOrientation = quaternion
-        } else {
-            //print("failed")
-        }
-
+        //self.adoptDeviceOrientation()
         self.updateShipPosition(deltaTime: deltaTime)
         self.updateRotation(deltaTime: deltaTime)
         self.findClosestHole()
     }
     var lastPosition: SIMD3<Float> = .zero
     var lastRotation: simd_quatf = simd_quatf()
+    func adoptDeviceOrientation() {
+        self.currentFrame = arSession.currentFrame
+        if let cameraTransform = currentFrame?.camera.transform {
+            // Convert the 4x4 transform matrix to a quaternion
+            let quaternion = simd_quaternion(cameraTransform)
 
+            // Use the quaternion to update the ship's orientation
+            self.currentRotation = quaternion
+            self.ship.simdOrientation = quaternion
+        } else {
+            //print("failed")
+        }
+    }
     func updateShipPosition(deltaTime: TimeInterval) {
         // Apply the new position
         let throttleDelta = self.throttle // * Float(deltaTime)
@@ -107,7 +107,7 @@ class ShipManager {
             let newRotation = simd_mul(totalRotation, self.currentRotation)
             
             // Apply low-pass filter
-            let alpha: Float = 0.75
+            let alpha: Float = 1
             let filteredRotation =  simd_normalize(simd_slerp(self.lastRotation, newRotation, alpha))
             // Normalize the quaternion
             self.lastRotation = filteredRotation
@@ -125,8 +125,8 @@ class ShipManager {
     func dragChanged(value: DragGesture.Value) {
         let translation = value.translation
         //print(translation.width, translation.height)
-        let deltaX = Float(translation.width - previousTranslation.width) * 0.005
-        let deltaY = Float(translation.height - previousTranslation.height) * 0.005
+        let deltaX = Float(translation.width - self.previousTranslation.width) * 0.005
+        let deltaY = Float(translation.height - self.previousTranslation.height) * 0.005
         // Update the averageRotationVelocity
         self.rotationVelocity = SIMD2<Float>(Float(deltaX), Float(deltaY))
         self.previousTranslation = translation
@@ -146,8 +146,10 @@ class ShipManager {
     }
     
     func throttle(value: Float) {
-        // Your throttle code here
-        self.throttle = value
+        DispatchQueue.main.async {
+            // Your throttle code here
+            self.throttle = value
+        }
     }
     
     func fireMissile(target: SCNNode? = nil) {

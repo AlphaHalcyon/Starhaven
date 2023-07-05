@@ -11,7 +11,7 @@ import SwiftUI
 struct StarhavenApp: App {
     var body: some Scene {
         WindowGroup {
-            ONSRMoonView()
+            OSNRMoonView()
         }
     }
 }

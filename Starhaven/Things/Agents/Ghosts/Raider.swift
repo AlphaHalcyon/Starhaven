@@ -7,7 +7,6 @@
 import Foundation
 import SwiftUI
 import SceneKit
-import GLKit
 import simd
 
 @MainActor class Raider {

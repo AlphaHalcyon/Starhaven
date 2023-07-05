@@ -7,6 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4948D79E2A53933A006FE8FE /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4948D78C2A53933A006FE8FE /* README.txt */; };
+		4948D79F2A53933A006FE8FE /* Turret_Reflection.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D78D2A53933A006FE8FE /* Turret_Reflection.jpg */; };
+		4948D7A02A53933A006FE8FE /* panel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D78E2A53933A006FE8FE /* panel.jpg */; };
+		4948D7A12A53933A006FE8FE /* HDU_02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D78F2A53933A006FE8FE /* HDU_02.jpg */; };
+		4948D7A22A53933A006FE8FE /* panelbump.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7902A53933A006FE8FE /* panelbump.jpg */; };
+		4948D7A42A53933A006FE8FE /* objSolar.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7922A53933A006FE8FE /* objSolar.obj */; };
+		4948D7A52A53933A006FE8FE /* HDU_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7932A53933A006FE8FE /* HDU_01.jpg */; };
+		4948D7A62A53933A006FE8FE /* innerHDU.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7942A53933A006FE8FE /* innerHDU.mtl */; };
+		4948D7A72A53933A006FE8FE /* objSolar.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7952A53933A006FE8FE /* objSolar.mtl */; };
+		4948D7A82A53933A006FE8FE /* outerHDU.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7962A53933A006FE8FE /* outerHDU.mtl */; };
+		4948D7A92A53933A006FE8FE /* Sci Fi AA Turret.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7972A53933A006FE8FE /* Sci Fi AA Turret.obj */; };
+		4948D7AA2A53933A006FE8FE /* innerHDU.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7982A53933A006FE8FE /* innerHDU.obj */; };
+		4948D7AB2A53933A006FE8FE /* outerHDU.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7992A53933A006FE8FE /* outerHDU.obj */; };
+		4948D7AC2A53933A006FE8FE /* Sci Fi AA Turret.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4948D79A2A53933A006FE8FE /* Sci Fi AA Turret.mtl */; };
+		4948D7AD2A53933A006FE8FE /* TankCannon.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D79B2A53933A006FE8FE /* TankCannon.obj */; };
+		4948D7AE2A53933A006FE8FE /* Turret_Normal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D79C2A53933A006FE8FE /* Turret_Normal.jpg */; };
+		4948D7AF2A53933A006FE8FE /* Turret_Color.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D79D2A53933A006FE8FE /* Turret_Color.jpg */; };
+		4948D7B32A5395FC006FE8FE /* base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B22A539546006FE8FE /* base.jpg */; };
+		4948D7B52A5397AE006FE8FE /* Raider.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B42A5397AE006FE8FE /* Raider.obj */; };
+		4948D7B72A5397BD006FE8FE /* Raider.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B62A5397BD006FE8FE /* Raider.mtl */; };
+		4948D7B92A53C8A6006FE8FE /* Earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B82A53C8A6006FE8FE /* Earth.jpg */; };
 		AF0561092A3E98E20096E211 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0561082A3E98E20096E211 /* CameraManager.swift */; };
 		AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610A2A3E99140096E211 /* PhysicsManager.swift */; };
 		AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610C2A3E99C00096E211 /* SceneManager.swift */; };
@@ -18,7 +39,6 @@
 		AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9AA2A344D380068D352 /* ParticleManager.swift */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
-		AF2C1D902A451D8B00E9D132 /* tex in Resources */ = {isa = PBXBuildFile; fileRef = AF2C1D8F2A451D8B00E9D132 /* tex */; };
 		AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D1DA52A0A006600A8F2C7 /* Planet.swift */; };
 		AF5B368F2A0AA9660075581E /* Custom Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5B368E2A0AA9650075581E /* Custom Slider.swift */; };
 		AF6388DA29DF77940086C90F /* Space.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388D929DF77940086C90F /* Space.swift */; };
@@ -28,12 +48,7 @@
 		AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */; };
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
 		AF6707BA2A3BDA2700A923E4 /* ShipManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707B92A3BDA2700A923E4 /* ShipManager.swift */; };
-		AF6707BC2A3CC2C200A923E4 /* PhysicsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */; };
 		AF6707BE2A3D415000A923E4 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707BD2A3D415000A923E4 /* ModelManager.swift */; };
-		AF67822D2A4D08AF004471AC /* objSolar.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AF6782292A4D08AF004471AC /* objSolar.mtl */; };
-		AF67822E2A4D08AF004471AC /* objSolar.obj in Resources */ = {isa = PBXBuildFile; fileRef = AF67822A2A4D08AF004471AC /* objSolar.obj */; };
-		AF67822F2A4D08AF004471AC /* panelbump.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AF67822B2A4D08AF004471AC /* panelbump.jpg */; };
-		AF6782302A4D08AF004471AC /* panel.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AF67822C2A4D08AF004471AC /* panel.jpg */; };
 		AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* Drone.swift */; };
 		AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */; };
 		AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */; };
@@ -41,26 +56,10 @@
 		AF778F0829F9F44700F299E5 /* Raider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF778F0729F9F44700F299E5 /* Raider.swift */; };
 		AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */; };
 		AFAA93932A4B91AB001718D6 /* Moonbase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAA93922A4B91AB001718D6 /* Moonbase.swift */; };
-		AFAA93952A4B9D8C001718D6 /* innerHDU.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93942A4B9D8C001718D6 /* innerHDU.obj */; };
-		AFAA93972A4B9E40001718D6 /* innerHDU.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93962A4B9E40001718D6 /* innerHDU.mtl */; };
-		AFAA93992A4B9E5C001718D6 /* HDU_01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93982A4B9E5C001718D6 /* HDU_01.jpg */; };
-		AFAA939B2A4BA63E001718D6 /* HDU_02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFAA939A2A4BA63D001718D6 /* HDU_02.jpg */; };
-		AFAA939D2A4BA64E001718D6 /* outerHDU.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFAA939C2A4BA64E001718D6 /* outerHDU.mtl */; };
-		AFAA939F2A4BA658001718D6 /* outerHDU.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFAA939E2A4BA658001718D6 /* outerHDU.obj */; };
 		AFAA93A22A4BE14D001718D6 /* ARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAA93A12A4BE14C001718D6 /* ARView.swift */; };
-		AFAA93A42A4BF415001718D6 /* TankCannon.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93A32A4BF415001718D6 /* TankCannon.obj */; };
-		AFAA93AA2A4BF45F001718D6 /* Sci Fi AA Turret.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93A52A4BF45F001718D6 /* Sci Fi AA Turret.mtl */; };
-		AFAA93AB2A4BF45F001718D6 /* Turret_Color.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93A62A4BF45F001718D6 /* Turret_Color.jpg */; };
-		AFAA93AC2A4BF45F001718D6 /* Sci Fi AA Turret.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93A72A4BF45F001718D6 /* Sci Fi AA Turret.obj */; };
-		AFAA93AD2A4BF45F001718D6 /* Turret_Normal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93A82A4BF45F001718D6 /* Turret_Normal.jpg */; };
-		AFAA93AE2A4BF45F001718D6 /* Turret_Reflection.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFAA93A92A4BF45F001718D6 /* Turret_Reflection.jpg */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
 		AFAFEF482A43ED1200247BAF /* IntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAFEF472A43ED1200247BAF /* IntroScreen.swift */; };
-		AFB0FD302A452764009B5061 /* base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AFB0FD2F2A452764009B5061 /* base.jpg */; };
-		AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */; };
-		AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DB2A25A4C4009C998B /* Raider.obj */; };
-		AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFBB77DD2A25A4F0009C998B /* Raider.mtl */; };
 		AFC43CCA29D771790080E891 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */; };
 		AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */ = {isa = PBXBuildFile; fileRef = AFC43CD929D7CF200080E891 /* Privacy Policy.txt */; };
 		AFC92EDB2A12B8BE0042697B /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */; };
@@ -71,8 +70,6 @@
 		AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06329CFAAFC00A127BB /* Extensions.swift */; };
 		AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD4C06529CFAF5100A127BB /* CustomTorus.swift */; };
 		AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */; };
-		AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */; };
-		AFD7EEBD2A2C88FD00A92162 /* dh10.obj in Resources */ = {isa = PBXBuildFile; fileRef = AFD7EEBB2A2C88FD00A92162 /* dh10.obj */; };
 		AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDBFDD929DD2775006DEB3E /* ContentView.swift */; };
 		AFDE46E429F8A17500401509 /* Faction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E329F8A17500401509 /* Faction.swift */; };
 		AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFDE46E729F908CA00401509 /* Ecosystem.swift */; };
@@ -83,6 +80,29 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4948D7752A538F4C006FE8FE /* Raider.obj */ = {isa = PBXFileReference; lastKnownFileType = file; name = Raider.obj; path = ../../../../Downloads/Raider.obj; sourceTree = "<group>"; };
+		4948D78C2A53933A006FE8FE /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.txt; path = Models/README.txt; sourceTree = "<group>"; };
+		4948D78D2A53933A006FE8FE /* Turret_Reflection.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Reflection.jpg; path = Models/Turret_Reflection.jpg; sourceTree = "<group>"; };
+		4948D78E2A53933A006FE8FE /* panel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = panel.jpg; path = Models/panel.jpg; sourceTree = "<group>"; };
+		4948D78F2A53933A006FE8FE /* HDU_02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HDU_02.jpg; path = Models/HDU_02.jpg; sourceTree = "<group>"; };
+		4948D7902A53933A006FE8FE /* panelbump.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = panelbump.jpg; path = Models/panelbump.jpg; sourceTree = "<group>"; };
+		4948D7922A53933A006FE8FE /* objSolar.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = objSolar.obj; path = Models/objSolar.obj; sourceTree = "<group>"; };
+		4948D7932A53933A006FE8FE /* HDU_01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HDU_01.jpg; path = Models/HDU_01.jpg; sourceTree = "<group>"; };
+		4948D7942A53933A006FE8FE /* innerHDU.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = innerHDU.mtl; path = Models/innerHDU.mtl; sourceTree = "<group>"; };
+		4948D7952A53933A006FE8FE /* objSolar.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = objSolar.mtl; path = Models/objSolar.mtl; sourceTree = "<group>"; };
+		4948D7962A53933A006FE8FE /* outerHDU.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = outerHDU.mtl; path = Models/outerHDU.mtl; sourceTree = "<group>"; };
+		4948D7972A53933A006FE8FE /* Sci Fi AA Turret.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Sci Fi AA Turret.obj"; path = "Models/Sci Fi AA Turret.obj"; sourceTree = "<group>"; };
+		4948D7982A53933A006FE8FE /* innerHDU.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = innerHDU.obj; path = Models/innerHDU.obj; sourceTree = "<group>"; };
+		4948D7992A53933A006FE8FE /* outerHDU.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = outerHDU.obj; path = Models/outerHDU.obj; sourceTree = "<group>"; };
+		4948D79A2A53933A006FE8FE /* Sci Fi AA Turret.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Sci Fi AA Turret.mtl"; path = "Models/Sci Fi AA Turret.mtl"; sourceTree = "<group>"; };
+		4948D79B2A53933A006FE8FE /* TankCannon.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TankCannon.obj; path = Models/TankCannon.obj; sourceTree = "<group>"; };
+		4948D79C2A53933A006FE8FE /* Turret_Normal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Normal.jpg; path = Models/Turret_Normal.jpg; sourceTree = "<group>"; };
+		4948D79D2A53933A006FE8FE /* Turret_Color.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Color.jpg; path = Models/Turret_Color.jpg; sourceTree = "<group>"; };
+		4948D7B22A539546006FE8FE /* base.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = base.jpg; sourceTree = "<group>"; };
+		4948D7B42A5397AE006FE8FE /* Raider.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.obj; path = "../../Library/Messages/Attachments/a6/06/5E86C0D9-3F63-45A3-BBB1-D5ABA845ED4E/Raider.obj"; sourceTree = "<group>"; };
+		4948D7B62A5397BD006FE8FE /* Raider.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.mtl; path = "../../Library/Messages/Attachments/fe/14/2DD21A8D-7E42-4D57-AF5F-7AF410A94928/Raider.mtl"; sourceTree = "<group>"; };
+		4948D7B82A53C8A6006FE8FE /* Earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Earth.jpg; path = ../../Downloads/Earth.jpg; sourceTree = "<group>"; };
+		4948D7BA2A53ECAF006FE8FE /* Starhaven.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Starhaven.entitlements; sourceTree = "<group>"; };
 		AF0561082A3E98E20096E211 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		AF05610A2A3E99140096E211 /* PhysicsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsManager.swift; sourceTree = "<group>"; };
 		AF05610C2A3E99C00096E211 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
@@ -100,7 +120,6 @@
 		AF12B9AA2A344D380068D352 /* ParticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleManager.swift; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
-		AF2C1D8F2A451D8B00E9D132 /* tex */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tex; path = ../../Downloads/tex; sourceTree = "<group>"; };
 		AF3D1DA52A0A006600A8F2C7 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
 		AF5B368E2A0AA9650075581E /* Custom Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Custom Slider.swift"; sourceTree = "<group>"; };
 		AF6388D929DF77940086C90F /* Space.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Space.swift; sourceTree = "<group>"; };
@@ -110,12 +129,7 @@
 		AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacegroundViewModel.swift; sourceTree = "<group>"; };
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
 		AF6707B92A3BDA2700A923E4 /* ShipManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipManager.swift; sourceTree = "<group>"; };
-		AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsTest.swift; sourceTree = "<group>"; };
 		AF6707BD2A3D415000A923E4 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
-		AF6782292A4D08AF004471AC /* objSolar.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = objSolar.mtl; path = "../../Downloads/solar-panel/obj/objSolar.mtl"; sourceTree = "<group>"; };
-		AF67822A2A4D08AF004471AC /* objSolar.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = objSolar.obj; path = "../../Downloads/solar-panel/obj/objSolar.obj"; sourceTree = "<group>"; };
-		AF67822B2A4D08AF004471AC /* panelbump.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = panelbump.jpg; path = "../../Downloads/solar-panel/obj/panelbump.jpg"; sourceTree = "<group>"; };
-		AF67822C2A4D08AF004471AC /* panel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = panel.jpg; path = "../../Downloads/solar-panel/obj/panel.jpg"; sourceTree = "<group>"; };
 		AF67FBB029F78C0B007CE669 /* Drone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drone.swift; sourceTree = "<group>"; };
 		AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
@@ -123,27 +137,11 @@
 		AF778F0729F9F44700F299E5 /* Raider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Raider.swift; sourceTree = "<group>"; };
 		AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMissile.swift; sourceTree = "<group>"; };
 		AFAA93922A4B91AB001718D6 /* Moonbase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moonbase.swift; sourceTree = "<group>"; };
-		AFAA93942A4B9D8C001718D6 /* innerHDU.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = innerHDU.obj; path = ../../Downloads/HDU/innerHDU.obj; sourceTree = "<group>"; };
-		AFAA93962A4B9E40001718D6 /* innerHDU.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = innerHDU.mtl; path = ../../Downloads/HDU/innerHDU.mtl; sourceTree = "<group>"; };
-		AFAA93982A4B9E5C001718D6 /* HDU_01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HDU_01.jpg; path = ../../Downloads/HDU/HDU_01.jpg; sourceTree = "<group>"; };
-		AFAA939A2A4BA63D001718D6 /* HDU_02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HDU_02.jpg; path = ../../Downloads/HDU/HDU_02.jpg; sourceTree = "<group>"; };
-		AFAA939C2A4BA64E001718D6 /* outerHDU.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = outerHDU.mtl; path = ../../Downloads/HDU/outerHDU.mtl; sourceTree = "<group>"; };
-		AFAA939E2A4BA658001718D6 /* outerHDU.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = outerHDU.obj; path = ../../Downloads/HDU/outerHDU.obj; sourceTree = "<group>"; };
 		AFAA93A02A4BE08D001718D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AFAA93A12A4BE14C001718D6 /* ARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARView.swift; sourceTree = "<group>"; };
-		AFAA93A32A4BF415001718D6 /* TankCannon.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TankCannon.obj; path = ../../Downloads/TankCannon.obj; sourceTree = "<group>"; };
-		AFAA93A52A4BF45F001718D6 /* Sci Fi AA Turret.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Sci Fi AA Turret.mtl"; path = "../../Downloads/Sci Fi AA Turret-Obj/Sci Fi AA Turret.mtl"; sourceTree = "<group>"; };
-		AFAA93A62A4BF45F001718D6 /* Turret_Color.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Color.jpg; path = "../../Downloads/Sci Fi AA Turret-Obj/Turret_Color.jpg"; sourceTree = "<group>"; };
-		AFAA93A72A4BF45F001718D6 /* Sci Fi AA Turret.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Sci Fi AA Turret.obj"; path = "../../Downloads/Sci Fi AA Turret-Obj/Sci Fi AA Turret.obj"; sourceTree = "<group>"; };
-		AFAA93A82A4BF45F001718D6 /* Turret_Normal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Normal.jpg; path = "../../Downloads/Sci Fi AA Turret-Obj/Turret_Normal.jpg"; sourceTree = "<group>"; };
-		AFAA93A92A4BF45F001718D6 /* Turret_Reflection.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Reflection.jpg; path = "../../Downloads/Sci Fi AA Turret-Obj/Turret_Reflection.jpg"; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
 		AFAFEF472A43ED1200247BAF /* IntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreen.swift; sourceTree = "<group>"; };
-		AFB0FD2F2A452764009B5061 /* base.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = base.jpg; path = ../../Downloads/tex/base.jpg; sourceTree = "<group>"; };
-		AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = HeavyBattleship.obj; sourceTree = "<group>"; };
-		AFBB77DB2A25A4C4009C998B /* Raider.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.obj; path = ../../../Downloads/Raider.obj; sourceTree = "<group>"; };
-		AFBB77DD2A25A4F0009C998B /* Raider.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.mtl; path = ../../../Downloads/Raider.mtl; sourceTree = "<group>"; };
 		AFC43CD929D7CF200080E891 /* Privacy Policy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Privacy Policy.txt"; sourceTree = "<group>"; };
 		AFC92EDA2A12B8BE0042697B /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		AFD4C04C29CFA48200A127BB /* Starhaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Starhaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,8 +153,6 @@
 		AFD4C06529CFAF5100A127BB /* CustomTorus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTorus.swift; sourceTree = "<group>"; };
 		AFD4C06A29CFFB4E00A127BB /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		AFD7EEB82A2C83A600A92162 /* IntroCutscene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroCutscene.swift; sourceTree = "<group>"; };
-		AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.mtl; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.mtl; sourceTree = "<group>"; };
-		AFD7EEBB2A2C88FD00A92162 /* dh10.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = dh10.obj; path = ../../../Downloads/cadnav.com_model/Models_G0701A063/dh10.obj; sourceTree = "<group>"; };
 		AFDBFDD929DD2775006DEB3E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AFDE46E329F8A17500401509 /* Faction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Faction.swift; sourceTree = "<group>"; };
 		AFDE46E729F908CA00401509 /* Ecosystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ecosystem.swift; sourceTree = "<group>"; };
@@ -178,6 +174,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4948D78B2A5392DB006FE8FE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4948D7B82A53C8A6006FE8FE /* Earth.jpg */,
+				4948D7B22A539546006FE8FE /* base.jpg */,
+				4948D7932A53933A006FE8FE /* HDU_01.jpg */,
+				4948D78F2A53933A006FE8FE /* HDU_02.jpg */,
+				4948D7942A53933A006FE8FE /* innerHDU.mtl */,
+				4948D7982A53933A006FE8FE /* innerHDU.obj */,
+				4948D7952A53933A006FE8FE /* objSolar.mtl */,
+				4948D7922A53933A006FE8FE /* objSolar.obj */,
+				4948D7962A53933A006FE8FE /* outerHDU.mtl */,
+				4948D7992A53933A006FE8FE /* outerHDU.obj */,
+				4948D78E2A53933A006FE8FE /* panel.jpg */,
+				4948D7902A53933A006FE8FE /* panelbump.jpg */,
+				4948D7B42A5397AE006FE8FE /* Raider.obj */,
+				4948D7B62A5397BD006FE8FE /* Raider.mtl */,
+				4948D78C2A53933A006FE8FE /* README.txt */,
+				4948D79A2A53933A006FE8FE /* Sci Fi AA Turret.mtl */,
+				4948D7972A53933A006FE8FE /* Sci Fi AA Turret.obj */,
+				4948D79B2A53933A006FE8FE /* TankCannon.obj */,
+				4948D79D2A53933A006FE8FE /* Turret_Color.jpg */,
+				4948D79C2A53933A006FE8FE /* Turret_Normal.jpg */,
+				4948D78D2A53933A006FE8FE /* Turret_Reflection.jpg */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		AF0561172A3EA8300096E211 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,25 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				AFAA93A12A4BE14C001718D6 /* ARView.swift */,
-				AF6707BB2A3CC2C200A923E4 /* PhysicsTest.swift */,
-				AFB0FD2F2A452764009B5061 /* base.jpg */,
-				AF6782292A4D08AF004471AC /* objSolar.mtl */,
-				AF67822A2A4D08AF004471AC /* objSolar.obj */,
-				AF67822C2A4D08AF004471AC /* panel.jpg */,
-				AF67822B2A4D08AF004471AC /* panelbump.jpg */,
-				AFAA939C2A4BA64E001718D6 /* outerHDU.mtl */,
-				AFAA939E2A4BA658001718D6 /* outerHDU.obj */,
-				AFAA93942A4B9D8C001718D6 /* innerHDU.obj */,
-				AFAA93962A4B9E40001718D6 /* innerHDU.mtl */,
-				AFAA93982A4B9E5C001718D6 /* HDU_01.jpg */,
-				AFAA939A2A4BA63D001718D6 /* HDU_02.jpg */,
-				AFAA93A32A4BF415001718D6 /* TankCannon.obj */,
-				AFAA93A52A4BF45F001718D6 /* Sci Fi AA Turret.mtl */,
-				AFAA93A72A4BF45F001718D6 /* Sci Fi AA Turret.obj */,
-				AFAA93A62A4BF45F001718D6 /* Turret_Color.jpg */,
-				AFAA93A82A4BF45F001718D6 /* Turret_Normal.jpg */,
-				AFAA93A92A4BF45F001718D6 /* Turret_Reflection.jpg */,
-				AF2C1D8F2A451D8B00E9D132 /* tex */,
+				4948D78B2A5392DB006FE8FE /* Models */,
 				AF0561182A3EA8870096E211 /* Managers */,
 				AF0561192A3EA8970096E211 /* Game Design */,
 				AF0561172A3EA8300096E211 /* Audio */,
@@ -266,6 +272,7 @@
 		AFD4C04E29CFA48200A127BB /* Starhaven */ = {
 			isa = PBXGroup;
 			children = (
+				4948D7BA2A53ECAF006FE8FE /* Starhaven.entitlements */,
 				AFAA93A02A4BE08D001718D6 /* Info.plist */,
 				AFD4C04F29CFA48200A127BB /* StarhavenApp.swift */,
 				AFF42A8829E773FD00B6C603 /* Views */,
@@ -273,11 +280,6 @@
 				AFD7EEBF2A2E892500A92162 /* Things */,
 				AFD4C06329CFAAFC00A127BB /* Extensions.swift */,
 				AFD4C05329CFA48400A127BB /* Assets.xcassets */,
-				AFBB77D92A2555B4009C998B /* HeavyBattleship.obj */,
-				AFBB77DB2A25A4C4009C998B /* Raider.obj */,
-				AFD7EEBA2A2C88FD00A92162 /* dh10.mtl */,
-				AFD7EEBB2A2C88FD00A92162 /* dh10.obj */,
-				AFBB77DD2A25A4F0009C998B /* Raider.mtl */,
 				AFD4C05529CFA48400A127BB /* Preview Content */,
 			);
 			path = Starhaven;
@@ -372,6 +374,7 @@
 		AFF42A8729E773D000B6C603 /* Celestial Objects */ = {
 			isa = PBXGroup;
 			children = (
+				4948D7752A538F4C006FE8FE /* Raider.obj */,
 				AF6388E629DFC9610086C90F /* Star.swift */,
 				AF3D1DA52A0A006600A8F2C7 /* Planet.swift */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
@@ -421,7 +424,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					AFD4C04B29CFA48200A127BB = {
 						CreatedOnToolsVersion = 14.2;
@@ -451,35 +454,33 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFAA939B2A4BA63E001718D6 /* HDU_02.jpg in Resources */,
-				AFBB77DA2A2555BD009C998B /* HeavyBattleship.obj in Resources */,
-				AFB0FD302A452764009B5061 /* base.jpg in Resources */,
-				AF2C1D902A451D8B00E9D132 /* tex in Resources */,
+				4948D7B32A5395FC006FE8FE /* base.jpg in Resources */,
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
+				4948D7AA2A53933A006FE8FE /* innerHDU.obj in Resources */,
+				4948D7AB2A53933A006FE8FE /* outerHDU.obj in Resources */,
+				4948D7A62A53933A006FE8FE /* innerHDU.mtl in Resources */,
+				4948D79E2A53933A006FE8FE /* README.txt in Resources */,
+				4948D7A22A53933A006FE8FE /* panelbump.jpg in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
-				AFD7EEBC2A2C88FD00A92162 /* dh10.mtl in Resources */,
-				AFAA93952A4B9D8C001718D6 /* innerHDU.obj in Resources */,
-				AFBB77DC2A25A4C4009C998B /* Raider.obj in Resources */,
+				4948D7AE2A53933A006FE8FE /* Turret_Normal.jpg in Resources */,
 				AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */,
-				AFAA93A42A4BF415001718D6 /* TankCannon.obj in Resources */,
+				4948D7AC2A53933A006FE8FE /* Sci Fi AA Turret.mtl in Resources */,
+				4948D7AD2A53933A006FE8FE /* TankCannon.obj in Resources */,
+				4948D7A92A53933A006FE8FE /* Sci Fi AA Turret.obj in Resources */,
+				4948D7B52A5397AE006FE8FE /* Raider.obj in Resources */,
+				4948D7A72A53933A006FE8FE /* objSolar.mtl in Resources */,
 				AF07021E29E120D300667F9B /* Assets.xcassets in Resources */,
-				AFAA93992A4B9E5C001718D6 /* HDU_01.jpg in Resources */,
 				AFC43CDA29D7CF200080E891 /* Privacy Policy.txt in Resources */,
-				AFAA93AD2A4BF45F001718D6 /* Turret_Normal.jpg in Resources */,
-				AFAA93AC2A4BF45F001718D6 /* Sci Fi AA Turret.obj in Resources */,
-				AFAA93972A4B9E40001718D6 /* innerHDU.mtl in Resources */,
-				AF67822D2A4D08AF004471AC /* objSolar.mtl in Resources */,
-				AFBB77DE2A25A4F0009C998B /* Raider.mtl in Resources */,
-				AFAA93AE2A4BF45F001718D6 /* Turret_Reflection.jpg in Resources */,
-				AFAA939D2A4BA64E001718D6 /* outerHDU.mtl in Resources */,
-				AFD7EEBD2A2C88FD00A92162 /* dh10.obj in Resources */,
-				AF67822E2A4D08AF004471AC /* objSolar.obj in Resources */,
+				4948D7AF2A53933A006FE8FE /* Turret_Color.jpg in Resources */,
+				4948D7A82A53933A006FE8FE /* outerHDU.mtl in Resources */,
+				4948D7A02A53933A006FE8FE /* panel.jpg in Resources */,
+				4948D7A52A53933A006FE8FE /* HDU_01.jpg in Resources */,
+				4948D7B92A53C8A6006FE8FE /* Earth.jpg in Resources */,
+				4948D7A42A53933A006FE8FE /* objSolar.obj in Resources */,
 				AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */,
-				AF6782302A4D08AF004471AC /* panel.jpg in Resources */,
-				AF67822F2A4D08AF004471AC /* panelbump.jpg in Resources */,
-				AFAA93AB2A4BF45F001718D6 /* Turret_Color.jpg in Resources */,
-				AFAA93AA2A4BF45F001718D6 /* Sci Fi AA Turret.mtl in Resources */,
-				AFAA939F2A4BA658001718D6 /* outerHDU.obj in Resources */,
+				4948D79F2A53933A006FE8FE /* Turret_Reflection.jpg in Resources */,
+				4948D7B72A5397BD006FE8FE /* Raider.mtl in Resources */,
+				4948D7A12A53933A006FE8FE /* HDU_02.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,7 +509,6 @@
 				AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */,
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
-				AF6707BC2A3CC2C200A923E4 /* PhysicsTest.swift in Sources */,
 				AF12B9A72A33BADA0068D352 /* GameManager.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
 				AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */,
@@ -658,6 +658,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
@@ -673,7 +674,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -683,8 +684,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -696,6 +698,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
@@ -711,7 +714,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -721,8 +724,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

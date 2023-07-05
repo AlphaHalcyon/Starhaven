@@ -11,12 +11,51 @@ import SwiftUI
 import SwiftUI
 import ARKit
 
-@MainActor struct ONSRMoonView: View {
+@MainActor class GameManager: ObservableObject {
+    let sceneManager: SceneManager
+    let cameraManager: CameraManager
+    let shipManager: ShipManager
+    var points: Int = 0
+    var fireCooldown: Bool = false
+    var showKillIncrement: Bool = false
+    var showScoreIncrement: Bool = false
+    var gear: Int = 1
+    init() {
+        // Initialize the SCNScene, SCNView, Level, and other objects
+        let level = Level(objects: [], collisionHandler: Level.DefaultCollisionHandler())
+        let scene = SCNScene()
+        let view = SCNView()
+        // Initialize the managers
+        self.shipManager = ShipManager(blackHoles: [])
+        self.cameraManager = CameraManager(trackingState: CameraTrackState.player(ship: self.shipManager.ship), scene: scene, throttle: self.shipManager.throttle)
+        self.sceneManager = SceneManager(cameraManager: cameraManager, shipManager: shipManager, scene: scene)
+        self.sceneManager.viewLoaded = true
+    }
+    
+    func handleDragChange(value: DragGesture.Value) {
+        self.shipManager.dragChanged(value: value)
+    }
+    
+    func handleDragEnd() {
+        self.shipManager.dragEnded()
+    }
+    
+    func handleThrottle(value: Float) {
+        self.shipManager.throttle(value: value)
+        self.cameraManager.throttle(value: value)
+    }
+    func handleFireMissile() {
+        // Fire a missile at the current target
+        self.shipManager.fireMissile(target: self.shipManager.hitTest())
+    }
+    
+}
+
+@MainActor struct OSNRMoonView: View {
     @StateObject var manager = GameManager()
     @State var userSelectedSettings: Bool = false
     @State var userSelectedContinue: Bool = false
     @State private var reticlePosition: CGPoint = CGPoint()
-    @State var gear: Int = 1
     var body: some View {
         ZStack {
             self.starHaven
@@ -34,11 +73,44 @@ import ARKit
                 .onEnded { _ in
                     self.manager.handleDragEnd()
                 })
-            self.HUD
+            HUD(manager: self.manager, OSNRMoonView: self)
         }
     }
     var loadingScreen: some View {
         IntroScreen(spaceViewModel: self.manager, userSelectedContinue: self.$userSelectedContinue)
+    }
+}
+
+struct SpaceView: UIViewRepresentable {
+    @State var manager: GameManager
+    init(manager: GameManager) {
+        self.manager = manager
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    func makeUIView(context: Context) -> SCNView {
+        let scnView = self.manager.sceneManager.view
+        scnView.pointOfView = self.manager.cameraManager.cameraNode
+        return scnView
+    }
+    func updateUIView(_ uiView: SCNView, context: Context) {
+        
+    }
+    class Coordinator: NSObject, SCNPhysicsContactDelegate {
+        var view: SpaceView
+
+        init(_ view: SpaceView) {
+            self.view = view
+        }
+    }
+}
+@MainActor struct HUD: View {
+    @State var manager: GameManager
+    @State var OSNRMoonView: OSNRMoonView
+    var body: some View {
+        self.HUD
     }
     var HUD: some View {
         ZStack {
@@ -81,7 +153,7 @@ import ARKit
     var settingsButton: some View {
         Image(systemName: "gear.circle.fill").resizable().scaledToFit().frame(width: UIScreen.main.bounds.height/10)
             .onTapGesture {
-                self.userSelectedSettings = true
+                self.OSNRMoonView.userSelectedSettings = true
             }
     }
     var pointStack: some View {
@@ -90,6 +162,7 @@ import ARKit
     var speedStack: some View {
         VStack { Text("SPEED"); Text("\(Int(self.throttle * 10)) km/s") }
     }
+    @State var gear: Int = 1
     var gearStack: some View {
         VStack {
             Text("GEAR")
@@ -100,11 +173,14 @@ import ARKit
                 Text("4").foregroundColor(self.gear==4 ? .white : .red)
             }
         }.onTapGesture {
-            if self.gear == 4 {
+            if self.manager.gear == 4 {
+                self.manager.gear = 1
                 self.gear = 1
-            } else { self.gear += 1 }
-            self.throttle = min(self.throttle, Float(10*self.gear))
+                self.throttle = min(self.throttle, Float(10*self.manager.gear))
+            } else { self.manager.gear += 1; self.gear += 1 }
+            
             self.manager.shipManager.throttle = self.throttle
+            print("Tapped gear!")
         }
     }
     @State var throttle: Float = 0
@@ -112,7 +188,7 @@ import ARKit
         HStack {
             VStack {
                 Spacer()
-                CustomSlider(value: self.$throttle, range: -10 * Float(self.gear)...10 * Float(self.gear), onChange: { val in
+                CustomSlider(value: self.$throttle, range: -10 * Float(self.manager.gear)...10 * Float(self.manager.gear), onChange: { val in
                     self.manager.handleThrottle(value: val)
                 })
             }
@@ -178,72 +254,4 @@ import ARKit
             Spacer()
         }
     }
-
 }
-class GameManager: ObservableObject {
-    var sceneManager: SceneManager
-    var cameraManager: CameraManager
-    var physicsManager: PhysicsManager
-    var shipManager: ShipManager
-    var points: Int = 0
-    var fireCooldown: Bool = false
-    var showKillIncrement: Bool = false
-    var showScoreIncrement: Bool = false
-    init() {
-        // Initialize the SCNScene, SCNView, Level, and other objects
-        let level = Level(objects: [], collisionHandler: Level.DefaultCollisionHandler())
-        let scene = SCNScene()
-        let view = SCNView()
-        // Initialize the managers
-        self.physicsManager = PhysicsManager(scene: scene, view: view, level: level)
-        self.shipManager = ShipManager(blackHoles: [])
-        self.cameraManager = CameraManager(trackingState: CameraTrackState.player(ship: self.shipManager.ship), scene: scene, throttle: self.shipManager.throttle)
-        self.sceneManager = SceneManager(cameraManager: cameraManager, shipManager: shipManager, scene: scene)
-        self.sceneManager.viewLoaded = true
-    }
-    
-    func handleDragChange(value: DragGesture.Value) {
-        self.shipManager.dragChanged(value: value)
-    }
-    
-    func handleDragEnd() {
-        self.shipManager.dragEnded()
-    }
-    
-    func handleThrottle(value: Float) {
-        self.shipManager.throttle(value: value)
-        self.cameraManager.throttle(value: value)
-    }
-    func handleFireMissile() {
-        // Fire a missile at the current target
-        self.shipManager.fireMissile(target: self.shipManager.hitTest())
-    }
-    
-}
-
-struct SpaceView: UIViewRepresentable {
-    @State var manager: GameManager
-    init(manager: GameManager) {
-        self.manager = manager
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    func makeUIView(context: Context) -> SCNView {
-        let scnView = self.manager.sceneManager.view
-        scnView.pointOfView = self.manager.cameraManager.cameraNode
-        return scnView
-    }
-    func updateUIView(_ uiView: SCNView, context: Context) {
-        
-    }
-    class Coordinator: NSObject, SCNPhysicsContactDelegate {
-        var view: SpaceView
-
-        init(_ view: SpaceView) {
-            self.view = view
-        }
-    }
-}
-

@@ -8,7 +8,7 @@
 import Foundation
 import SceneKit
 
-class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhysicsContactDelegate {
+class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     var sceneObjects: [SceneObject] = []
     var viewLoaded: Bool = false
     var lastUpdateTime: TimeInterval = .zero
@@ -37,7 +37,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
     deinit {
         print("SceneManager is being deallocated")
     }
-    
     // Rendering Loop
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         // Update the game state
@@ -61,7 +60,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
     }
     func updateObjectPositions() {
         let playerPosition = self.shipManager.ship.position
-
+        
         // Calculate distance from the origin
         let distanceFromOrigin = sqrt(pow(playerPosition.x, 2) + pow(playerPosition.y, 2) + pow(playerPosition.z, 2))
         
@@ -79,16 +78,23 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
             self.shipManager.ship.position = SCNVector3Zero
         }
     }
-
+    var physicsManager: PhysicsManager? // This is a strong reference
+    
+    func createPhysicsManager() -> PhysicsManager {
+        let manager = PhysicsManager(sceneManager: self)
+        self.physicsManager = manager // Hold a strong reference
+        return manager
+    }
     // Scene Creation
     func setupScene() {
         self.view.scene = self.scene
         self.createSkybox()
         self.view.delegate = self
-        self.scene.physicsWorld.contactDelegate = self
+        
+        self.scene.physicsWorld.contactDelegate = self.createPhysicsManager()
     }
     func addShip() {
-        self.shipManager.ship.position = SCNVector3(-2500,2500,-2500)
+        self.shipManager.ship.position = SCNVector3(-2000,2500,-2500)
         self.addNode(self.shipManager.ship)
     }
     func createAI() {
@@ -131,7 +137,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         let z = radius * cos(phi)
         return SCNVector3(x, y, z)
     }
-
+    
     public func createStar() {
         let star = Star(radius: 500, color: .orange, sceneManager: self)
         star.node.position = SCNVector3(0, 1_500, 10_000)
@@ -139,7 +145,10 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         self.addNode(star.node)
     }
     public func createPlanet(name: String) {
-        let image = UIImage(imageLiteralResourceName: name)
+        guard let image = UIImage(named: name) else {
+            print("Failed to create planet from imagename \(name)")
+            return
+        }
         let planet = Planet(image: image, radius: 1750, view: self.view, asteroidBeltImage: image, sceneManager: self)
         planet.node.castsShadow = true
         self.sceneObjects.append(planet)
@@ -147,6 +156,16 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
         //self.createBlackHoles(around: planet, count: 10)
         self.shipManager.ship.look(at: planet.node.position)
         self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
+    }
+    public func createEarth() {
+        guard let image = UIImage(named: "Earth.jpg") else {
+            return
+        }
+        let planet = Planet(image: image, radius: 10_000, view: self.view, asteroidBeltImage: image, sceneManager: self)
+        planet.node.castsShadow = true
+        planet.node.position = SCNVector3(-5_000, -15_000, 15000)
+        self.sceneObjects.append(planet)
+        planet.addToScene(scene: self.scene)
     }
     func createSkybox() {
         self.view.allowsCameraControl = false
@@ -159,109 +178,21 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject, SCNPhy
             UIImage(named: "sky"),
             UIImage(named: "sky")
         ]
-        self.view.scene?.background.intensity = 0.98
-    }
-    
-    // Scene Manipulation AND ... regrettably ... Contact Handling
-    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-        if let contactBodyA = contact.nodeA.physicsBody, let contactBodyB = contact.nodeB.physicsBody {
-            let contactMask = contactBodyA.categoryBitMask | contactBodyB.categoryBitMask
-            switch contactMask {
-            case CollisionCategory.laser | CollisionCategory.enemyShip:
-                self.handleLaserEnemyCollision(contact: contact)
-            case CollisionCategory.missile | CollisionCategory.enemyShip:
-                self.handleMissileEnemyCollision(contact: contact)
-            default:
-                return
-            }
-        }
-    }
-    func death(node: SCNNode, enemyNode: SCNNode) {
-        self.createExplosion(at: enemyNode.position)
-        DispatchQueue.main.async {
-            node.removeFromParentNode()
-            enemyNode.removeFromParentNode()
-            self.sceneObjects = self.sceneObjects.filter { $0.node != enemyNode }
-        }
-    }
-    func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
-        if let contactBody = contact.nodeA.physicsBody {
-            let laserNode = contactBody.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
-            let enemyNode = contactBody.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-            if let sceneObject = self.sceneObjects.first(where: { $0.node == enemyNode }), let ai = sceneObject as? AI {
-                //Assuming color is a property of SceneObject
-                if ai.faction == .OSNR  {
-                    if Float.random(in: 0...1) > 0.9 {
-                        print("AI death")
-                        self.death(node: laserNode, enemyNode: enemyNode)
-                    }
-                    else {
-                        //ai.isEvading = true
-                    }
-                } else if ai.faction == .Wraith  {
-                    if Float.random(in: 0...1) > 0.9 {
-                        print("AI death")
-                        self.death(node: laserNode, enemyNode: enemyNode)
-                    }
-                    else {
-                        //ai.isEvading = true
-                    }
-                }
-            }
-        }
-    }
-    func handleMissileEnemyCollision(contact: SCNPhysicsContact) {
-        // Determine which node is the missile and which is the enemy ship
-        let missileNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.missile ? contact.nodeA : contact.nodeB
-        let enemyNode = contact.nodeA.physicsBody!.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
-        
-        self.missileContact(missileNode: missileNode, enemyNode: enemyNode)
-    }
-    func missileContact(missileNode: SCNNode, enemyNode: SCNNode) {
-        // Find the corresponding missile object and call the handleCollision function
-        if let missile = self.sceneObjects.first(where: { $0.node == missileNode }) {
-            if missile.faction != .OSNR {
-                return
-            }
-            // self.playSound(name: "snatchHiss")
-            // missile.detonate()
-            self.createExplosion(at: missile.node.position)
-        }
-        // Remove the missile and enemy ship from the scene
-        DispatchQueue.main.async {
-            self.createExplosion(at: enemyNode.position)
-            enemyNode.removeFromParentNode()
-            self.cameraManager.trackingState = CameraTrackState.player(ship: self.shipManager.ship)
-            // Add logic for updating the score or other game state variables
-            // For example, you could call a function in the SpacegroundViewModel to increase the score:
-            // self.incrementScore(killsOrBlackHoles: 2)
-            self.sceneObjects = self.sceneObjects.filter { $0.node != enemyNode }
-        }
+        self.view.scene?.background.intensity = 0.5
     }
     
     // OBJECT POOLING for EXPLOSION and MISSILE objects
     var explosions: [Explosion] = []
     func createExplosion(at position: SCNVector3) {
         if self.explosions.isEmpty {
-            self.explosions.append(Explosion(at: position, sceneManager: self))
+            Explosion(at: position, sceneManager: self)
         } else if let explosion = self.explosions.popLast() {
             explosion.setPosition(at: position)
+        } else {
+            Explosion(at: position, sceneManager: self)
         }
     }
     var missiles: [OSNRMissile] = []
-    func fireMissile(from position: SCNNode, towards target: SCNNode?, faction: Faction) {
-        if self.missiles.isEmpty {
-            let missile = OSNRMissile(target: target, particleSystemColor: faction == Faction.OSNR ?  UIColor.systemPink : UIColor.cyan, sceneManager: self)
-            self.missiles.append(missile)
-            missile.fire()
-            
-        } else if let missile = self.missiles.popLast() {
-            missile.target = target
-            missile.faction = faction
-            missile.node.position = position.position
-            missile.fire()
-        }
-    }
     func addNode(_ node: SCNNode) {
         self.scene.rootNode.addChildNode(node)
     }
