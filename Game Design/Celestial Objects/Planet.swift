@@ -41,7 +41,7 @@ class Planet: SceneObject {
         self.node.physicsBody = SCNPhysicsBody(type: .static, shape: shape)
         self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
         let startLatitude: Double = 50
-        let endLatitude: Double = 160
+        let endLatitude: Double = 100
         let latitudes: [Double] = Array(stride(from: startLatitude, through: endLatitude, by: 5))
         let longitudes: [Double] = Array(repeating: 0.0, count: latitudes.count)
         let lights: [Bool] = latitudes.map { $0 >= 60 && $0 <= 80 }

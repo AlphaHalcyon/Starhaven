@@ -49,24 +49,28 @@ class GameManager: ObservableObject {
     }
     func handleFireMissile() {
         // Fire a missile at the current target
-        self.fireMissile(target: self.shipManager.hitTest(), particleSystemColor: .green)
+        self.fireMissile(target: self.shipManager.hitTest(), particleSystemColor: .red)
     }
     // WEAPONS
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
         let missile: OSNRMissile
-        if self.sceneManager.missiles.isEmpty {
-            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
-            self.fire(missile: missile.missileNode)
-        } else if let missile = self.sceneManager.missiles.popLast() {
+        if let missile = self.sceneManager.missiles.popLast() {
             missile.target = target
             missile.faction = .Phantom
             missile.particleSystem.particleColor = particleSystemColor
             self.fire(missile: missile.missileNode)
             missile.fire()
         }
+        else if self.sceneManager.missiles.isEmpty {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode)
+        } else {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode)
+        }
     }
     func fire(missile: SCNNode) {
-        missile.position = self.shipManager.ship.position - SCNVector3(0, -1, 1)
+        missile.position = self.shipManager.ship.position - SCNVector3(0, -2, 2)
         missile.physicsBody?.velocity = SCNVector3(0,0,0)
         missile.simdOrientation = self.shipManager.ship.simdOrientation
         let direction = self.shipManager.ship.presentation.worldFront
@@ -156,7 +160,7 @@ struct SpaceView: UIViewRepresentable {
     var reticle: some View {
         Crosshair()
             .stroke(self.manager.shipManager.closestEnemy == nil ? Color.white : Color.red, lineWidth: 1)
-            .frame(width: 20, height: 20).opacity(0.98)
+            .frame(width: 20, height: 20).opacity(0.33)
     }
     var dynamicCamera: some View {
         VStack {
@@ -166,6 +170,7 @@ struct SpaceView: UIViewRepresentable {
     var infoHUD: some View {
         VStack {
             HStack {
+                self.settingsButton.padding(.horizontal)
                 self.speedStack
                 Spacer()
                 self.gearStack
@@ -173,9 +178,6 @@ struct SpaceView: UIViewRepresentable {
                 self.pointStack
             }
             .font(.custom("Avenir Next Regular", size: 24)).padding().foregroundColor(.red)
-            HStack {
-                self.settingsButton; Spacer()
-            }.padding(.horizontal)
             Spacer()
         }
     }

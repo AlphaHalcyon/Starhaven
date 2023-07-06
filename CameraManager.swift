@@ -18,7 +18,7 @@ enum CameraTrackState {
 class CameraManager {
     var cameraNode: SCNNode
     var trackingState: CameraTrackState
-    var followDistance: Float = 0.5
+    var followDistance: Float = 1
     var throttle: Float
     init(trackingState: CameraTrackState, scene: SCNScene, throttle: Float) {
         self.throttle = throttle
@@ -75,7 +75,7 @@ class CameraManager {
     private func setupCamera(scene: SCNScene) {
         // Create a camera
         let camera = SCNCamera()
-        camera.zFar = 150000
+        camera.zFar = 200_000
         camera.zNear = 1
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()

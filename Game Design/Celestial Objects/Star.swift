@@ -37,7 +37,7 @@ class Star: SceneObject {
         
         let lightNode = SCNNode()
         let light = SCNLight()
-        light.intensity = 2_000
+        light.intensity = 5_000
         light.type = .omni
         light.color = UIColor.orange
         light.categoryBitMask = 1
