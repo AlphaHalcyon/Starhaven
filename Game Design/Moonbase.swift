@@ -32,8 +32,8 @@ class Moonbase: SceneObject {
         if self.hasLight {
             let lightNode = SCNNode()
             let light = SCNLight()
-            light.intensity = 250
-            light.type = .omni
+            light.intensity = 500
+            light.type = .spot
             light.color = UIColor.cyan
             lightNode.position = SCNVector3(0, 5, 0)
             lightNode.light = light

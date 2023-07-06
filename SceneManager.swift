@@ -7,6 +7,7 @@
 
 import Foundation
 import SceneKit
+import SpriteKit
 
 class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     weak var gameManager: GameManager?
@@ -18,6 +19,13 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     let cameraManager: CameraManager
     let shipManager: ShipManager
     var objectsPlacedInCameraView: Bool = false
+    
+    // OBJECT POOLING for EXPLOSION + MISSILE + TRIANGLE objects and nodes
+    var explosions: [Explosion] = []
+    // Missile Pool
+    var missiles: [OSNRMissile] = []
+    // Triangle Pool
+    var trianglePool: [SKShapeNode] = []
     init(cameraManager: CameraManager, shipManager: ShipManager, scene: SCNScene) {
         self.scene = scene
         self.view = SCNView()
@@ -94,15 +102,15 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.scene.physicsWorld.contactDelegate = self.createPhysicsManager()
     }
     func addShip() {
-        self.shipManager.ship.position = SCNVector3(-2000,2500,-2000)
+        self.shipManager.ship.position = SCNVector3(-1000,2500,-1000)
         self.addNode(self.shipManager.ship)
     }
     func createAI() {
-        let num = 8
-        let node = ModelManager.createShip(scale: 0.05)
+        let num = 14
+        let node = ModelManager.createShip(scale: 0.1)
         for i in 0...num {
             let drone = AI(node: node.clone(), faction: .OSNR, sceneManager: self)
-            let vector = SCNVector3(-500,1800 + i,-1900 + i*100)
+            let vector = SCNVector3(-500,2000 + i,i*100)
             drone.node.position = vector
             
             self.addNode(drone.node)
@@ -110,7 +118,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         }
         for i in 0...num {
             let drone = AI(node: node.clone(), faction: .Wraith, sceneManager: self)
-            let vector = SCNVector3(500,1800 + i,-1900 + i*100)
+            let vector = SCNVector3(500,2000 + i,i*100)
             drone.node.position = vector
             
             self.addNode(drone.node)
@@ -138,7 +146,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     
     public func createStar() {
         let star = Star(radius: 1_000, color: .orange, sceneManager: self)
-        star.node.position = SCNVector3(0, 1_500, 100_000)
+        star.node.position = SCNVector3(0, 1_500, 150_000)
         self.sceneObjects.append(star)
         self.addNode(star.node)
     }
@@ -147,12 +155,12 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
             print("Failed to create planet from imagename \(name)")
             return
         }
-        let planet = Planet(image: image, radius: 1750, view: self.view, asteroidBeltImage: image, sceneManager: self)
+        let planet = Planet(image: image, radius: 2000, view: self.view, asteroidBeltImage: image, sceneManager: self)
         planet.node.castsShadow = true
         self.sceneObjects.append(planet)
         planet.addToScene(scene: self.scene)
         //self.createBlackHoles(around: planet, count: 10)
-        self.shipManager.ship.look(at: planet.node.position)
+        self.shipManager.ship.look(at: planet.node.position + SCNVector3(0,500,0))
         self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
     }
     public func createEarth() {
@@ -179,8 +187,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.view.scene?.background.intensity = 0.5
     }
     
-    // OBJECT POOLING for EXPLOSION and MISSILE objects
-    var explosions: [Explosion] = []
     func createExplosion(at position: SCNVector3) {
         if self.explosions.isEmpty {
             Explosion(at: position, sceneManager: self)
@@ -190,9 +196,11 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
             Explosion(at: position, sceneManager: self)
         }
     }
-    var missiles: [OSNRMissile] = []
+    
     func addNode(_ node: SCNNode) {
-        self.scene.rootNode.addChildNode(node)
+        self.view.prepare([node]) { success in
+            self.scene.rootNode.addChildNode(node)
+        }
     }
     func removeNode(_ node: SCNNode) {
         node.removeFromParentNode()

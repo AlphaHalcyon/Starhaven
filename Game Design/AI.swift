@@ -33,6 +33,15 @@ class AI: SceneObject {
         self.node.physicsBody?.collisionBitMask = CollisionCategory.missile
         self.node.physicsBody?.contactTestBitMask = CollisionCategory.laser | CollisionCategory.missile
         self.node.physicsBody?.collisionBitMask &= ~CollisionCategory.laser
+        let system = SCNParticleSystem()
+        system.particleColor = faction == .OSNR ? .systemPink : .cyan
+        system.emitterShape = self.node.geometry
+        system.particleSize = 5
+        system.birthRate = 500
+        let particleNode = SCNNode()
+        particleNode.addParticleSystem(system)
+        particleNode.position = SCNVector3(0, 25, 0)
+        self.node.addChildNode(particleNode)
     }
     func destroy() {
     }
@@ -72,7 +81,7 @@ class AI: SceneObject {
                         self.node.worldPosition.z + normalizedDirection.z * speed
                     )
                 }
-                if Float.random(in: 0...1) < 1/180 { // every 3 seconds {
+                if Float.random(in: 0...1) < 1/500 {
                     self.fireMissile(target: self.target, particleSystemColor: self.faction == .OSNR ? .red : .cyan)
                 }
             }
@@ -153,7 +162,7 @@ class OSNRMissile: SceneObject {
             if let target = self.target {
                 self.missileNode.look(at: target.presentation.position)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                 self.destroy()
             }
         }

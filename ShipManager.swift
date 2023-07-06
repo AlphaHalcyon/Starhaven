@@ -43,6 +43,7 @@ class ShipManager {
     var currentFrame: ARFrame?
     init() {
         self.ship = SCNNode() //ModelManager.createShip()
+        self.ship.scale = SCNVector3(0.5,0.5,0.5)
         self.ship.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(node: self.ship))
         self.ship.physicsBody?.isAffectedByGravity = false
         self.ship.physicsBody?.categoryBitMask = CollisionCategory.ship
