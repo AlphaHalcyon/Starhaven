@@ -59,7 +59,7 @@ class Star: SceneObject {
         self.node.addChildNode(lightNode2)
         
     }
-    public func update() {
+    public func update(updateAtTime time: TimeInterval) {
     }
     func destroy() {
     }

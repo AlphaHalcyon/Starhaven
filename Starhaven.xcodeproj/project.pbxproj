@@ -28,6 +28,8 @@
 		4948D7B52A5397AE006FE8FE /* Raider.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B42A5397AE006FE8FE /* Raider.obj */; };
 		4948D7B72A5397BD006FE8FE /* Raider.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B62A5397BD006FE8FE /* Raider.mtl */; };
 		4948D7B92A53C8A6006FE8FE /* Earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B82A53C8A6006FE8FE /* Earth.jpg */; };
+		4956C8042A5B64E80003D9D4 /* BH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8032A5B64E80003D9D4 /* BH.swift */; };
+		4956C8072A5BB0EF0003D9D4 /* SwiftUI Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8062A5BB0EF0003D9D4 /* SwiftUI Views.swift */; };
 		AF0561092A3E98E20096E211 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0561082A3E98E20096E211 /* CameraManager.swift */; };
 		AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610A2A3E99140096E211 /* PhysicsManager.swift */; };
 		AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610C2A3E99C00096E211 /* SceneManager.swift */; };
@@ -102,6 +104,8 @@
 		4948D7B62A5397BD006FE8FE /* Raider.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.mtl; path = "../../Library/Messages/Attachments/fe/14/2DD21A8D-7E42-4D57-AF5F-7AF410A94928/Raider.mtl"; sourceTree = "<group>"; };
 		4948D7B82A53C8A6006FE8FE /* Earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Earth.jpg; path = ../../Downloads/Earth.jpg; sourceTree = "<group>"; };
 		4948D7BA2A53ECAF006FE8FE /* Starhaven.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Starhaven.entitlements; sourceTree = "<group>"; };
+		4956C8032A5B64E80003D9D4 /* BH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BH.swift; sourceTree = "<group>"; };
+		4956C8062A5BB0EF0003D9D4 /* SwiftUI Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI Views.swift"; sourceTree = "<group>"; };
 		AF0561082A3E98E20096E211 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
 		AF05610A2A3E99140096E211 /* PhysicsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsManager.swift; sourceTree = "<group>"; };
 		AF05610C2A3E99C00096E211 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
@@ -201,6 +205,14 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		4956C8052A5BB09D0003D9D4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4956C8062A5BB0EF0003D9D4 /* SwiftUI Views.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		AF0561172A3EA8300096E211 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -247,6 +259,7 @@
 			children = (
 				AFAA93A12A4BE14C001718D6 /* ARView.swift */,
 				4948D78B2A5392DB006FE8FE /* Models */,
+				4956C8052A5BB09D0003D9D4 /* Views */,
 				AF0561182A3EA8870096E211 /* Managers */,
 				AF0561192A3EA8970096E211 /* Game Design */,
 				AF0561172A3EA8300096E211 /* Audio */,
@@ -376,6 +389,7 @@
 				AF6388E629DFC9610086C90F /* Star.swift */,
 				AF3D1DA52A0A006600A8F2C7 /* Planet.swift */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
+				4956C8032A5B64E80003D9D4 /* BH.swift */,
 				AFD4C06529CFAF5100A127BB /* CustomTorus.swift */,
 			);
 			path = "Celestial Objects";
@@ -504,9 +518,11 @@
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
 				AFE668A02A4277C00049D599 /* AI.swift in Sources */,
+				4956C8042A5B64E80003D9D4 /* BH.swift in Sources */,
 				AFDE46EA29F911A800401509 /* FactionSystem.swift in Sources */,
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
+				4956C8072A5BB0EF0003D9D4 /* SwiftUI Views.swift in Sources */,
 				AF12B9A72A33BADA0068D352 /* GameManager.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
 				AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */,
@@ -658,7 +674,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
@@ -678,11 +694,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -698,7 +714,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
@@ -718,11 +734,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;

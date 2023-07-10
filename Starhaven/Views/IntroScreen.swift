@@ -17,11 +17,15 @@ import Foundation
 import SwiftUI
 
 struct IntroScreen: View {
-    unowned var spaceViewModel: GameManager
+    @EnvironmentObject var gameManager: GameManager
     @Binding var userSelectedContinue: Bool
+    @State var redraw: Bool = false
     var body: some View {
-        self.loadScreen
+        self.loadScreen.onChange(of: self.gameManager.viewLoaded, perform: { val in
+            self.redraw.toggle()
+        })
     }
+
     var loadScreen: some View {
         VStack {
             Text("HVN")
@@ -29,7 +33,7 @@ struct IntroScreen: View {
             Text("The OFFICE of STELLAR-NAVAL RESEARCH has DEFENSIVE INSTALLATIONS on the SURFACE of PERSEPHONE, a small MOON of the WATER PLANET CIRCE. These installations ARE UNDER THE CONTROL of the ENEMY'S DRONE SYSTEMS. DESTROY ALL OF THEM.")
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true).font(.custom("Avenir Next Bold", size: 16)).foregroundColor(.gray)
-            if !self.spaceViewModel.sceneManager.viewLoaded { self.loading } else {
+            if !self.gameManager.viewLoaded { self.loading } else {
                 self.continueButton
             }
             Spacer()
@@ -42,9 +46,13 @@ struct IntroScreen: View {
     var continueButton: some View {
         Text("CONTINUE")
             .font(.custom("Avenir Next Regular", size: 35))
-            .foregroundColor(!self.spaceViewModel.sceneManager.viewLoaded ? .gray : .red)
+            .foregroundColor(self.gameManager.viewLoaded ? .red : .gray)
             .onTapGesture {
-                if self.spaceViewModel.sceneManager.viewLoaded { self.userSelectedContinue = true; self.spaceViewModel.sceneManager.view.play(nil) }
+                print(self.gameManager.viewLoaded)
+                if self.gameManager.viewLoaded {
+                    self.userSelectedContinue = true; self.gameManager.sceneManager.view.play(nil)
+                    self.gameManager.sceneManager.distributeBlackHoles()
+                }
             }.padding()
     }
     func generateTip() -> String {

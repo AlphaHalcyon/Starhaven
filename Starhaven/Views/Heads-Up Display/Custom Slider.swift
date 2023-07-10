@@ -12,7 +12,7 @@ struct CustomSlider: View {
     @Binding var value: Float
     let range: ClosedRange<Float>
     let onChange: (Float) -> Void
-    let width: CGFloat = 45
+    let width: CGFloat = 50
     let height: CGFloat = 225
     
     @State private var isDragging = false

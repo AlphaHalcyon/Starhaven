@@ -35,23 +35,34 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
     func death(node: SCNNode, enemyNode: SCNNode) {
         self.sceneManager.createExplosion(at: enemyNode.presentation.position)
         enemyNode.removeFromParentNode()
-        DispatchQueue.main.async {
-            
-            self.sceneManager.sceneObjects.removeAll(where: { $0.node == enemyNode })
+        self.sceneManager.sceneObjects.removeAll(where: { $0.node == enemyNode })
+    }
+    func handleGameStart() {
+        if !self.sceneManager.viewLoaded {
+            DispatchQueue.main.async {
+                self.sceneManager.viewLoaded = true
+                self.sceneManager.gameManager?.viewLoaded = true
+                print(self.sceneManager.gameManager?.viewLoaded)
+            }
         }
+        
     }
     func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
         if let contactBody = contact.nodeA.physicsBody {
+            self.handleGameStart()
             let laserNode = contactBody.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
             let enemyNode = contactBody.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
             if let sceneObject = self.sceneManager.sceneObjects.first(where: { $0.node == enemyNode }) {
                 if let ai = sceneObject as? AI, let color = laserNode.particleSystems?.first?.particleColor {
                     //Player missile
-                    if color == .red {
+                    if color == UIColor.systemPink {
                         if let manager = self.sceneManager.gameManager {
+                           
                             self.death(node: laserNode, enemyNode: enemyNode)
+                            
                             DispatchQueue.main.async {
                                 manager.points += 10
+                                
                             }
                             return
                         } else { print("Failed to get manager.") }
@@ -59,12 +70,12 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
                     
                     //Assuming color is a property of SceneObject
                     if ai.faction == .OSNR && color != UIColor.red {
-                        if Float.random(in: 0...1) > 0.5 {
+                        if Float.random(in: 0...1) < 0.5 {
                             print("AI death.")
                             self.death(node: laserNode, enemyNode: enemyNode)
                         }
                     } else if ai.faction == .Wraith && color != UIColor.cyan {
-                        if Float.random(in: 0...1) > 0.5 {
+                        if Float.random(in: 0...1) < 0.5 {
                             print("AI death.")
                             self.death(node: laserNode, enemyNode: enemyNode)
                         }
