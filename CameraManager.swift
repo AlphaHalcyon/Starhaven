@@ -19,15 +19,13 @@ class CameraManager {
     var cameraNode: SCNNode
     var trackingState: CameraTrackState
     var followDistance: Float = 1
-    var throttle: Float
-    init(trackingState: CameraTrackState, scene: SCNScene, throttle: Float) {
-        self.throttle = throttle
+    init(trackingState: CameraTrackState, scene: SCNScene) {
         self.cameraNode = SCNNode()
         self.trackingState = trackingState
         self.setupCamera(scene: scene)
     }
-    public func updateCamera(for state: CameraTrackState, deltaTime: Float) {
-        switch state {
+    public func updateCamera(deltaTime: Float) {
+        switch self.trackingState {
         case .player(let ship):
             updateCameraForShip(ship: ship)
         case .missile(let missile):
@@ -48,10 +46,6 @@ class CameraManager {
 
     public func updateCameraTarget(target: SCNNode? = nil) {
         // Track missile from target
-    }
-    func throttle(value: Float) {
-        // Your throttle code here
-        self.throttle = value
     }
     func map(value: Float, inMin: Float, inMax: Float, outMin: Float, outMax: Float) -> Float {
         return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin

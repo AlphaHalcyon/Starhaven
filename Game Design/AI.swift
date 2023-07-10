@@ -37,15 +37,17 @@ class AI: SceneObject {
         system.particleColor = faction == .OSNR ? .systemPink : .cyan
         system.emitterShape = self.node.geometry
         system.particleSize = 5
-        system.birthRate = 500
+        system.birthRate = 30
+        system.particleAngularVelocity = 0
+        system.particleLifeSpan = 0.1
         let particleNode = SCNNode()
         particleNode.addParticleSystem(system)
-        particleNode.position = SCNVector3(0, 25, 0)
+        particleNode.position = SCNVector3(0, 30, 0)
         self.node.addChildNode(particleNode)
     }
     func destroy() {
     }
-    func update() {
+    func update(updateAtTime time: TimeInterval) {
         // Check if the current target is still valid
         if let target = self.target { if !self.sceneManager.sceneObjects.contains(where: {$0.node == target}) { self.selectNewTarget() }
             let pos = self.node.worldPosition
@@ -68,7 +70,7 @@ class AI: SceneObject {
                 
                 if distance < minDistance {
                     // Complex chase
-                    let chaseOffset = self.offset
+                    let chaseOffset = self.getChaseOffset(updateAtTime: time)
                     self.node.worldPosition = SCNVector3(
                         self.node.worldPosition.x + chaseOffset.x * speed,
                         self.node.worldPosition.y + chaseOffset.y * speed,
@@ -90,6 +92,19 @@ class AI: SceneObject {
         }
     }
     // OPERATIONS
+    func getChaseOffset(updateAtTime time: TimeInterval) -> SCNVector3 {
+        // Define the scale of the sinusoidal chase
+        let chaseScale: Float = 0.025
+
+        // Combine multiple sinusoids for a more complex chase pattern
+        let chaseSpiralOffset = SCNVector3(
+            chaseScale * cos(Float(time) / 3),
+            chaseScale * sin(Float(time) / 1.5),
+            chaseScale * cos(Float(time) / 2)
+        )
+
+        return chaseSpiralOffset
+    }
     func selectNewTarget() {
         let targets = self.sceneManager.sceneObjects.filter { $0.isAI && $0.faction != self.faction }
         if let target = targets.randomElement() {
@@ -158,20 +173,20 @@ class OSNRMissile: SceneObject {
         self.node = node
     }
     func fire() {
-        DispatchQueue.main.async {
-            if let target = self.target {
-                self.missileNode.look(at: target.presentation.position)
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                self.destroy()
+        if let target = self.target {
+            self.missileNode.look(at: target.presentation.position)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            self.destroy()
+            if self.particleSystem.particleColor == UIColor.systemPink {
+                print("Shouldn't be")
+                self.sceneManager.setTrackingStatePlayer()
             }
         }
     }
-    func update() {
+    func update(updateAtTime time: TimeInterval) {
         // Manually update the missile's position based on its velocity
-        DispatchQueue.main.async {
-            self.missileNode.position = self.missileNode.position + self.velocity
-        }
+        self.missileNode.position = self.missileNode.position + self.velocity
     }
     func destroy() {
         let pos = self.missileNode.presentation.worldPosition
@@ -184,7 +199,7 @@ class OSNRMissile: SceneObject {
     func setPosition(at position: SCNVector3, towards target: SCNNode, faction: Faction) {
         self.node.position = position
         self.target = target
-        self.particleSystem.particleColor = faction == .OSNR ? .systemPink : .cyan
+        self.particleSystem.particleColor = faction == .OSNR ? .red : .cyan
         self.fire()
     }
     

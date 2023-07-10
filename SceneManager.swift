@@ -12,7 +12,7 @@ import SpriteKit
 class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     weak var gameManager: GameManager?
     var sceneObjects: [SceneObject] = []
-    var viewLoaded: Bool = false
+    @Published var viewLoaded: Bool = false
     var lastUpdateTime: TimeInterval = .zero
     let view: SCNView
     let scene: SCNScene
@@ -36,56 +36,56 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.addShip()
         self.createPlanet(name: "base.jpg")
         self.createStar()
+        self.createBlackHoles()
         self.createAI()
-        self.view.prepare([self.scene]) { success in
-            print("prepared!")
-            self.viewLoaded = true
-            print(self.viewLoaded)
-        }
     }
     deinit {
         print("SceneManager is being deallocated")
+    }
+    var blackHoles: [SCNNode] = []
+    let blackHoleCount: Int = 15
+    func createBlackHoles() {
+        for _ in 0...self.blackHoleCount {
+            self.createBlackHole()
+        }
+    }
+    func createBlackHole() {
+        let blackHole: SCNNode = BH.blackHole(pov: self.cameraManager.cameraNode).clone()
+        let pos = SCNVector3(0, 2_000,0)
+        blackHole.position = pos
+        self.blackHoles.append(blackHole)
+        self.view.prepare([blackHole]) { success in
+            self.addNode(blackHole)
+        }
+    }
+    func distributeBlackHoles() {
+        for blackHole in blackHoles {
+            let pos = self.generateRandomPointInSphere(with: 15_000)
+            blackHole.position = pos
+        }
     }
     // Rendering Loop
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         // Update the game state
         let deltaTime = time - lastUpdateTime
-        //self.updateObjectPositions()
         self.lastUpdateTime = time
         self.updateShip(deltaTime: time)
         self.updateCamera(deltaTime: Float(deltaTime))
-        self.updateSceneObjects()
+        self.updateSceneObjects(updateAtTime: time)
     }
-    func updateSceneObjects() {
+    func updateSceneObjects(updateAtTime time: TimeInterval) {
         for obj in self.sceneObjects {
-            obj.update()
+            obj.update(updateAtTime: time)
         }
     }
+    func setTrackingStatePlayer() {
+        self.cameraManager.trackingState = CameraTrackState.player(ship: self.shipManager.ship)
+    }
     func updateCamera(deltaTime: Float) {
-        self.cameraManager.updateCamera(for: CameraTrackState.player(ship: self.shipManager.ship), deltaTime: deltaTime)
+        self.cameraManager.updateCamera(deltaTime: deltaTime)
     }
     func updateShip(deltaTime: TimeInterval) {
         self.shipManager.update(deltaTime: deltaTime)
-    }
-    func updateObjectPositions() {
-        let playerPosition = self.shipManager.ship.position
-        
-        // Calculate distance from the origin
-        let distanceFromOrigin = sqrt(pow(playerPosition.x, 2) + pow(playerPosition.y, 2) + pow(playerPosition.z, 2))
-        
-        if distanceFromOrigin > 200_000 {
-            // Update positions of all scene objects relative to the player.
-            for object in self.sceneObjects {
-                if object is OSNRMissile || object is Explosion {
-                    object.node.removeFromParentNode()
-                    self.sceneObjects.removeAll(where: {$0.node==object.node})
-                } else {
-                    object.node.position = object.node.position - playerPosition
-                }
-            }
-            self.sceneObjects.removeAll(where: { $0 is OSNRMissile || $0 is Explosion })
-            self.shipManager.ship.position = SCNVector3Zero
-        }
     }
     var physicsManager: PhysicsManager? // This is a strong reference
     
@@ -102,36 +102,29 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.scene.physicsWorld.contactDelegate = self.createPhysicsManager()
     }
     func addShip() {
-        self.shipManager.ship.position = SCNVector3(-1000,2500,-1000)
+        self.shipManager.ship.position = SCNVector3(0,3000,-1000)
         self.addNode(self.shipManager.ship)
+
     }
     func createAI() {
-        let num = 14
-        let node = ModelManager.createShip(scale: 0.1)
+        let num = 15
+        let node = ModelManager.createShip(scale: 0.15)
         for i in 0...num {
-            let drone = AI(node: node.clone(), faction: .OSNR, sceneManager: self)
-            let vector = SCNVector3(-500,2000 + i,i*100)
-            drone.node.position = vector
-            
-            self.addNode(drone.node)
-            self.sceneObjects.append(drone)
+            let offset: SCNVector3 = SCNVector3(-500,2200,-500)
+            self.createDrone(node: node.flattenedClone(), offset: offset, i: i, faction: .OSNR)
         }
         for i in 0...num {
-            let drone = AI(node: node.clone(), faction: .Wraith, sceneManager: self)
-            let vector = SCNVector3(500,2000 + i,i*100)
-            drone.node.position = vector
-            
-            self.addNode(drone.node)
-            self.sceneObjects.append(drone)
+            let offset: SCNVector3 = SCNVector3(500,2200,-500)
+            self.createDrone(node: node.flattenedClone(), offset: offset, i: i, faction: .Wraith)
         }
     }
-    func createBlackHoles(around planet: Planet, count: Int) {
-        for _ in 0..<count {
-            let randomPoint = generateRandomPointInSphere(with: Float(planet.sphere.radius * 4))
-            let blackHole = BlackHole(scene: self.scene, view: self.view, radius: CGFloat.random(in: 10...50), camera: self.cameraManager.cameraNode, ringCount: Int.random(in: 5...15), vibeOffset: Int.random(in: 1...2), bothRings: false, vibe: ShaderVibe.discOh, period: 20, shipNode: self.shipManager.ship)
-            blackHole.blackHoleNode.position = randomPoint + planet.node.position
-            self.addNode(blackHole.blackHoleNode)
-        }
+    func createDrone(node: SCNNode, offset: SCNVector3, i: Int, faction: Faction) {
+        let drone = AI(node: node.clone(), faction: faction, sceneManager: self)
+        let vector = SCNVector3(offset.x,offset.y+Float(i),offset.z + Float(i) * 100)
+        drone.node.position = vector
+        
+        self.addNode(drone.node)
+        self.sceneObjects.append(drone)
     }
     func generateRandomPointInSphere(with radius: Float) -> SCNVector3 {
         let u = Float.random(in: 0...1)
@@ -160,7 +153,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.sceneObjects.append(planet)
         planet.addToScene(scene: self.scene)
         //self.createBlackHoles(around: planet, count: 10)
-        self.shipManager.ship.look(at: planet.node.position + SCNVector3(0,500,0))
+        self.shipManager.ship.look(at: planet.node.position)
         self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
     }
     public func createEarth() {
@@ -240,13 +233,13 @@ class Explosion: SceneObject {
             }
         }
     }
-    func update() {
+    func update(updateAtTime time: TimeInterval) {
     }
     func destroy() {
     }
 }
 protocol Updateable {
-    func update()
+    func update(updateAtTime time: TimeInterval)
 }
 protocol SceneObject: Updateable {
     var node: SCNNode { get set }
@@ -254,6 +247,6 @@ protocol SceneObject: Updateable {
     var isAI: Bool { get set }
     var faction: Faction { get set }
     init(node: SCNNode, sceneManager: SceneManager)
-    func update()
+    func update(updateAtTime time: TimeInterval)
     func destroy()
 }

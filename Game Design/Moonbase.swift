@@ -126,7 +126,7 @@ class Moonbase: SceneObject {
     }
 
     // Add methods to manipulate moonbase
-    func update() {
+    func update(updateAtTime time: TimeInterval) {
         //self.aim
     }
     func destroy() {

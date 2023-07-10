@@ -20,7 +20,7 @@ class Planet: SceneObject {
         self.node = node
         self.sceneManager = sceneManager
         let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
-        self.node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+        self.node.physicsBody = SCNPhysicsBody(type: .static, shape: shape)
         self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
     }
     init(image: UIImage, radius: CGFloat, view: SCNView, asteroidBeltImage: UIImage? = nil, sceneManager: SceneManager) {
@@ -40,8 +40,8 @@ class Planet: SceneObject {
         let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
         self.node.physicsBody = SCNPhysicsBody(type: .static, shape: shape)
         self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
-        let startLatitude: Double = 50
-        let endLatitude: Double = 100
+        let startLatitude: Double = 60
+        let endLatitude: Double = 90
         let latitudes: [Double] = Array(stride(from: startLatitude, through: endLatitude, by: 5))
         let longitudes: [Double] = Array(repeating: 0.0, count: latitudes.count)
         let lights: [Bool] = latitudes.map { $0 >= 60 && $0 <= 80 }
@@ -95,7 +95,7 @@ class Planet: SceneObject {
     func setPosition(x: CGFloat, y: CGFloat, z: CGFloat) {
         node.position = SCNVector3(x, y, z)
     }
-    func update() {
+    func update(updateAtTime time: TimeInterval) {
     }
     func destroy() {
     }
