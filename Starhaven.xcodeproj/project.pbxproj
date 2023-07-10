@@ -24,21 +24,24 @@
 		4948D7AD2A53933A006FE8FE /* TankCannon.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D79B2A53933A006FE8FE /* TankCannon.obj */; };
 		4948D7AE2A53933A006FE8FE /* Turret_Normal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D79C2A53933A006FE8FE /* Turret_Normal.jpg */; };
 		4948D7AF2A53933A006FE8FE /* Turret_Color.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D79D2A53933A006FE8FE /* Turret_Color.jpg */; };
-		4948D7B32A5395FC006FE8FE /* base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B22A539546006FE8FE /* base.jpg */; };
 		4948D7B52A5397AE006FE8FE /* Raider.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B42A5397AE006FE8FE /* Raider.obj */; };
 		4948D7B72A5397BD006FE8FE /* Raider.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B62A5397BD006FE8FE /* Raider.mtl */; };
 		4948D7B92A53C8A6006FE8FE /* Earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4948D7B82A53C8A6006FE8FE /* Earth.jpg */; };
 		4956C8042A5B64E80003D9D4 /* BH.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8032A5B64E80003D9D4 /* BH.swift */; };
 		4956C8072A5BB0EF0003D9D4 /* SwiftUI Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8062A5BB0EF0003D9D4 /* SwiftUI Views.swift */; };
-		AF0561092A3E98E20096E211 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF0561082A3E98E20096E211 /* CameraManager.swift */; };
-		AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610A2A3E99140096E211 /* PhysicsManager.swift */; };
-		AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610C2A3E99C00096E211 /* SceneManager.swift */; };
+		4956C8092A5BC1350003D9D4 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8082A5BC1350003D9D4 /* AudioManager.swift */; };
+		4956C8112A5BC2100003D9D4 /* ParticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C80A2A5BC20F0003D9D4 /* ParticleManager.swift */; };
+		4956C8122A5BC2100003D9D4 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C80B2A5BC2100003D9D4 /* GameManager.swift */; };
+		4956C8132A5BC2100003D9D4 /* PhysicsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C80C2A5BC2100003D9D4 /* PhysicsManager.swift */; };
+		4956C8142A5BC2100003D9D4 /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C80D2A5BC2100003D9D4 /* SceneManager.swift */; };
+		4956C8152A5BC2100003D9D4 /* ShipManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C80E2A5BC2100003D9D4 /* ShipManager.swift */; };
+		4956C8162A5BC2100003D9D4 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C80F2A5BC2100003D9D4 /* ModelManager.swift */; };
+		4956C8172A5BC2100003D9D4 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8102A5BC2100003D9D4 /* CameraManager.swift */; };
+		4956C8192A5BC2680003D9D4 /* base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4956C8182A5BC2680003D9D4 /* base.jpg */; };
+		4956C81B2A5BC7040003D9D4 /* WaterPlanet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C81A2A5BC7040003D9D4 /* WaterPlanet.swift */; };
 		AF05610F2A3E99E80096E211 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610E2A3E99E80096E211 /* Level.swift */; };
-		AF05611B2A3EAE600096E211 /* AIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05611A2A3EAE600096E211 /* AIManager.swift */; };
 		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
-		AF12B9A72A33BADA0068D352 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A62A33BADA0068D352 /* GameManager.swift */; };
 		AF12B9A92A33DFFF0068D352 /* Physics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A82A33DFFF0068D352 /* Physics.swift */; };
-		AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9AA2A344D380068D352 /* ParticleManager.swift */; };
 		AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */; };
 		AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */; };
 		AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3D1DA52A0A006600A8F2C7 /* Planet.swift */; };
@@ -49,8 +52,6 @@
 		AF6388E029DF78430086C90F /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388DF29DF78430086C90F /* Ship.swift */; };
 		AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */; };
 		AF6388E729DFC9610086C90F /* Star.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6388E629DFC9610086C90F /* Star.swift */; };
-		AF6707BA2A3BDA2700A923E4 /* ShipManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707B92A3BDA2700A923E4 /* ShipManager.swift */; };
-		AF6707BE2A3D415000A923E4 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6707BD2A3D415000A923E4 /* ModelManager.swift */; };
 		AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF67FBB029F78C0B007CE669 /* Drone.swift */; };
 		AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */; };
 		AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */; };
@@ -58,7 +59,6 @@
 		AF778F0829F9F44700F299E5 /* Raider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF778F0729F9F44700F299E5 /* Raider.swift */; };
 		AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */; };
 		AFAA93932A4B91AB001718D6 /* Moonbase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAA93922A4B91AB001718D6 /* Moonbase.swift */; };
-		AFAA93A22A4BE14D001718D6 /* ARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAA93A12A4BE14C001718D6 /* ARView.swift */; };
 		AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44A29F468D3007D5A2F /* Laser.swift */; };
 		AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */; };
 		AFAFEF482A43ED1200247BAF /* IntroScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFAFEF472A43ED1200247BAF /* IntroScreen.swift */; };
@@ -99,16 +99,22 @@
 		4948D79B2A53933A006FE8FE /* TankCannon.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TankCannon.obj; path = Models/TankCannon.obj; sourceTree = "<group>"; };
 		4948D79C2A53933A006FE8FE /* Turret_Normal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Normal.jpg; path = Models/Turret_Normal.jpg; sourceTree = "<group>"; };
 		4948D79D2A53933A006FE8FE /* Turret_Color.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Turret_Color.jpg; path = Models/Turret_Color.jpg; sourceTree = "<group>"; };
-		4948D7B22A539546006FE8FE /* base.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = base.jpg; sourceTree = "<group>"; };
 		4948D7B42A5397AE006FE8FE /* Raider.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.obj; path = "../../Library/Messages/Attachments/a6/06/5E86C0D9-3F63-45A3-BBB1-D5ABA845ED4E/Raider.obj"; sourceTree = "<group>"; };
 		4948D7B62A5397BD006FE8FE /* Raider.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Raider.mtl; path = "../../Library/Messages/Attachments/fe/14/2DD21A8D-7E42-4D57-AF5F-7AF410A94928/Raider.mtl"; sourceTree = "<group>"; };
 		4948D7B82A53C8A6006FE8FE /* Earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Earth.jpg; path = ../../Downloads/Earth.jpg; sourceTree = "<group>"; };
 		4948D7BA2A53ECAF006FE8FE /* Starhaven.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Starhaven.entitlements; sourceTree = "<group>"; };
 		4956C8032A5B64E80003D9D4 /* BH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BH.swift; sourceTree = "<group>"; };
 		4956C8062A5BB0EF0003D9D4 /* SwiftUI Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI Views.swift"; sourceTree = "<group>"; };
-		AF0561082A3E98E20096E211 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
-		AF05610A2A3E99140096E211 /* PhysicsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsManager.swift; sourceTree = "<group>"; };
-		AF05610C2A3E99C00096E211 /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
+		4956C8082A5BC1350003D9D4 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		4956C80A2A5BC20F0003D9D4 /* ParticleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ParticleManager.swift; path = Managers/ParticleManager.swift; sourceTree = "<group>"; };
+		4956C80B2A5BC2100003D9D4 /* GameManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameManager.swift; path = Managers/GameManager.swift; sourceTree = "<group>"; };
+		4956C80C2A5BC2100003D9D4 /* PhysicsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhysicsManager.swift; path = Managers/PhysicsManager.swift; sourceTree = "<group>"; };
+		4956C80D2A5BC2100003D9D4 /* SceneManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneManager.swift; path = Managers/SceneManager.swift; sourceTree = "<group>"; };
+		4956C80E2A5BC2100003D9D4 /* ShipManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShipManager.swift; path = Managers/ShipManager.swift; sourceTree = "<group>"; };
+		4956C80F2A5BC2100003D9D4 /* ModelManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModelManager.swift; path = Managers/ModelManager.swift; sourceTree = "<group>"; };
+		4956C8102A5BC2100003D9D4 /* CameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraManager.swift; path = Managers/CameraManager.swift; sourceTree = "<group>"; };
+		4956C8182A5BC2680003D9D4 /* base.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = base.jpg; path = Models/base.jpg; sourceTree = "<group>"; };
+		4956C81A2A5BC7040003D9D4 /* WaterPlanet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterPlanet.swift; sourceTree = "<group>"; };
 		AF05610E2A3E99E80096E211 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		AF0561112A3EA8270096E211 /* ISR.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ISR.mp3; sourceTree = "<group>"; };
 		AF0561122A3EA8270096E211 /* HVNDarkseid.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HVNDarkseid.mp3; sourceTree = "<group>"; };
@@ -116,11 +122,8 @@
 		AF0561142A3EA82A0096E211 /* snatchHiss.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = snatchHiss.wav; sourceTree = "<group>"; };
 		AF0561152A3EA82A0096E211 /* snap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = snap.wav; sourceTree = "<group>"; };
 		AF0561162A3EA82B0096E211 /* she never loved u bro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "she never loved u bro.mp3"; sourceTree = "<group>"; };
-		AF05611A2A3EAE600096E211 /* AIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIManager.swift; sourceTree = "<group>"; };
 		AF07021C29E120D300667F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AF12B9A62A33BADA0068D352 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		AF12B9A82A33DFFF0068D352 /* Physics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Physics.swift; sourceTree = "<group>"; };
-		AF12B9AA2A344D380068D352 /* ParticleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleManager.swift; sourceTree = "<group>"; };
 		AF1C63D229D98B1600710916 /* SceneKit Asset Catalog.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "SceneKit Asset Catalog.scnassets"; sourceTree = "<group>"; };
 		AF28B9B929E4C9A7002FEAB5 /* Reticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reticle.swift; sourceTree = "<group>"; };
 		AF3D1DA52A0A006600A8F2C7 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
@@ -131,8 +134,6 @@
 		AF6388DF29DF78430086C90F /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AF6388E229DF79090086C90F /* SpacegroundViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacegroundViewModel.swift; sourceTree = "<group>"; };
 		AF6388E629DFC9610086C90F /* Star.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Star.swift; sourceTree = "<group>"; };
-		AF6707B92A3BDA2700A923E4 /* ShipManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipManager.swift; sourceTree = "<group>"; };
-		AF6707BD2A3D415000A923E4 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		AF67FBB029F78C0B007CE669 /* Drone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drone.swift; sourceTree = "<group>"; };
 		AF67FBB429F7C0CB007CE669 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AF6D0AF52A35BF2E001C1DEB /* LoadingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScreen.swift; sourceTree = "<group>"; };
@@ -141,7 +142,6 @@
 		AF9FD3802A02E64D00F5F2AC /* GhostMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostMissile.swift; sourceTree = "<group>"; };
 		AFAA93922A4B91AB001718D6 /* Moonbase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moonbase.swift; sourceTree = "<group>"; };
 		AFAA93A02A4BE08D001718D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		AFAA93A12A4BE14C001718D6 /* ARView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARView.swift; sourceTree = "<group>"; };
 		AFAAB44A29F468D3007D5A2F /* Laser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laser.swift; sourceTree = "<group>"; };
 		AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollisionCategory.swift; sourceTree = "<group>"; };
 		AFAFEF472A43ED1200247BAF /* IntroScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreen.swift; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				4948D7B82A53C8A6006FE8FE /* Earth.jpg */,
-				4948D7B22A539546006FE8FE /* base.jpg */,
+				4956C8182A5BC2680003D9D4 /* base.jpg */,
 				4948D7932A53933A006FE8FE /* HDU_01.jpg */,
 				4948D78F2A53933A006FE8FE /* HDU_02.jpg */,
 				4948D7942A53933A006FE8FE /* innerHDU.mtl */,
@@ -209,6 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				4956C8062A5BB0EF0003D9D4 /* SwiftUI Views.swift */,
+				4956C8082A5BC1350003D9D4 /* AudioManager.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -229,14 +230,13 @@
 		AF0561182A3EA8870096E211 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				AF12B9A62A33BADA0068D352 /* GameManager.swift */,
-				AF05611A2A3EAE600096E211 /* AIManager.swift */,
-				AF05610C2A3E99C00096E211 /* SceneManager.swift */,
-				AF0561082A3E98E20096E211 /* CameraManager.swift */,
-				AF05610A2A3E99140096E211 /* PhysicsManager.swift */,
-				AF6707B92A3BDA2700A923E4 /* ShipManager.swift */,
-				AF6707BD2A3D415000A923E4 /* ModelManager.swift */,
-				AF12B9AA2A344D380068D352 /* ParticleManager.swift */,
+				4956C8102A5BC2100003D9D4 /* CameraManager.swift */,
+				4956C80B2A5BC2100003D9D4 /* GameManager.swift */,
+				4956C80F2A5BC2100003D9D4 /* ModelManager.swift */,
+				4956C80A2A5BC20F0003D9D4 /* ParticleManager.swift */,
+				4956C80C2A5BC2100003D9D4 /* PhysicsManager.swift */,
+				4956C80D2A5BC2100003D9D4 /* SceneManager.swift */,
+				4956C80E2A5BC2100003D9D4 /* ShipManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -257,7 +257,6 @@
 		AFD4C04329CFA48200A127BB = {
 			isa = PBXGroup;
 			children = (
-				AFAA93A12A4BE14C001718D6 /* ARView.swift */,
 				4948D78B2A5392DB006FE8FE /* Models */,
 				4956C8052A5BB09D0003D9D4 /* Views */,
 				AF0561182A3EA8870096E211 /* Managers */,
@@ -387,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				AF6388E629DFC9610086C90F /* Star.swift */,
+				4956C81A2A5BC7040003D9D4 /* WaterPlanet.swift */,
 				AF3D1DA52A0A006600A8F2C7 /* Planet.swift */,
 				AFD4C05D29CFA49500A127BB /* BlackHole.swift */,
 				4956C8032A5B64E80003D9D4 /* BH.swift */,
@@ -466,12 +466,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4948D7B32A5395FC006FE8FE /* base.jpg in Resources */,
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				4948D7AA2A53933A006FE8FE /* innerHDU.obj in Resources */,
 				4948D7AB2A53933A006FE8FE /* outerHDU.obj in Resources */,
 				4948D7A62A53933A006FE8FE /* innerHDU.mtl in Resources */,
 				4948D79E2A53933A006FE8FE /* README.txt in Resources */,
+				4956C8192A5BC2680003D9D4 /* base.jpg in Resources */,
 				4948D7A22A53933A006FE8FE /* panelbump.jpg in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
 				4948D7AE2A53933A006FE8FE /* Turret_Normal.jpg in Resources */,
@@ -505,16 +505,16 @@
 			files = (
 				AFDE46E829F908CA00401509 /* Ecosystem.swift in Sources */,
 				AF6388DA29DF77940086C90F /* Space.swift in Sources */,
+				4956C8162A5BC2100003D9D4 /* ModelManager.swift in Sources */,
 				AF5B368F2A0AA9660075581E /* Custom Slider.swift in Sources */,
 				AF3D1DA62A0A006600A8F2C7 /* Planet.swift in Sources */,
 				AFD4C06429CFAAFC00A127BB /* Extensions.swift in Sources */,
 				AF6D0AF82A35C2A4001C1DEB /* SettingsScreen.swift in Sources */,
 				AFC92EDB2A12B8BE0042697B /* HomeScreen.swift in Sources */,
-				AFAA93A22A4BE14D001718D6 /* ARView.swift in Sources */,
+				4956C8112A5BC2100003D9D4 /* ParticleManager.swift in Sources */,
 				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
-				AF6707BA2A3BDA2700A923E4 /* ShipManager.swift in Sources */,
-				AF05610B2A3E99140096E211 /* PhysicsManager.swift in Sources */,
 				AFDE46E429F8A17500401509 /* Faction.swift in Sources */,
+				4956C8172A5BC2100003D9D4 /* CameraManager.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
 				AFE668A02A4277C00049D599 /* AI.swift in Sources */,
@@ -523,28 +523,28 @@
 				AFF42A8629E6689800B6C603 /* Missile.swift in Sources */,
 				AF6388E029DF78430086C90F /* Ship.swift in Sources */,
 				4956C8072A5BB0EF0003D9D4 /* SwiftUI Views.swift in Sources */,
-				AF12B9A72A33BADA0068D352 /* GameManager.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
 				AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */,
-				AF6707BE2A3D415000A923E4 /* ModelManager.swift in Sources */,
 				AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */,
 				AF12B9A92A33DFFF0068D352 /* Physics.swift in Sources */,
-				AF12B9AB2A344D380068D352 /* ParticleManager.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */,
 				AF6D0AF62A35BF2E001C1DEB /* LoadingScreen.swift in Sources */,
 				AFAA93932A4B91AB001718D6 /* Moonbase.swift in Sources */,
 				AFAFEF482A43ED1200247BAF /* IntroScreen.swift in Sources */,
 				AFD4C05E29CFA49500A127BB /* BlackHole.swift in Sources */,
 				AF28B9BA29E4C9A7002FEAB5 /* Reticle.swift in Sources */,
+				4956C8092A5BC1350003D9D4 /* AudioManager.swift in Sources */,
 				AFD4C06629CFAF5100A127BB /* CustomTorus.swift in Sources */,
 				AF6388E329DF79090086C90F /* SpacegroundViewModel.swift in Sources */,
-				AF0561092A3E98E20096E211 /* CameraManager.swift in Sources */,
-				AF05610D2A3E99C00096E211 /* SceneManager.swift in Sources */,
+				4956C8142A5BC2100003D9D4 /* SceneManager.swift in Sources */,
+				4956C8152A5BC2100003D9D4 /* ShipManager.swift in Sources */,
 				AF67FBB129F78C0B007CE669 /* Drone.swift in Sources */,
-				AF05611B2A3EAE600096E211 /* AIManager.swift in Sources */,
+				4956C8122A5BC2100003D9D4 /* GameManager.swift in Sources */,
 				AF6388DC29DF77B80086C90F /* HUD.swift in Sources */,
 				AFDE46F229F91E2400401509 /* Dreadknought.swift in Sources */,
+				4956C81B2A5BC7040003D9D4 /* WaterPlanet.swift in Sources */,
 				AF6388DE29DF77DF0086C90F /* VelocityBuffer.swift in Sources */,
+				4956C8132A5BC2100003D9D4 /* PhysicsManager.swift in Sources */,
 				AF05610F2A3E99E80096E211 /* Level.swift in Sources */,
 				AF9FD3812A02E64D00F5F2AC /* GhostMissile.swift in Sources */,
 			);

@@ -35,14 +35,15 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
     func death(node: SCNNode, enemyNode: SCNNode) {
         self.sceneManager.createExplosion(at: enemyNode.presentation.position)
         enemyNode.removeFromParentNode()
-        self.sceneManager.sceneObjects.removeAll(where: { $0.node == enemyNode })
+        DispatchQueue.main.async {
+            self.sceneManager.sceneObjects.removeAll(where: { $0.node == enemyNode })
+        }
     }
     func handleGameStart() {
         if !self.sceneManager.viewLoaded {
             DispatchQueue.main.async {
                 self.sceneManager.viewLoaded = true
                 self.sceneManager.gameManager?.viewLoaded = true
-                print(self.sceneManager.gameManager?.viewLoaded)
             }
         }
         

@@ -40,22 +40,37 @@ struct CustomSlider: View {
                             .position(x: width / 2, y: sliderY)
                             .foregroundColor(.white)
                     )
+                    .overlay(
+                        Rectangle()
+                            .frame(width: width, height: 1)
+                            .position(x: width / 2, y: height / 2)
+                            .foregroundColor(.gray)
+                    )
                     .gesture(
-                        DragGesture()
+                        DragGesture(minimumDistance: 0.001)
                             .onChanged { gestureValue in
                                 DispatchQueue.main.async {
                                     isDragging = true
                                     let newValue = Float(1 - gestureValue.location.y / height)
                                     let clampedValue = min(max(newValue, 0), 1)
                                     let mappedValue = clampedValue * (range.upperBound - range.lowerBound) + range.lowerBound
-                                    value = mappedValue
-                                    debounce {
-                                        onChange(mappedValue)
-                                        isDragging = false
+                                    if abs(mappedValue) < 0.1 {
+                                        value = 0
+                                        debounce {
+                                            onChange(0)
+                                            isDragging = false
+                                        }
+                                    } else {
+                                        value = mappedValue
+                                        debounce {
+                                            onChange(mappedValue)
+                                            isDragging = false
+                                        }
                                     }
                                 }
                             }
                     )
+
                     .opacity(0.66)
             }
         }
