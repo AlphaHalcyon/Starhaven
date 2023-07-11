@@ -15,6 +15,7 @@ class GameManager: ObservableObject {
     @Published var sceneManager: SceneManager
     let cameraManager: CameraManager
     let shipManager: ShipManager
+    let audioManager: AudioManager = AudioManager()
     @Published var points: Int = 0
     @Published var kills: Int = 0
     @Published var fireCooldown: Bool = false
@@ -22,9 +23,11 @@ class GameManager: ObservableObject {
     @Published var showScoreIncrement: Bool = false
     @Published var gear: Int = 1
     @Published var viewLoaded: Bool = false
+    @Published var userSelectedContinue: Bool = false
     init() {
         // Initialize the SCNScene
         let scene = SCNScene()
+        self.audioManager.playMusic(resourceName: "HVN2")
         // Initialize the managers
         self.shipManager = ShipManager()
         self.cameraManager = CameraManager(trackingState: CameraTrackState.player(ship: self.shipManager.ship), scene: scene)
@@ -47,34 +50,28 @@ class GameManager: ObservableObject {
         // Fire a missile at the current target
         self.fireMissile(target: self.shipManager.hitTest(), particleSystemColor: UIColor.systemPink)
     }
-    // WEAPONS
+    // Weapons
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
         let missile: OSNRMissile
-        if let missile = self.sceneManager.missiles.popLast() {
-            missile.target = target
-            missile.faction = .Phantom
-            missile.particleSystem.particleColor = particleSystemColor
-            self.fire(missile: missile.missileNode, target: target)
-            missile.fire()
-        }
-        else if self.sceneManager.missiles.isEmpty {
-            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
-            self.fire(missile: missile.missileNode, target: target)
-        } else {
-            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
-            self.fire(missile: missile.missileNode, target: target)
-        }
+        missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+        self.fire(missile: missile.missileNode, target: target)
     }
     func fire(missile: SCNNode, target: SCNNode? = nil) {
-        missile.position = self.shipManager.ship.position - SCNVector3(0, -2, 2)
-        missile.physicsBody?.velocity = SCNVector3(0,0,0)
-        missile.simdOrientation = self.shipManager.ship.simdOrientation
-        let direction = self.shipManager.ship.presentation.worldFront
-        let missileMass = missile.physicsBody?.mass ?? 1
-        missile.eulerAngles.x += Float.pi / 2
-        let missileForce = 500 * missileMass
-        self.sceneManager.addNode(missile)
-        missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        //self.sceneManager.cameraManager.trackingState = CameraTrackState.missile(missile: missile)
+        DispatchQueue.main.async {
+            missile.position = self.shipManager.ship.position - SCNVector3(0, -2, 2)
+            missile.physicsBody?.velocity = SCNVector3(0,0,0)
+            missile.simdOrientation = self.shipManager.ship.simdOrientation
+            let direction = self.shipManager.ship.presentation.worldFront
+            let missileMass = missile.physicsBody?.mass ?? 1
+            missile.eulerAngles.x += Float.pi / 2
+            let missileForce = 600 * missileMass
+            self.sceneManager.addNode(missile)
+            missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+            //self.sceneManager.cameraManager.trackingState = CameraTrackState.missile(missile: missile)
+        }
+    }
+    // Points
+    func addPoints(points: Int) {
+        self.points += points
     }
 }

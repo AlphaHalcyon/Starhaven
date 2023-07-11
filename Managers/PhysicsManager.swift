@@ -15,7 +15,7 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
         self.sceneManager = sceneManager
     }
     // CONTACT HANDLING
-    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+    @MainActor func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         if let contactBodyA = contact.nodeA.physicsBody, let contactBodyB = contact.nodeB.physicsBody {
             let contactMask = contactBodyA.categoryBitMask | contactBodyB.categoryBitMask
             switch contactMask {
@@ -48,9 +48,8 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
         }
         
     }
-    func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
+    @MainActor func handleLaserEnemyCollision(contact: SCNPhysicsContact) {
         if let contactBody = contact.nodeA.physicsBody {
-            self.handleGameStart()
             let laserNode = contactBody.categoryBitMask == CollisionCategory.laser ? contact.nodeA : contact.nodeB
             let enemyNode = contactBody.categoryBitMask == CollisionCategory.enemyShip ? contact.nodeA : contact.nodeB
             if let sceneObject = self.sceneManager.sceneObjects.first(where: { $0.node == enemyNode }) {
@@ -71,28 +70,34 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
                     
                     //Assuming color is a property of SceneObject
                     if ai.faction == .OSNR && color != UIColor.red {
-                        if Float.random(in: 0...1) < 0.5 {
+                        self.handleGameStart()
+                        if Float.random(in: 0...1) > 0.95 {
                             print("AI death.")
                             self.death(node: laserNode, enemyNode: enemyNode)
                         }
                     } else if ai.faction == .Wraith && color != UIColor.cyan {
-                        if Float.random(in: 0...1) < 0.5 {
+                        if Float.random(in: 0...1) > 0.95 {
                             print("AI death.")
                             self.death(node: laserNode, enemyNode: enemyNode)
                         }
                     }
                 } else if let moonbase = sceneObject as? Moonbase {
                     if let hab = moonbase.habNode {
-                        self.sceneManager.createExplosion(at: hab.position)
+                        DispatchQueue.main.async {
+                            self.sceneManager.createExplosion(at: hab.position)
+                        }
                     }
-                    if let first = moonbase.node.childNodes.first {
-                        self.sceneManager.createExplosion(at: first.position)
+                    if let lightNode = moonbase.node.childNode(withName: "Moonbase Light", recursively: false) {
+                        DispatchQueue.main.async {
+                            lightNode.removeFromParentNode()
+                        }
                     }
                     self.sceneManager.createExplosion(at: laserNode.presentation.position)
-                    self.death(node: laserNode, enemyNode: moonbase.node)
                     if let manager = self.sceneManager.gameManager {
                         DispatchQueue.main.async {
-                            manager.points += 10
+                            moonbase.node.removeFromParentNode()
+                            manager.addPoints(points: 50)
+                            self.sceneManager.sceneObjects.removeAll(where: { $0.node == moonbase.node })
                         }
                     } else { print("Failed to get manager.") }
                 }

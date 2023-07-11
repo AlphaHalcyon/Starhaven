@@ -60,26 +60,33 @@ class ShipManager {
     }
     var currentOrientation: SIMD2<Float> = .zero
     func update(deltaTime: TimeInterval) {
-        //self.adoptDeviceOrientation()
+        self.adoptDeviceOrientation()
         self.updateShipPosition(deltaTime: deltaTime)
         self.updateRotation(deltaTime: deltaTime)
         self.findClosestHole()
     }
-    var lastPosition: SIMD3<Float> = .zero
-    var lastRotation: simd_quatf = simd_quatf()
+    var previousCameraTransform: simd_float4x4?
+
     func adoptDeviceOrientation() {
         self.currentFrame = arSession.currentFrame
+        
         if let cameraTransform = currentFrame?.camera.transform {
-            // Convert the 4x4 transform matrix to a quaternion
-            let quaternion = simd_quaternion(cameraTransform)
-
-            // Use the quaternion to update the ship's orientation
-            self.currentRotation = quaternion
-            self.ship.simdOrientation = quaternion
-        } else {
-            //print("failed")
+            // Calculate the delta rotation between the current and previous camera transforms
+            if let previousCameraTransform = previousCameraTransform {
+                let deltaRotation = simd_mul(simd_inverse(previousCameraTransform), cameraTransform)
+                let deltaQuaternion = simd_quaternion(deltaRotation)
+                
+                // Apply the delta rotation to the ship's orientation
+                let quat = simd_mul(ship.simdOrientation, deltaQuaternion)
+                ship.simdOrientation = quat
+                self.currentRotation = ship.simdOrientation
+            }
+            
+            // Update the previous camera transform
+            previousCameraTransform = cameraTransform
         }
     }
+
     func updateShipPosition(deltaTime: TimeInterval) {
         // Apply the new position
         let throttleDelta = self.throttle // * Float(deltaTime)
@@ -106,13 +113,13 @@ class ShipManager {
             
             // Apply low-pass filter
             let alpha: Float = 1
-            let filteredRotation =  simd_normalize(simd_slerp(self.lastRotation, newRotation, alpha))
+            //let filteredRotation =  simd_normalize(simd_slerp(self.lastRotation, newRotation, alpha))
             // Normalize the quaternion
-            self.lastRotation = filteredRotation
+            //self.lastRotation = filteredRotation
             
             // Apply the new rotation
-            self.ship.simdOrientation = filteredRotation
-            self.currentRotation = filteredRotation
+            self.ship.simdOrientation = newRotation
+            self.currentRotation = newRotation
             if length(self.rotationVelocity) < 0.005 {
                 self.rotationVelocity = .zero
             }
@@ -126,7 +133,7 @@ class ShipManager {
         let deltaX = Float(translation.width - self.previousTranslation.width) * 0.005
         let deltaY = Float(translation.height - self.previousTranslation.height) * 0.005
         // Update the averageRotationVelocity
-        self.rotationVelocity = SIMD2<Float>(Float(deltaX), Float(deltaY))
+        self.rotationVelocity = SIMD2<Float>(0, Float(deltaY))
         self.previousTranslation = translation
     }
     func dragEnded() {

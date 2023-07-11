@@ -11,9 +11,9 @@ import SceneKit
 
 class BH {
     init(){}
-    static let numRings: Int = 12
-    static let radius: CGFloat = 80
-    static let pipeRadius: CGFloat = 10
+    static let numRings: Int = 10
+    static let radius: CGFloat = 60
+    static let pipeRadius: CGFloat = 8
     static func blackHole(pov: SCNNode) -> SCNNode {
         let node = BH.blackHoleNode
         let lensedRootNode = SCNNode()
@@ -32,6 +32,8 @@ class BH {
         node.simdOrientation = simd_quatf(angle: .pi/2, axis: simd_float3(x: 0, y: 1, z: 0))
         let lensingConstraint = SCNLookAtConstraint(target: pov)
         lensedRootNode.constraints = [lensingConstraint]
+        let pos = SCNVector3(0, 2_000,0)
+        node.position = pos
         return node
     }
     static func accretionRing(radius: CGFloat) -> SCNNode {

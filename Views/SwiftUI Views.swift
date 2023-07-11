@@ -17,7 +17,7 @@ struct OSNRMoonView: View {
     var body: some View {
         ZStack {
             self.starHaven
-            if !self.userSelectedContinue {
+            if !self.manager.userSelectedContinue {
                 IntroScreen(userSelectedContinue: self.$userSelectedContinue).environmentObject(self.manager)
             }
         }

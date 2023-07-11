@@ -21,9 +21,7 @@ struct IntroScreen: View {
     @Binding var userSelectedContinue: Bool
     @State var redraw: Bool = false
     var body: some View {
-        self.loadScreen.onChange(of: self.gameManager.viewLoaded, perform: { val in
-            self.redraw.toggle()
-        })
+        self.loadScreen
     }
 
     var loadScreen: some View {
@@ -45,13 +43,17 @@ struct IntroScreen: View {
     }
     var continueButton: some View {
         Text("CONTINUE")
-            .font(.custom("Avenir Next Regular", size: 35))
+            .font(.custom("Avenir Next Regular", size: 40))
             .foregroundColor(self.gameManager.viewLoaded ? .red : .gray)
             .onTapGesture {
                 print(self.gameManager.viewLoaded)
                 if self.gameManager.viewLoaded {
-                    self.userSelectedContinue = true; self.gameManager.sceneManager.view.play(nil)
-                    self.gameManager.sceneManager.distributeBlackHoles()
+                    
+                    self.gameManager.userSelectedContinue = true
+                    self.gameManager.sceneManager.celestialManager?.distributeBlackHoles()
+                    self.gameManager.sceneManager.shipManager.ship.look(at: self.gameManager.sceneManager.scene.rootNode.position)
+                    self.gameManager.sceneManager.shipManager.currentRotation = self.gameManager.sceneManager.shipManager.ship.simdOrientation
+                    print(self.gameManager.userSelectedContinue)
                 }
             }.padding()
     }

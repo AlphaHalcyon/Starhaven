@@ -40,8 +40,8 @@ class Planet: SceneObject {
         let shape = SCNPhysicsShape(node: self.node, options: [.keepAsCompound: true])
         self.node.physicsBody = SCNPhysicsBody(type: .static, shape: shape)
         self.node.physicsBody?.categoryBitMask = CollisionCategory.celestial
-        let startLatitude: Double = 60
-        let endLatitude: Double = 90
+        let startLatitude: Double = 65
+        let endLatitude: Double = 85
         let latitudes: [Double] = Array(stride(from: startLatitude, through: endLatitude, by: 5))
         let longitudes: [Double] = Array(repeating: 0.0, count: latitudes.count)
         let lights: [Bool] = latitudes.map { $0 >= 60 && $0 <= 80 }
@@ -52,7 +52,7 @@ class Planet: SceneObject {
     func addMoonbase(latitudes: [Double], longitudes: [Double], lights: [Bool]) {
         for i in 0..<latitudes.count {
             let moonbase = Moonbase(sceneManager: self.sceneManager, planet: self, hasLight: lights[i])
-            moonbase.node.scale = SCNVector3(25,25,25)
+            moonbase.node.scale = SCNVector3(30,30,30)
             let base: SCNNode = moonbase.node
             self.addObject(object: base, atLatitude: latitudes[i], longitude: longitudes[i])
             self.sceneManager.sceneObjects.append(moonbase)

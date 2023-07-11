@@ -14,8 +14,8 @@ class ParticleManager {
         let coronaGeo = SCNSphere(radius: 5)
         let fireParticleSystem = SCNParticleSystem()
         fireParticleSystem.particleColor = .orange
-        fireParticleSystem.birthRate = 21_000
-        fireParticleSystem.particleSize = 0.25
+        fireParticleSystem.birthRate = 20_000
+        fireParticleSystem.particleSize = 0.3
         fireParticleSystem.particleIntensity = 1
         fireParticleSystem.particleLifeSpan = 0.4
         fireParticleSystem.spreadingAngle = 180
@@ -42,11 +42,12 @@ class ParticleManager {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
         particleSystem.particleIntensity = 1
-        particleSystem.particleSize = 0.5
-        particleSystem.birthRate = 35_000
+        particleSystem.particleSize = 2.5
+        particleSystem.birthRate = 10_000
         particleSystem.emissionDuration = particleSystem.emissionDurationVariation
         particleSystem.particleLifeSpan = 0.025
         particleSystem.emitterShape = ModelManager.missileGeometry.geometry
+        particleSystem.blendMode = .additive
         return particleSystem
     }
     static let missileGeometry: SCNNode = {
@@ -56,11 +57,11 @@ class ParticleManager {
         let particleSystem = SCNParticleSystem()
         particleSystem.particleColor = color
         particleSystem.particleSize = 2
-        particleSystem.birthRate = 55_000
+        particleSystem.birthRate = 25_000
         particleSystem.emissionDuration = 1
-        particleSystem.particleLifeSpan = 0.1
-        particleSystem.spreadingAngle = 40
+        particleSystem.particleLifeSpan = 0.05
         particleSystem.emitterShape = self.missileGeometry.geometry
+        particleSystem.blendMode = .additive
         return particleSystem
     }
     // Wraith Lasers

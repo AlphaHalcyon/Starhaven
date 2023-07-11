@@ -69,7 +69,7 @@ class CameraManager {
     private func setupCamera(scene: SCNScene) {
         // Create a camera
         let camera = SCNCamera()
-        camera.zFar = 200_000
+        camera.zFar = 2000_000
         camera.zNear = 1
         // Create a camera node and attach the camera
         self.cameraNode = SCNNode()
