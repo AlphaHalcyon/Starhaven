@@ -18,6 +18,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     let scene: SCNScene
     let cameraManager: CameraManager
     let shipManager: ShipManager
+    var celestialManager: CelestialManager? = nil
     var objectsPlacedInCameraView: Bool = false
     
     // OBJECT POOLING for EXPLOSION + MISSILE + TRIANGLE objects and nodes
@@ -34,43 +35,31 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         super.init()
         self.setupScene()
         self.addShip()
-        self.createPlanet(name: "base.jpg")
-        self.createStar()
-        self.createBlackHoles()
+        self.celestialManager = CelestialManager(manager: self)
+        self.view.pause(nil)
+        self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
         self.createAI()
+        self.view.prepare([self.scene]) { success in
+            self.view.play(nil)
+        }
     }
     deinit {
         print("SceneManager is being deallocated")
     }
-    var blackHoles: [SCNNode] = []
-    let blackHoleCount: Int = 15
-    func createBlackHoles() {
-        for _ in 0...self.blackHoleCount {
-            self.createBlackHole()
-        }
-    }
-    func createBlackHole() {
-        let blackHole: SCNNode = BH.blackHole(pov: self.cameraManager.cameraNode).clone()
-        let pos = SCNVector3(0, 2_000,0)
-        blackHole.position = pos
-        self.blackHoles.append(blackHole)
-        self.view.prepare([blackHole]) { success in
-            self.addNode(blackHole)
-        }
-    }
-    func distributeBlackHoles() {
-        for blackHole in blackHoles {
-            let pos = self.generateRandomPointInSphere(with: 15_000)
-            blackHole.position = pos
-        }
-    }
+    
     // Rendering Loop
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         // Update the game state
         let deltaTime = time - lastUpdateTime
         self.lastUpdateTime = time
-        self.updateShip(deltaTime: time)
-        self.updateCamera(deltaTime: Float(deltaTime))
+        if let manager = self.gameManager {
+            if manager.userSelectedContinue {
+                self.updateShip(deltaTime: time)
+                self.updateCamera(deltaTime: Float(deltaTime))
+            } else {
+                self.shipManager.updateRotation(deltaTime: deltaTime)
+            }
+        }
         self.updateSceneObjects(updateAtTime: time)
     }
     func updateSceneObjects(updateAtTime time: TimeInterval) {
@@ -97,7 +86,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     // Scene Creation
     func setupScene() {
         self.view.scene = self.scene
-        self.createSkybox()
         self.view.delegate = self
         self.scene.physicsWorld.contactDelegate = self.createPhysicsManager()
     }
@@ -107,14 +95,14 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
 
     }
     func createAI() {
-        let num = 15
+        let num = 10
         let node = ModelManager.createShip(scale: 0.15)
         for i in 0...num {
-            let offset: SCNVector3 = SCNVector3(-500,2200,-500)
+            let offset: SCNVector3 = SCNVector3(-750,2300,-750)
             self.createDrone(node: node.flattenedClone(), offset: offset, i: i, faction: .OSNR)
         }
         for i in 0...num {
-            let offset: SCNVector3 = SCNVector3(500,2200,-500)
+            let offset: SCNVector3 = SCNVector3(750,2300,-750)
             self.createDrone(node: node.flattenedClone(), offset: offset, i: i, faction: .Wraith)
         }
     }
@@ -137,48 +125,6 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         return SCNVector3(x, y, z)
     }
     
-    public func createStar() {
-        let star = Star(radius: 1_000, color: .orange, sceneManager: self)
-        star.node.position = SCNVector3(0, 1_500, 150_000)
-        self.sceneObjects.append(star)
-        self.addNode(star.node)
-    }
-    public func createPlanet(name: String) {
-        guard let image = UIImage(named: name) else {
-            print("Failed to create planet from imagename \(name)")
-            return
-        }
-        let planet = Planet(image: image, radius: 2000, view: self.view, asteroidBeltImage: image, sceneManager: self)
-        planet.node.castsShadow = true
-        self.sceneObjects.append(planet)
-        planet.addToScene(scene: self.scene)
-        //self.createBlackHoles(around: planet, count: 10)
-        self.shipManager.ship.look(at: planet.node.position)
-        self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
-    }
-    public func createEarth() {
-        guard let image = UIImage(named: "Earth.jpg") else {
-            return
-        }
-        let planet = Planet(image: image, radius: 10_000, view: self.view, asteroidBeltImage: image, sceneManager: self)
-        planet.node.castsShadow = true
-        planet.node.position = SCNVector3(-5_000, -15_000, 15000)
-        self.sceneObjects.append(planet)
-        planet.addToScene(scene: self.scene)
-    }
-    func createSkybox() {
-        self.view.allowsCameraControl = false
-        self.view.backgroundColor = UIColor.black
-        self.view.scene?.background.contents = [
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky"),
-            UIImage(named: "sky")
-        ]
-        self.view.scene?.background.intensity = 0.5
-    }
     
     func createExplosion(at position: SCNVector3) {
         if self.explosions.isEmpty {

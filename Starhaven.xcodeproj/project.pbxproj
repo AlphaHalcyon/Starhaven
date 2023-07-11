@@ -39,6 +39,10 @@
 		4956C8172A5BC2100003D9D4 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8102A5BC2100003D9D4 /* CameraManager.swift */; };
 		4956C8192A5BC2680003D9D4 /* base.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4956C8182A5BC2680003D9D4 /* base.jpg */; };
 		4956C81B2A5BC7040003D9D4 /* WaterPlanet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C81A2A5BC7040003D9D4 /* WaterPlanet.swift */; };
+		4956C8212A5BCDB30003D9D4 /* cloudTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 4956C8202A5BCDB30003D9D4 /* cloudTexture.png */; };
+		4956C8232A5C68160003D9D4 /* CelestialManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8222A5C68160003D9D4 /* CelestialManager.swift */; };
+		49980BDB2A5CA3F500DB70A6 /* OSNRMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49980BDA2A5CA3F500DB70A6 /* OSNRMissile.swift */; };
+		49CA94232A5D0BCE00E3D8A2 /* HVN2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 49CA94222A5D0BCE00E3D8A2 /* HVN2.mp3 */; };
 		AF05610F2A3E99E80096E211 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610E2A3E99E80096E211 /* Level.swift */; };
 		AF07021E29E120D300667F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF07021C29E120D300667F9B /* Assets.xcassets */; };
 		AF12B9A92A33DFFF0068D352 /* Physics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF12B9A82A33DFFF0068D352 /* Physics.swift */; };
@@ -115,6 +119,10 @@
 		4956C8102A5BC2100003D9D4 /* CameraManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraManager.swift; path = Managers/CameraManager.swift; sourceTree = "<group>"; };
 		4956C8182A5BC2680003D9D4 /* base.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = base.jpg; path = Models/base.jpg; sourceTree = "<group>"; };
 		4956C81A2A5BC7040003D9D4 /* WaterPlanet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterPlanet.swift; sourceTree = "<group>"; };
+		4956C8202A5BCDB30003D9D4 /* cloudTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cloudTexture.png; path = Models/cloudTexture.png; sourceTree = "<group>"; };
+		4956C8222A5C68160003D9D4 /* CelestialManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelestialManager.swift; sourceTree = "<group>"; };
+		49980BDA2A5CA3F500DB70A6 /* OSNRMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSNRMissile.swift; sourceTree = "<group>"; };
+		49CA94222A5D0BCE00E3D8A2 /* HVN2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVN2.mp3; path = ../../../Music/Logic/Bounces/HVN2.mp3; sourceTree = "<group>"; };
 		AF05610E2A3E99E80096E211 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		AF0561112A3EA8270096E211 /* ISR.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ISR.mp3; sourceTree = "<group>"; };
 		AF0561122A3EA8270096E211 /* HVNDarkseid.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = HVNDarkseid.mp3; sourceTree = "<group>"; };
@@ -180,6 +188,7 @@
 		4948D78B2A5392DB006FE8FE /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4956C8202A5BCDB30003D9D4 /* cloudTexture.png */,
 				4948D7B82A53C8A6006FE8FE /* Earth.jpg */,
 				4956C8182A5BC2680003D9D4 /* base.jpg */,
 				4948D7932A53933A006FE8FE /* HDU_01.jpg */,
@@ -209,7 +218,6 @@
 			isa = PBXGroup;
 			children = (
 				4956C8062A5BB0EF0003D9D4 /* SwiftUI Views.swift */,
-				4956C8082A5BC1350003D9D4 /* AudioManager.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -219,6 +227,7 @@
 			children = (
 				AF0561122A3EA8270096E211 /* HVNDarkseid.mp3 */,
 				AF0561132A3EA8270096E211 /* HVN.mp3 */,
+				49CA94222A5D0BCE00E3D8A2 /* HVN2.mp3 */,
 				AF0561112A3EA8270096E211 /* ISR.mp3 */,
 				AF0561152A3EA82A0096E211 /* snap.wav */,
 				AF0561142A3EA82A0096E211 /* snatchHiss.wav */,
@@ -237,6 +246,8 @@
 				4956C80C2A5BC2100003D9D4 /* PhysicsManager.swift */,
 				4956C80D2A5BC2100003D9D4 /* SceneManager.swift */,
 				4956C80E2A5BC2100003D9D4 /* ShipManager.swift */,
+				4956C8082A5BC1350003D9D4 /* AudioManager.swift */,
+				4956C8222A5C68160003D9D4 /* CelestialManager.swift */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -245,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				AFE6689F2A4277C00049D599 /* AI.swift */,
+				49980BDA2A5CA3F500DB70A6 /* OSNRMissile.swift */,
 				AFDE46E329F8A17500401509 /* Faction.swift */,
 				AFAAB44C29F47B8F007D5A2F /* CollisionCategory.swift */,
 				AFAA93922A4B91AB001718D6 /* Moonbase.swift */,
@@ -469,10 +481,12 @@
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				4948D7AA2A53933A006FE8FE /* innerHDU.obj in Resources */,
 				4948D7AB2A53933A006FE8FE /* outerHDU.obj in Resources */,
+				4956C8212A5BCDB30003D9D4 /* cloudTexture.png in Resources */,
 				4948D7A62A53933A006FE8FE /* innerHDU.mtl in Resources */,
 				4948D79E2A53933A006FE8FE /* README.txt in Resources */,
 				4956C8192A5BC2680003D9D4 /* base.jpg in Resources */,
 				4948D7A22A53933A006FE8FE /* panelbump.jpg in Resources */,
+				49CA94232A5D0BCE00E3D8A2 /* HVN2.mp3 in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
 				4948D7AE2A53933A006FE8FE /* Turret_Normal.jpg in Resources */,
 				AF1C63D329D98B1600710916 /* SceneKit Asset Catalog.scnassets in Resources */,
@@ -515,6 +529,7 @@
 				AF778F0829F9F44700F299E5 /* Raider.swift in Sources */,
 				AFDE46E429F8A17500401509 /* Faction.swift in Sources */,
 				4956C8172A5BC2100003D9D4 /* CameraManager.swift in Sources */,
+				49980BDB2A5CA3F500DB70A6 /* OSNRMissile.swift in Sources */,
 				AF6388E729DFC9610086C90F /* Star.swift in Sources */,
 				AFD4C05029CFA48200A127BB /* StarhavenApp.swift in Sources */,
 				AFE668A02A4277C00049D599 /* AI.swift in Sources */,
@@ -525,6 +540,7 @@
 				4956C8072A5BB0EF0003D9D4 /* SwiftUI Views.swift in Sources */,
 				AFAAB44B29F468D3007D5A2F /* Laser.swift in Sources */,
 				AFD7EEB92A2C83A600A92162 /* IntroCutscene.swift in Sources */,
+				4956C8232A5C68160003D9D4 /* CelestialManager.swift in Sources */,
 				AFAAB44D29F47B8F007D5A2F /* CollisionCategory.swift in Sources */,
 				AF12B9A92A33DFFF0068D352 /* Physics.swift in Sources */,
 				AFDBFDDA29DD2775006DEB3E /* ContentView.swift in Sources */,
@@ -674,7 +690,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
@@ -694,7 +710,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -714,7 +730,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
@@ -734,7 +750,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alphaHalcyon.starHaven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

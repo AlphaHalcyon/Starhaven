@@ -11,7 +11,7 @@ import SceneKit
 
 class Moonbase: SceneObject {
     var sceneManager: SceneManager
-    var faction: Faction = .OSNR
+    var faction: Faction = .Wraith
     var isAI: Bool = false
     required init(node: SCNNode, sceneManager: SceneManager) {
         self.node = node
@@ -38,6 +38,7 @@ class Moonbase: SceneObject {
             lightNode.position = SCNVector3(0, 5, 0)
             lightNode.light = light
             lightNode.look(at: planet.node.position)
+            lightNode.name = "Moonbase Light"
             self.node.addChildNode(lightNode)
         }
         self.sceneManager = sceneManager
@@ -124,15 +125,68 @@ class Moonbase: SceneObject {
             print("Failed to load outer hab: \(error)")
         }
     }
-
+    
     // Add methods to manipulate moonbase
     func update(updateAtTime time: TimeInterval) {
-        //self.aim
+        /*
+         if let target = self.target {
+             if Float.random(in: 0...1) < 1/50 {
+                 print("firing!")
+                 self.fireMissile(target: self.target, particleSystemColor: .red)
+             }
+         } else {
+             self.selectNewTarget()
+         }
+         */
     }
     func destroy() {
     }
     // Aim the railgun turret at a target
     func aimRailgunAt(target: SCNVector3) {
         railgunTurretNode?.look(at: target)
+    }
+    // WEAPONS MECHANICS
+    var firing: Bool = false
+    var target: SCNNode?
+    func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
+        let missile: OSNRMissile
+        if self.sceneManager.missiles.isEmpty {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode)
+        } else if let missile = self.sceneManager.missiles.popLast() {
+            missile.target = target
+            missile.faction = faction
+            missile.particleSystem.particleColor = particleSystemColor
+            self.fire(missile: missile.missileNode)
+            missile.fire()
+        } else {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode)
+        }
+    }
+    func fire(missile: SCNNode) {
+        missile.position = self.railgunBaseNodes[0].position
+        missile.physicsBody?.velocity = SCNVector3(0,0,0)
+        let direction = self.node.presentation.worldFront
+        let missileMass = missile.physicsBody?.mass ?? 1
+        missile.orientation = self.node.presentation.orientation
+        missile.eulerAngles.x += Float.pi / 2
+        let missileForce = 500 * missileMass
+        self.sceneManager.addNode(missile)
+        DispatchQueue.main.async {
+            missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+        }
+    }
+    func selectNewTarget() {
+        let targets = self.sceneManager.sceneObjects.filter { $0.isAI && $0.faction != self.faction }
+        if let target = targets.randomElement() {
+            self.target = target.node
+        }
+        self.target = targets.randomElement()?.node
+        let constraint = SCNLookAtConstraint(target: target)
+        constraint.isGimbalLockEnabled = true
+        for node in railgunBaseNodes {
+            node.constraints = [constraint]
+        }
     }
 }
