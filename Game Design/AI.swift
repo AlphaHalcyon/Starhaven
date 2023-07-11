@@ -70,7 +70,7 @@ class AI: SceneObject {
                 
                 if distance < minDistance {
                     // Complex chase
-                    let chaseOffset = self.getChaseOffset(updateAtTime: time)
+                    let chaseOffset = !self.sceneManager.viewLoaded ? SCNVector3() : self.getChaseOffset(updateAtTime: time)
                     self.node.worldPosition = SCNVector3(
                         self.node.worldPosition.x + chaseOffset.x * speed,
                         self.node.worldPosition.y + chaseOffset.y * speed,
@@ -94,7 +94,7 @@ class AI: SceneObject {
     // OPERATIONS
     func getChaseOffset(updateAtTime time: TimeInterval) -> SCNVector3 {
         // Define the scale of the sinusoidal chase
-        let chaseScale: Float = 0.025
+        let chaseScale: Float = 0.05
 
         // Combine multiple sinusoids for a more complex chase pattern
         let chaseSpiralOffset = SCNVector3(

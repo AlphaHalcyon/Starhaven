@@ -43,7 +43,7 @@ class ParticleManager {
         particleSystem.particleColor = color
         particleSystem.particleIntensity = 1
         particleSystem.particleSize = 2.5
-        particleSystem.birthRate = 15_000
+        particleSystem.birthRate = 10_000
         particleSystem.emissionDuration = particleSystem.emissionDurationVariation
         particleSystem.particleLifeSpan = 0.025
         particleSystem.emitterShape = ModelManager.missileGeometry.geometry

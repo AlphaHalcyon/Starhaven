@@ -93,9 +93,9 @@ class PhysicsManager: NSObject, ObservableObject, SCNPhysicsContactDelegate {
                         }
                     }
                     self.sceneManager.createExplosion(at: laserNode.presentation.position)
-                    moonbase.node.removeFromParentNode()
                     if let manager = self.sceneManager.gameManager {
                         DispatchQueue.main.async {
+                            moonbase.node.removeFromParentNode()
                             manager.addPoints(points: 50)
                             self.sceneManager.sceneObjects.removeAll(where: { $0.node == moonbase.node })
                         }

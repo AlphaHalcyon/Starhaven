@@ -55,19 +55,20 @@ class GameManager: ObservableObject {
         let missile: OSNRMissile
         missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
         self.fire(missile: missile.missileNode, target: target)
-        print("popped")
     }
     func fire(missile: SCNNode, target: SCNNode? = nil) {
-        missile.position = self.shipManager.ship.position - SCNVector3(0, -2, 2)
-        missile.physicsBody?.velocity = SCNVector3(0,0,0)
-        missile.simdOrientation = self.shipManager.ship.simdOrientation
-        let direction = self.shipManager.ship.presentation.worldFront
-        let missileMass = missile.physicsBody?.mass ?? 1
-        missile.eulerAngles.x += Float.pi / 2
-        let missileForce = 600 * missileMass
-        self.sceneManager.addNode(missile)
-        missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
-        //self.sceneManager.cameraManager.trackingState = CameraTrackState.missile(missile: missile)
+        DispatchQueue.main.async {
+            missile.position = self.shipManager.ship.position - SCNVector3(0, -2, 2)
+            missile.physicsBody?.velocity = SCNVector3(0,0,0)
+            missile.simdOrientation = self.shipManager.ship.simdOrientation
+            let direction = self.shipManager.ship.presentation.worldFront
+            let missileMass = missile.physicsBody?.mass ?? 1
+            missile.eulerAngles.x += Float.pi / 2
+            let missileForce = 600 * missileMass
+            self.sceneManager.addNode(missile)
+            missile.physicsBody?.applyForce(direction * Float(missileForce), asImpulse: true)
+            //self.sceneManager.cameraManager.trackingState = CameraTrackState.missile(missile: missile)
+        }
     }
     // Points
     func addPoints(points: Int) {

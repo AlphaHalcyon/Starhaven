@@ -14,7 +14,7 @@ class CelestialManager {
         self.manager = manager
         self.createStar()
         self.createPlanet(name: "base.jpg")
-        //self.createBlackHoles()
+        self.createBlackHoles()
         self.createWaterPlanet()
         self.createSkybox()
         if let pos = self.blackHoles.first?.position {
@@ -28,7 +28,7 @@ class CelestialManager {
         self.manager.addNode(planet.node)
     }
     public func createStar() {
-        let star = Star(radius: 1_000, color: .orange, sceneManager: self.manager)
+        let star = Star(radius: 5_000, color: .orange, sceneManager: self.manager)
         star.node.position = SCNVector3(0, 1_500, 150_000)
         self.manager.sceneObjects.append(star)
         self.manager.addNode(star.node)
@@ -70,17 +70,18 @@ class CelestialManager {
         self.manager.view.scene?.background.intensity = 0.5
     }
     var blackHoles: [SCNNode] = []
-    let blackHoleCount: Int = 2
+    let blackHoleCount: Int = 15
     func createBlackHoles() {
+        let blackHole: SCNNode = BH.blackHole(pov: self.manager.cameraManager.cameraNode)
         for _ in 0...self.blackHoleCount {
-            self.createBlackHole()
+            self.createBlackHole(blackHole: blackHole)
         }
     }
-    func createBlackHole() {
-        let blackHole: SCNNode = BH.blackHole(pov: self.manager.cameraManager.cameraNode).clone()
-        self.blackHoles.append(blackHole)
-        self.manager.view.prepare([blackHole]) { success in
-            self.manager.addNode(blackHole)
+    func createBlackHole(blackHole: SCNNode) {
+        let node = blackHole.clone()
+        self.blackHoles.append(node)
+        self.manager.view.prepare([node]) { success in
+            self.manager.addNode(node)
         }
     }
     func distributeBlackHoles() {
