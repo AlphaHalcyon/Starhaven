@@ -52,13 +52,24 @@ class GameManager: ObservableObject {
     }
     // Weapons
     func fireMissile(target: SCNNode? = nil, particleSystemColor: UIColor) {
+        print(self.sceneManager.missiles.count)
         let missile: OSNRMissile
-        missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
-        self.fire(missile: missile.missileNode, target: target)
+        if self.sceneManager.missiles.isEmpty {
+            missile = OSNRMissile(target: target, particleSystemColor: particleSystemColor, sceneManager: self.sceneManager)
+            self.fire(missile: missile.missileNode, target: target)
+        }
+        else {
+            if let missile = self.sceneManager.missiles.popLast() {
+                missile.target = target
+                missile.particleSystem.particleColor = particleSystemColor
+                self.fire(missile: missile.missileNode, target: target)
+                missile.fire()
+            }
+        }
     }
     func fire(missile: SCNNode, target: SCNNode? = nil) {
         DispatchQueue.main.async {
-            missile.position = self.shipManager.ship.position - SCNVector3(0, -2, 2)
+            missile.position = self.shipManager.ship.position - SCNVector3(0, -10, 10)
             missile.physicsBody?.velocity = SCNVector3(0,0,0)
             missile.simdOrientation = self.shipManager.ship.simdOrientation
             let direction = self.shipManager.ship.presentation.worldFront

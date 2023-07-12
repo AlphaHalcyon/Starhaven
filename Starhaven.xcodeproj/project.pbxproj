@@ -41,6 +41,11 @@
 		4956C81B2A5BC7040003D9D4 /* WaterPlanet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C81A2A5BC7040003D9D4 /* WaterPlanet.swift */; };
 		4956C8212A5BCDB30003D9D4 /* cloudTexture.png in Resources */ = {isa = PBXBuildFile; fileRef = 4956C8202A5BCDB30003D9D4 /* cloudTexture.png */; };
 		4956C8232A5C68160003D9D4 /* CelestialManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4956C8222A5C68160003D9D4 /* CelestialManager.swift */; };
+		498A97752A5E58DB00A03559 /* Explosion.aif in Resources */ = {isa = PBXBuildFile; fileRef = 498A97742A5E58DB00A03559 /* Explosion.aif */; };
+		498A977A2A5E5D2E00A03559 /* harvest3.aif in Resources */ = {isa = PBXBuildFile; fileRef = 498A97762A5E5D2D00A03559 /* harvest3.aif */; };
+		498A977B2A5E5D2E00A03559 /* harvest4.aif in Resources */ = {isa = PBXBuildFile; fileRef = 498A97772A5E5D2D00A03559 /* harvest4.aif */; };
+		498A977C2A5E5D2E00A03559 /* harvest2.aif in Resources */ = {isa = PBXBuildFile; fileRef = 498A97782A5E5D2D00A03559 /* harvest2.aif */; };
+		498A977D2A5E5D2E00A03559 /* harvest1.aif in Resources */ = {isa = PBXBuildFile; fileRef = 498A97792A5E5D2E00A03559 /* harvest1.aif */; };
 		49980BDB2A5CA3F500DB70A6 /* OSNRMissile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49980BDA2A5CA3F500DB70A6 /* OSNRMissile.swift */; };
 		49CA94232A5D0BCE00E3D8A2 /* HVN2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 49CA94222A5D0BCE00E3D8A2 /* HVN2.mp3 */; };
 		AF05610F2A3E99E80096E211 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05610E2A3E99E80096E211 /* Level.swift */; };
@@ -121,6 +126,11 @@
 		4956C81A2A5BC7040003D9D4 /* WaterPlanet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterPlanet.swift; sourceTree = "<group>"; };
 		4956C8202A5BCDB30003D9D4 /* cloudTexture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cloudTexture.png; path = Models/cloudTexture.png; sourceTree = "<group>"; };
 		4956C8222A5C68160003D9D4 /* CelestialManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CelestialManager.swift; sourceTree = "<group>"; };
+		498A97742A5E58DB00A03559 /* Explosion.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = Explosion.aif; sourceTree = "<group>"; };
+		498A97762A5E5D2D00A03559 /* harvest3.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = harvest3.aif; sourceTree = "<group>"; };
+		498A97772A5E5D2D00A03559 /* harvest4.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = harvest4.aif; sourceTree = "<group>"; };
+		498A97782A5E5D2D00A03559 /* harvest2.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = harvest2.aif; sourceTree = "<group>"; };
+		498A97792A5E5D2E00A03559 /* harvest1.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = harvest1.aif; sourceTree = "<group>"; };
 		49980BDA2A5CA3F500DB70A6 /* OSNRMissile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSNRMissile.swift; sourceTree = "<group>"; };
 		49CA94222A5D0BCE00E3D8A2 /* HVN2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = HVN2.mp3; path = ../../../Music/Logic/Bounces/HVN2.mp3; sourceTree = "<group>"; };
 		AF05610E2A3E99E80096E211 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
@@ -231,6 +241,11 @@
 				AF0561112A3EA8270096E211 /* ISR.mp3 */,
 				AF0561152A3EA82A0096E211 /* snap.wav */,
 				AF0561142A3EA82A0096E211 /* snatchHiss.wav */,
+				498A97742A5E58DB00A03559 /* Explosion.aif */,
+				498A97792A5E5D2E00A03559 /* harvest1.aif */,
+				498A97782A5E5D2D00A03559 /* harvest2.aif */,
+				498A97762A5E5D2D00A03559 /* harvest3.aif */,
+				498A97772A5E5D2D00A03559 /* harvest4.aif */,
 				AF0561162A3EA82B0096E211 /* she never loved u bro.mp3 */,
 			);
 			path = Audio;
@@ -480,11 +495,14 @@
 			files = (
 				AFD4C05729CFA48400A127BB /* Preview Assets.xcassets in Resources */,
 				4948D7AA2A53933A006FE8FE /* innerHDU.obj in Resources */,
+				498A977D2A5E5D2E00A03559 /* harvest1.aif in Resources */,
 				4948D7AB2A53933A006FE8FE /* outerHDU.obj in Resources */,
 				4956C8212A5BCDB30003D9D4 /* cloudTexture.png in Resources */,
 				4948D7A62A53933A006FE8FE /* innerHDU.mtl in Resources */,
 				4948D79E2A53933A006FE8FE /* README.txt in Resources */,
+				498A97752A5E58DB00A03559 /* Explosion.aif in Resources */,
 				4956C8192A5BC2680003D9D4 /* base.jpg in Resources */,
+				498A977A2A5E5D2E00A03559 /* harvest3.aif in Resources */,
 				4948D7A22A53933A006FE8FE /* panelbump.jpg in Resources */,
 				49CA94232A5D0BCE00E3D8A2 /* HVN2.mp3 in Resources */,
 				AFD4C05429CFA48400A127BB /* Assets.xcassets in Resources */,
@@ -493,6 +511,7 @@
 				4948D7AC2A53933A006FE8FE /* Sci Fi AA Turret.mtl in Resources */,
 				4948D7AD2A53933A006FE8FE /* TankCannon.obj in Resources */,
 				4948D7A92A53933A006FE8FE /* Sci Fi AA Turret.obj in Resources */,
+				498A977C2A5E5D2E00A03559 /* harvest2.aif in Resources */,
 				4948D7B52A5397AE006FE8FE /* Raider.obj in Resources */,
 				4948D7A72A53933A006FE8FE /* objSolar.mtl in Resources */,
 				AF07021E29E120D300667F9B /* Assets.xcassets in Resources */,
@@ -503,6 +522,7 @@
 				4948D7A52A53933A006FE8FE /* HDU_01.jpg in Resources */,
 				4948D7B92A53C8A6006FE8FE /* Earth.jpg in Resources */,
 				4948D7A42A53933A006FE8FE /* objSolar.obj in Resources */,
+				498A977B2A5E5D2E00A03559 /* harvest4.aif in Resources */,
 				AF67FBB529F7C0CB007CE669 /* Launch Screen.storyboard in Resources */,
 				4948D79F2A53933A006FE8FE /* Turret_Reflection.jpg in Resources */,
 				4948D7B72A5397BD006FE8FE /* Raider.mtl in Resources */,
@@ -690,7 +710,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
@@ -730,7 +750,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Starhaven/Starhaven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Starhaven/Preview Content\"";
 				DEVELOPMENT_TEAM = QTK9J7VK88;
 				ENABLE_PREVIEWS = YES;
