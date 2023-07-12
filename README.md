@@ -6,7 +6,7 @@
  ## FIXES, UPDATES, AND SOLUTIONS
  
 ### Update: More Managers, Audio and Celestial Bodies (7/12/2023)
-1. **AudioManager***
+1. **AudioManager**
 The AudioManager class is responsible for handling all the sound effects and music in your game. It contains several methods to play different types of sounds, like explosions and a special "harvest" sound. It also manages the volume of these sounds. It achieves this by making use of the AVFoundation and AVKit frameworks to handle audio in your iOS game.
 
 The playExplosion function calculates the volume of an explosion sound based on the distance parameter. The closer the explosion (lower distance), the louder the sound.
