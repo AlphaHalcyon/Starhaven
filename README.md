@@ -5,6 +5,24 @@
  
  ## FIXES, UPDATES, AND SOLUTIONS
  
+### Update: More Managers, Audio and Celestial Bodies (7/12/2023)
+1. **AudioManager***
+The AudioManager class is responsible for handling all the sound effects and music in your game. It contains several methods to play different types of sounds, like explosions and a special "harvest" sound. It also manages the volume of these sounds. It achieves this by making use of the AVFoundation and AVKit frameworks to handle audio in your iOS game.
+
+The playExplosion function calculates the volume of an explosion sound based on the distance parameter. The closer the explosion (lower distance), the louder the sound.
+The missileFired function is meant to play a sound when a missile is fired. However, it seems that the implementation is not complete, and it currently only gets the URL of the missile firing sound.
+The Harvest enum and the associated playHarvest function handle playing one of four different "harvest" sounds in a cyclic sequence.
+The playMusic function is a public function to play any given music file.
+The playSound private function plays a sound from a provided resource name and extension. It's used by other functions to handle the actual playing of sounds.
+
+2. **CelestialManager**
+The CelestialManager class handles the creation of various celestial bodies and phenomena within the game. It uses the SceneKit framework to create and manage 3D graphical objects.
+
+It creates a star, a planet, black holes, a water planet, and sets a skybox at the initialization of a CelestialManager instance.
+Each createX function (e.g., createStar, createPlanet, createBlackHoles) creates an object of the type X. For instance, createPlanet creates a planet using an image specified by name, and createBlackHoles creates a specified number of black holes.
+The distributeBlackHoles function distributes the black holes randomly in the 3D space.
+The manager also controls the direction in which the player's ship is looking upon initialization.
+
 ### Update: Object Pooling and ARKit Integration (7/2/2023)
 1. **Object pooling,** utilized for both Explosion and Missile objects. Object pooling is a design pattern that allows for the reuse of objects that are expensive to instantiate, significantly optimizing performance by minimizing memory allocations and deallocations.
 
