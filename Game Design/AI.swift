@@ -36,10 +36,10 @@ class AI: SceneObject {
         let system = SCNParticleSystem()
         system.particleColor = faction == .OSNR ? .systemPink : .cyan
         system.emitterShape = self.node.geometry
-        system.particleSize = 5
-        system.birthRate = 30
+        system.particleSize = 10
+        system.birthRate = 1
         system.particleAngularVelocity = 0
-        system.particleLifeSpan = 0.1
+        system.particleLifeSpan = 1
         let particleNode = SCNNode()
         particleNode.addParticleSystem(system)
         particleNode.position = SCNVector3(0, 30, 0)

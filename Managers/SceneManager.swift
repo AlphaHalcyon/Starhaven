@@ -25,6 +25,12 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     var explosions: [Explosion] = []
     // Missile Pool
     var missiles: [OSNRMissile] = []
+    func createMissiles() {
+        for i in 0...10 {
+            let missile = OSNRMissile(target: nil, particleSystemColor: .white, sceneManager: self)
+            self.missiles.append(missile)
+        }
+    }
     // Triangle Pool
     var trianglePool: [SKShapeNode] = []
     init(cameraManager: CameraManager, shipManager: ShipManager, scene: SCNScene) {
@@ -38,6 +44,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         self.celestialManager = CelestialManager(manager: self)
         self.view.pause(nil)
         self.shipManager.currentRotation = self.shipManager.ship.simdOrientation
+        //self.createMissiles()
         self.createAI()
         self.view.prepare([self.scene]) { success in
             self.view.play(nil)
@@ -48,7 +55,7 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
     }
     
     // Rendering Loop
-    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+    @MainActor func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         // Update the game state
         let deltaTime = time - lastUpdateTime
         self.lastUpdateTime = time
@@ -98,17 +105,17 @@ class SceneManager: NSObject, SCNSceneRendererDelegate, ObservableObject {
         let num = 10
         let node = ModelManager.createShip(scale: 0.15)
         for i in 0...num {
-            let offset: SCNVector3 = SCNVector3(-750,2300,-750)
+            let offset: SCNVector3 = SCNVector3(-750,2400 + Float.random(in: -100...100),-750)
             self.createDrone(node: node.flattenedClone(), offset: offset, i: i, faction: .OSNR)
         }
         for i in 0...num {
-            let offset: SCNVector3 = SCNVector3(750,2300,-750)
+            let offset: SCNVector3 = SCNVector3(750,2400 + Float.random(in: -100...100),-750)
             self.createDrone(node: node.flattenedClone(), offset: offset, i: i, faction: .Wraith)
         }
     }
     func createDrone(node: SCNNode, offset: SCNVector3, i: Int, faction: Faction) {
         let drone = AI(node: node.clone(), faction: faction, sceneManager: self)
-        let vector = SCNVector3(offset.x,offset.y+Float(i),offset.z + Float(i) * 100)
+        let vector = SCNVector3(offset.x,offset.y+Float(i),offset.z + Float(i) * 150)
         drone.node.position = vector
         
         self.addNode(drone.node)
@@ -167,12 +174,14 @@ class Explosion: SceneObject {
     }
     func explode() {
         let implodeAction = SCNAction.scale(to: 5, duration: 0.40)
-        let implodeActionStep = SCNAction.scale(to: 2.5, duration: 1)
         let implodeActionEnd = SCNAction.scale(to: 0.1, duration: 0.125)
-        let pulseSequence = SCNAction.sequence([implodeAction, implodeActionStep, implodeActionEnd])
+        let pulseSequence = SCNAction.sequence([implodeAction, implodeActionEnd])
         self.sceneManager.view.prepare([self.node]) { success in
             self.sceneManager.addNode(self.node)
             self.node.runAction(SCNAction.repeat(pulseSequence, count: 1))
+            var distance = Float(abs(self.node.position.distance(to: self.sceneManager.shipManager.ship.position)))
+            let maxDistance: Float = 5000; if distance>maxDistance{distance=maxDistance}
+            self.sceneManager.gameManager?.audioManager.playExplosion(distance: distance, maxDistance: maxDistance)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.sceneManager.removeNode(self.node)
                 self.sceneManager.explosions.append(self)
